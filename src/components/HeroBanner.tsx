@@ -107,7 +107,7 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
   }, []);
 
   return (
-    <div className="relative mx-auto mt-16 mb-6 w-full max-w-5xl px-4">
+    <div className="relative mx-auto mt-16 mb-2 w-full max-w-5xl px-4">
       <div className={STRIPE_CLASS} />
 
             <div className="relative aspect-[4096/1365] w-full overflow-hidden bg-[#0d0d10]">

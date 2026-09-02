@@ -33,7 +33,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative mx-auto max-w-4xl px-6 pt-14 pb-16 text-center md:text-left md:pt-20 md:pb-20">
+    <section className="relative mx-auto max-w-4xl px-6 pt-6 pb-16 text-center md:text-left md:pt-8 md:pb-20">
       <div>
         <p className="mb-4 font-mono text-sm text-blue-500">~/hello-world</p>
 
