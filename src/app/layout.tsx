@@ -1,9 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
 import CanvasBackground from "@/components/ui/CanvasBackground";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <CommandMenu />
+        <Analytics />
         <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
       </body>
     </html>
