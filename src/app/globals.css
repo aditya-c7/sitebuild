@@ -1,0 +1,82 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background-color: #0d0d10;
+  color: #fafafa;
+  min-height: 100vh;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(37, 99, 235, 0.3);
+  color: #93c5fd;
+}
+
+/* Pause marquee animation on hover */
+.pause-on-hover:hover {
+  animation-play-state: paused !important;
+}
+
+/* cmdk group headings */
+[cmdk-group-heading] {
+  padding: 0.375rem 0.75rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #71717a;
+}
+
+/* Thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #27272a transparent;
+}
+
+/*
+ * PP Editorial New (Pangram Pangram) — display font for the name.
+ * Activate by placing the trial font files in public/fonts:
+ *   PPEditorialNew-Regular.woff2
+ *   PPEditorialNew-Italic.woff2
+ * (Free trial: pangrampangram.com/products/editorial-new.)
+ * Until present, the name renders in the Instrument Serif fallback.
+ */
+@font-face {
+  font-family: "PP Editorial New";
+  src: url("/fonts/PPEditorialNew-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PP Editorial New";
+  src: url("/fonts/PPEditorialNew-Italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* LinkedIn badge — keep docs exact, just remove outer gap */
+.badge-base {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+}
