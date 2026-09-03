@@ -188,7 +188,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-4xl px-6 pb-16 md:pb-20">
+    <section id="projects" className="mx-auto max-w-4xl px-6 pb-16 md:pb-20 no-select select-none">
       <SectionHeading index="02" title="Projects" />
 
       <div className="flex flex-col gap-6">

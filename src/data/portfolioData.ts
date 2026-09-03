@@ -38,7 +38,7 @@ export const HERO_DATA = {
   role: "Developer",
   locationName: "India",
   targetTimeZone: "Asia/Kolkata",
-  bioPart1: "CS student at ",
+  bioPart1: "CS student @ ",
   bioHighlight: "VTU",
   bioPart2:
     ". I occasionally touch grass.",

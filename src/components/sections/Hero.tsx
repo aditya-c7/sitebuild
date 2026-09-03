@@ -37,7 +37,7 @@ export default function Hero() {
       <div>
         <p className="mb-4 font-mono text-sm text-blue-500">~/hello-world</p>
 
-        <h1 className="text-[2.6rem] font-normal leading-none tracking-tight text-zinc-50 sm:text-5xl md:text-7xl font-editorial">
+        <h1 className="text-[2.6rem] font-normal leading-none tracking-tight text-zinc-50 sm:text-5xl md:text-7xl font-editorial no-select select-none">
           {HERO_DATA.name.split(" ")[0]}{" "}
           <span className="text-white">
             {HERO_DATA.name.split(" ").slice(1).join(" ")}
