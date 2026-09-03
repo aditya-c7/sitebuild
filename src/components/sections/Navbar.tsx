@@ -30,12 +30,12 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 backdrop-blur-xl transition-colors duration-300 ${
-        scrolled ? "bg-[#0a0a0a]/70 shadow-[0_8px_30px_rgba(0,0,0,0.35)]" : "bg-[#0a0a0a]/40"
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-white/[0.07] backdrop-blur-lg transition-colors duration-300 ${
+        scrolled ? "bg-[#0a0a0a]/45 shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : "bg-[#0a0a0a]/20"
       }`}
       style={{
-        backdropFilter: "blur(12px) saturate(180%)",
-        WebkitBackdropFilter: "blur(12px) saturate(180%)",
+        backdropFilter: "blur(8px) saturate(150%)",
+        WebkitBackdropFilter: "blur(8px) saturate(150%)",
       }}
     >
       <nav className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
@@ -81,7 +81,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-white/10 bg-[#0a0a0a]/70 backdrop-blur-xl md:hidden">
+        <div className="border-t border-white/[0.07] bg-[#0a0a0a]/45 backdrop-blur-lg md:hidden">
           <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4">
             {MOBILE_LINKS.map((link) => (
               <a
