@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import Image from "next/image";
 
 interface Particle {
@@ -107,26 +107,44 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
   }, []);
 
   return (
-    <div className="relative mx-auto mt-16 mb-2 w-full max-w-5xl px-4">
+    <div
+      className="relative mx-auto mt-16 mb-2 w-full max-w-5xl select-none px-4"
+      onContextMenu={(e) => e.preventDefault()}
+    >
       <div className={STRIPE_CLASS} />
 
-            <div className="relative aspect-[4096/1365] w-full overflow-hidden bg-[#0d0d10]">
+      <div
+        className="relative aspect-[4096/1365] w-full select-none overflow-hidden bg-[#0d0d10]"
+        onContextMenu={(e) => e.preventDefault()}
+        onDragStart={(e) => e.preventDefault()}
+      >
         <Image
           src={imageSrc}
           alt="Panoramic banner"
           fill
+          draggable={false}
           priority
           sizes="(max-width: 1024px) 100vw, 1024px"
-          className="object-cover object-top opacity-90"
+          className="pointer-events-none select-none object-cover object-top opacity-90"
           style={{
             maskImage: EDGE_MASK,
             WebkitMaskImage: EDGE_MASK,
-          }}
+            userSelect: "none",
+            pointerEvents: "none",
+          } as CSSProperties}
         />
         <canvas
           ref={canvasRef}
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-10 h-full w-full"
+        />
+        {/* Transparent overlay to block double-click, drag, right-click — keeps banner view-only */}
+        <div
+          className="absolute inset-0 z-20 select-none"
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
+          aria-hidden="true"
+          style={{ WebkitUserDrag: "none", userSelect: "none" } as CSSProperties}
         />
       </div>
 

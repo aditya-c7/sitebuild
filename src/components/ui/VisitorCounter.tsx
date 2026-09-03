@@ -2,16 +2,32 @@
 
 import { useEffect, useState } from "react";
 
-const NAMESPACE = "adityahq";
-const KEY = "visitors";
+// countapi.xyz is dead (2024+). Using its drop-in replacement:
+// https://countapi.mileshilliard.com — same idea, no signup, free.
+// Docs: GET /api/v1/get/:key, HIT /api/v1/hit/:key
+const API_BASE = "https://countapi.mileshilliard.com/api/v1";
+const KEY = "adityahq-visitors";
 const VISITED_FLAG = "adityahq_visited";
 const VISITOR_ID_KEY = "adityahq_visitor_id";
+
+function parseCount(data: unknown): number | null {
+  if (!data || typeof data !== "object") return null;
+  const v = (data as { value?: unknown }).value;
+  if (typeof v === "number" && Number.isFinite(v)) return v;
+  if (typeof v === "string") {
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
 
 export default function VisitorCounter() {
   const [count, setCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+
     const hasVisited = localStorage.getItem(VISITED_FLAG);
 
     // create persistent unique visitor ID (never counted twice on same browser)
@@ -23,39 +39,47 @@ export default function VisitorCounter() {
       }
     }
 
+    // Unique rule: hit (+1) only on first visit from this browser, else get.
     const endpoint = hasVisited
-      ? `https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`
-      : `https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`;
+      ? `${API_BASE}/get/${KEY}`
+      : `${API_BASE}/hit/${KEY}`;
 
     if (!hasVisited) {
       localStorage.setItem(VISITED_FLAG, "1");
     }
 
-    fetch(endpoint)
-      .then((r) => r.json())
-      .then((data) => {
-        if (typeof data.value === "number") {
-          setCount(data.value);
-        } else {
-          // fallback: try get
-          return fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
-            .then((r) => r.json())
-            .then((d) => {
-              if (typeof d.value === "number") setCount(d.value);
-            });
+    const load = async () => {
+      try {
+        let res = await fetch(endpoint, { cache: "no-store" });
+        // If key never existed, GET returns 404 — create it with a HIT.
+        if (!res.ok && hasVisited) {
+          res = await fetch(`${API_BASE}/hit/${KEY}`, { cache: "no-store" });
         }
-      })
-      .catch(() => {
-        // if countapi is down, show 0 gracefully and don't break location
-        fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
-          .then((r) => r.json())
-          .then((d) => {
-            if (typeof d.value === "number") setCount(d.value);
-            else setCount(null);
-          })
-          .catch(() => setCount(null));
-      })
-      .finally(() => setLoading(false));
+        const data = await res.json().catch(() => null);
+        let n = parseCount(data);
+        // If HIT failed but GET might work (or vice versa), try the other once.
+        if (n === null) {
+          const fallback = hasVisited ? `${API_BASE}/hit/${KEY}` : `${API_BASE}/get/${KEY}`;
+          try {
+            const r2 = await fetch(fallback, { cache: "no-store" });
+            const d2 = await r2.json().catch(() => null);
+            n = parseCount(d2);
+          } catch {
+            // ignore, will show fallback below
+          }
+        }
+        if (!cancelled) setCount(n);
+      } catch {
+        if (!cancelled) setCount(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (loading) {

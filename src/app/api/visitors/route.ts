@@ -1,26 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Best for Vercel/Next.js hosting - no PHP needed, uses countapi.xyz as free backend
-// This route is optional - the client components call countapi directly.
-// Keep this as fallback if you want server-side counting.
+// Server proxy for the visitor counter (avoids CORS/adblock issues).
+// Uses countapi.mileshilliard.com (free, no key). countapi.xyz is dead.
+const API_BASE = "https://countapi.mileshilliard.com/api/v1";
+const KEY = "adityahq-visitors";
 
 export async function GET(request: NextRequest) {
   const action = request.nextUrl.searchParams.get("action") || "get";
-  const namespace = "adityahq";
-  const key = "visitors";
 
   const url =
-    action === "hit"
-      ? `https://api.countapi.xyz/hit/${namespace}/${key}`
-      : `https://api.countapi.xyz/get/${namespace}/${key}`;
+    action === "hit" ? `${API_BASE}/hit/${KEY}` : `${API_BASE}/get/${KEY}`;
 
   try {
     const res = await fetch(url, { cache: "no-store" });
-    const data = await res.json();
+    const data = await res.json().catch(() => null);
     return NextResponse.json(data, {
       headers: { "Access-Control-Allow-Origin": "*" },
     });
   } catch {
-    return NextResponse.json({ value: null, error: "countapi unavailable" }, { status: 500 });
+    return NextResponse.json({ value: null, error: "counter unavailable" }, { status: 500 });
   }
 }

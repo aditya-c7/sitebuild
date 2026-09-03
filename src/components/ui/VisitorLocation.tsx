@@ -8,37 +8,63 @@ export default function VisitorLocation() {
   const [text, setText] = useState<string | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
     const cached = localStorage.getItem(LOCATION_CACHE_KEY);
     if (cached) {
       setText(cached);
       return;
     }
 
-    fetch("https://ipapi.co/json/")
-      .then((r) => {
-        if (!r.ok) throw new Error("ipapi failed");
-        return r.json();
-      })
-      .then((data) => {
-        const city = (data.city as string) || "";
-        const country = (data.country_name as string) || (data.country as string) || "";
-        let location = "";
-        if (city && country) location = `${city}, ${country}`;
-        else if (city) location = city;
-        else if (country) location = country;
-        else location = "your area";
+    const formatLocation = (data: Record<string, unknown>): string | null => {
+      const city = typeof data.city === "string" ? data.city : "";
+      // ipwho.is uses `country`, ipapi.co uses `country_name`
+      const country =
+        (typeof data.country_name === "string" && data.country_name) ||
+        (typeof data.country === "string" && data.country) ||
+        "";
+      if (data.success === false) return null;
+      if ((data as { error?: unknown }).error === true) return null;
+      if (city && country) return `${city}, ${country}`;
+      if (city) return city;
+      if (country) return country;
+      return null;
+    };
 
-        const full = `You're visiting from ${location}`;
-        setText(full);
+    const save = (full: string) => {
+      if (cancelled) return;
+      setText(full);
+      try {
+        localStorage.setItem(LOCATION_CACHE_KEY, full);
+      } catch {
+        // ignore storage error
+      }
+    };
+
+    const load = async () => {
+      // Primary: ipwho.is (free, no key, CORS-enabled). Fallback: ipapi.co
+      const sources = ["https://ipwho.is/", "https://ipapi.co/json/"];
+      for (const url of sources) {
         try {
-          localStorage.setItem(LOCATION_CACHE_KEY, full);
+          const r = await fetch(url, { cache: "no-store" });
+          if (!r.ok) continue;
+          const data = (await r.json().catch(() => null)) as Record<string, unknown> | null;
+          if (!data) continue;
+          const location = formatLocation(data);
+          if (location) {
+            save(`You're visiting from ${location}`);
+            return;
+          }
         } catch {
-          // ignore storage error
+          // try next source
         }
-      })
-      .catch(() => {
-        setText("You're visiting from your location");
-      });
+      }
+      save("You're visiting from your location");
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (!text) {
