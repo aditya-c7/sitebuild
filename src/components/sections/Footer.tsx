@@ -2,6 +2,8 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import { HERO_DATA } from "@/data/portfolioData";
 import VisitorCounter from "@/components/ui/VisitorCounter";
 import VisitorLocation from "@/components/ui/VisitorLocation";
+import VisitorDevice from "@/components/ui/VisitorDevice";
+import VisitorBrowser from "@/components/ui/VisitorBrowser";
 
 const PAGES = [
   { label: "Projects", href: "#projects" },
@@ -28,6 +30,8 @@ export default function Footer() {
             <div className="mt-3 flex flex-col gap-1.5">
               <VisitorCounter />
               <VisitorLocation />
+              <VisitorDevice />
+              <VisitorBrowser />
             </div>
           </div>
 
