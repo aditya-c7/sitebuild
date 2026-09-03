@@ -30,9 +30,13 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors duration-300 ${
-        scrolled ? "border-zinc-800/80 bg-[#0d0d10]/85" : "border-transparent bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-white/10 backdrop-blur-xl transition-colors duration-300 ${
+        scrolled ? "bg-[#0a0a0a]/70 shadow-[0_8px_30px_rgba(0,0,0,0.35)]" : "bg-[#0a0a0a]/40"
       }`}
+      style={{
+        backdropFilter: "blur(12px) saturate(180%)",
+        WebkitBackdropFilter: "blur(12px) saturate(180%)",
+      }}
     >
       <nav className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
         <a href="#top" className="font-mono text-[15px] font-semibold tracking-tight text-zinc-100 transition-colors hover:text-white">
@@ -77,7 +81,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-zinc-800/80 bg-[#0d0d10]/95 backdrop-blur-md md:hidden">
+        <div className="border-t border-white/10 bg-[#0a0a0a]/70 backdrop-blur-xl md:hidden">
           <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4">
             {MOBILE_LINKS.map((link) => (
               <a
