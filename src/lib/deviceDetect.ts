@@ -56,6 +56,35 @@ function touchPoints(): number {
   }
 }
 
+// True only for coarse-pointer (finger-driven) primary input.
+// Touch ALONE never implies mobile — touchscreen laptops report touch points
+// with a fine (mouse) pointer, so both conditions are required together.
+function coarsePointer(): boolean {
+  try {
+    return (
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches
+    );
+  } catch {
+    return false;
+  }
+}
+
+// Viewport width in CSS px (0 = unknown, never used as a signal).
+// Cross-check for phones with stripped UAs: a finger-driven device at
+// <=767px horizontal width is a phone, never a desktop.
+function viewportWidth(): number {
+  try {
+    if (typeof window !== "undefined" && typeof window.innerWidth === "number") {
+      return window.innerWidth;
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+}
+
 export function parseBrowser(
   ua: string,
   fullList?: UADataBrand[]
@@ -124,6 +153,15 @@ export function parseBrowser(
 }
 
 export function parseOS(ua: string, platform?: string, platformVersion?: string): string {
+  // LinkedIn / in-app WebView fix: every Android UA contains the word "Linux"
+  // ("Mozilla/5.0 (Linux; Android 14; …)"). Android is therefore checked
+  // FIRST and unconditionally — "Linux" may only win when Android is absent,
+  // which is what keeps real desktop-Linux detection intact.
+  if (platform === "Android" || /Android/.test(ua)) {
+    if (platformVersion) return `Android ${trimVersion(platformVersion)}`;
+    const m = ua.match(/Android ([\d.]+)/);
+    return m ? `Android ${trimVersion(m[1])}` : "Android";
+  }
   if (platform === "Windows" || /Windows NT/.test(ua)) {
     const majorV = parseInt(platformVersion || "", 10);
     if (Number.isFinite(majorV) && majorV > 0) {
@@ -141,11 +179,6 @@ export function parseOS(ua: string, platform?: string, platformVersion?: string)
     const m = ua.match(/Mac OS X ([\d_]+)/);
     return m ? `macOS ${m[1].replace(/_/g, ".")}` : "macOS";
   }
-  if (platform === "Android" || /Android/.test(ua)) {
-    if (platformVersion) return `Android ${trimVersion(platformVersion)}`;
-    const m = ua.match(/Android ([\d.]+)/);
-    return m ? `Android ${trimVersion(m[1])}` : "Android";
-  }
   if (platform === "iOS" || /iPhone|iPad|iPod/.test(ua)) {
     const m = ua.match(/OS ([\d_]+) like Mac OS X/);
     return m ? `iOS ${m[1].replace(/_/g, ".")}` : "iOS";
@@ -156,11 +189,28 @@ export function parseOS(ua: string, platform?: string, platformVersion?: string)
 }
 
 export function deviceKind(ua: string, mobileHint?: boolean): DeviceKind {
+  // Explicit tablet token always wins (covers iPad, incl. in-app browsers on iPad).
   if (/iPad/.test(ua)) return "tablet";
-  if (/Tablet/.test(ua)) return "tablet";
-  if (/Android/.test(ua) && !/Mobi|Mobile/.test(ua)) return "tablet";
-  if (/Macintosh/.test(ua) && touchPoints() > 1) return "tablet";
+  // LinkedIn in-app browser strips mobile tokens on some Android builds — force mobile.
+  if (/LinkedInApp/.test(ua)) return "mobile";
+  // UA Client Hints are authoritative when present.
   if (mobileHint === true) return "mobile";
+  // Finger-driven hardware: phones (narrow viewport) vs tablets (wide).
+  // Touchscreen laptops are unaffected — their primary pointer is fine, not coarse.
+  if (touchPoints() > 0 && coarsePointer()) {
+    const w = viewportWidth();
+    return w > 0 && w <= 767 ? "mobile" : "tablet";
+  }
+  if (/Tablet/.test(ua)) return "tablet";
+  if (/Android/.test(ua)) {
+    // Phones show Mobile tokens or run in a WebView (`; wv)`); an Android UA
+    // with neither signal is most likely a tablet.
+    if (/Mobi|Mobile/.test(ua) || /;\s*wv[;)]/.test(ua)) return "mobile";
+    return "tablet";
+  }
+  // Any other embedded WebView with a stripped UA — desktop browsers never send `wv`.
+  if (/;\s*wv[;)]/.test(ua)) return "mobile";
+  if (/Macintosh/.test(ua) && touchPoints() > 1) return "tablet";
   if (/Mobi|Android|iPhone|iPod|Windows Phone|Mobile/.test(ua)) return "mobile";
   return "pc";
 }
@@ -260,5 +310,22 @@ export function savePcLock(
     return lock;
   } catch {
     return null;
+  }
+}
+
+// Mobile hygiene: releases any stored device data that is NOT a valid pc
+// snapshot (corrupt entries or legacy non-pc writes) so mobile sessions never
+// retain stale device info — it is re-captured fresh on every visit instead.
+// A valid pc lock is always preserved (devtools spoofing must not erase it).
+// Returns true when something was cleared.
+export function releaseNonPcLock(): boolean {
+  try {
+    const raw = localStorage.getItem(PC_LOCK_KEY);
+    if (!raw) return false;
+    if (getPcLock() !== null) return false;
+    localStorage.removeItem(PC_LOCK_KEY);
+    return true;
+  } catch {
+    return false;
   }
 }

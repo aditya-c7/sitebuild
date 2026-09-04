@@ -6,6 +6,7 @@ import {
   detectDeviceInfo,
   deviceLabelFor,
   getPcLock,
+  releaseNonPcLock,
   savePcLock,
 } from "@/lib/deviceDetect";
 
@@ -23,6 +24,8 @@ export default function VisitorBrowser() {
     let cancelled = false;
     const run = async () => {
       try {
+        // Drop any stale non-pc device data first (mobile is always re-captured fresh).
+        releaseNonPcLock();
         // Locked PC history wins over any fresh detection.
         const lock = getPcLock();
         if (lock) {
