@@ -98,6 +98,7 @@ export default function Hero() {
                 <div className="hidden group-hover:block absolute left-1/2 top-full z-50 mt-3 w-fit -translate-x-1/2 md:left-0 md:translate-x-0">
                   <div className="w-fit overflow-hidden rounded-lg shadow-xl">
                     <div
+                      suppressHydrationWarning
                       className="badge-base LI-profile-badge"
                       data-locale="en_US"
                       data-size="medium"

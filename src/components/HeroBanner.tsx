@@ -123,7 +123,8 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
           alt="Panoramic banner"
           fill
           draggable={false}
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="(max-width: 1024px) 100vw, 1024px"
           className="pointer-events-none select-none object-cover object-top opacity-90"
           style={{

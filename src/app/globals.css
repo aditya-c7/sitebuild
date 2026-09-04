@@ -51,27 +51,12 @@ body {
 }
 
 /*
- * PP Editorial New (Pangram Pangram) — display font for the name.
- * Activate by placing the trial font files in public/fonts:
- *   PPEditorialNew-Regular.woff2
- *   PPEditorialNew-Italic.woff2
- * (Free trial: pangrampangram.com/products/editorial-new.)
- * Until present, the name renders in the Instrument Serif fallback.
+ * Display font for the name: Instrument Serif (next/font, no external file).
+ * "PP Editorial New" stays first in the font-editorial stack in
+ * tailwind.config.ts so it applies automatically if ever licensed/added —
+ * but no font files are declared until they exist, so the browser
+ * never requests a missing file (was a console 404).
  */
-@font-face {
-  font-family: "PP Editorial New";
-  src: url("/fonts/PPEditorialNew-Regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "PP Editorial New";
-  src: url("/fonts/PPEditorialNew-Italic.woff2") format("woff2");
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-}
 
 /* LinkedIn badge — keep docs exact, just remove outer gap */
 .badge-base {
