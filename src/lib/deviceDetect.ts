@@ -20,7 +20,13 @@ export interface PcLock {
   visits: number;
 }
 
-export const PC_LOCK_KEY = "adityahq_device_lock";
+// Bumped whenever detection logic changes: old snapshots are abandoned and
+// every visitor re-captures once with the current detector. This is the
+// client-side "flush everyone's device info" — remote browsers can't be
+// wiped directly, but the stale key is never read again (and is deleted
+// on sight by releaseNonPcLock below).
+export const PC_LOCK_KEY = "adityahq_device_lock_v2";
+const LEGACY_LOCK_KEYS = ["adityahq_device_lock"];
 
 export interface UADataBrand {
   brand: string;
@@ -82,6 +88,28 @@ function viewportWidth(): number {
     return 0;
   } catch {
     return 0;
+  }
+}
+
+// Touch detection with a fallback for broken in-app WebViews that report
+// maxTouchPoints: 0 while still firing touch events.
+function hasTouch(): boolean {
+  if (touchPoints() > 0) return true;
+  try {
+    return typeof window !== "undefined" && "ontouchstart" in window;
+  } catch {
+    return false;
+  }
+}
+
+// Deprecated but still present everywhere: phones/handhelds report ARM
+// ("Linux armv8l", "Linux aarch64"), real desktop Linux reports x86_64.
+function navPlatform(): string {
+  try {
+    const p = typeof navigator !== "undefined" ? navigator.platform : "";
+    return typeof p === "string" ? p : "";
+  } catch {
+    return "";
   }
 }
 
@@ -196,8 +224,9 @@ export function deviceKind(ua: string, mobileHint?: boolean): DeviceKind {
   // UA Client Hints are authoritative when present.
   if (mobileHint === true) return "mobile";
   // Finger-driven hardware: phones (narrow viewport) vs tablets (wide).
-  // Touchscreen laptops are unaffected — their primary pointer is fine, not coarse.
-  if (touchPoints() > 0 && coarsePointer()) {
+  // Touch ALONE never counts — touchscreen laptops report touch points with
+  // a fine (mouse) pointer, so coarse is required alongside it.
+  if (hasTouch() && coarsePointer()) {
     const w = viewportWidth();
     return w > 0 && w <= 767 ? "mobile" : "tablet";
   }
@@ -212,6 +241,13 @@ export function deviceKind(ua: string, mobileHint?: boolean): DeviceKind {
   if (/;\s*wv[;)]/.test(ua)) return "mobile";
   if (/Macintosh/.test(ua) && touchPoints() > 1) return "tablet";
   if (/Mobi|Android|iPhone|iPod|Windows Phone|Mobile/.test(ua)) return "mobile";
+  // Last resort for fully stripped UAs: bare "Linux" (no Android/CrOS tokens)
+  // on ARM hardware is a phone/handheld — real desktop Linux is x86_64.
+  // Touchscreen ARM laptops are vanishingly rare; this never fires for them
+  // unless they also hide every other signal.
+  if (/Linux/.test(ua) && !/Android|CrOS/.test(ua) && /arm|aarch64/i.test(navPlatform())) {
+    return "mobile";
+  }
   return "pc";
 }
 
@@ -320,9 +356,17 @@ export function savePcLock(
 // Returns true when something was cleared.
 export function releaseNonPcLock(): boolean {
   try {
+    let cleared = false;
+    // Flush snapshots written by older detector versions.
+    for (const key of LEGACY_LOCK_KEYS) {
+      if (localStorage.getItem(key) !== null) {
+        localStorage.removeItem(key);
+        cleared = true;
+      }
+    }
     const raw = localStorage.getItem(PC_LOCK_KEY);
-    if (!raw) return false;
-    if (getPcLock() !== null) return false;
+    if (!raw) return cleared;
+    if (getPcLock() !== null) return cleared;
     localStorage.removeItem(PC_LOCK_KEY);
     return true;
   } catch {
