@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
 import CanvasBackground from "@/components/ui/CanvasBackground";
+import DevToolsGuard from "@/components/ui/DevToolsGuard";
 import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
@@ -52,7 +53,8 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <CommandMenu />
-        <Analytics />
+        <DevToolsGuard />
+        <Analytics debug={false} />
         <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
       </body>
     </html>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import Image from "next/image";
 
 interface Particle {
   x: number;
@@ -118,15 +117,17 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
       >
-        <Image
+        {/* Plain img (not next/image): no preload link is emitted, so neither
+            the hosted "preloaded but not used" warning nor the dev LCP
+            "add priority" notice can fire. eager + high keeps it fast. */}
+        <img
           src={imageSrc}
           alt="Panoramic banner"
-          fill
           draggable={false}
           loading="eager"
           fetchPriority="high"
-          sizes="(max-width: 1024px) 100vw, 1024px"
-          className="pointer-events-none select-none object-cover object-top opacity-90"
+          decoding="async"
+          className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-top opacity-90"
           style={{
             maskImage: EDGE_MASK,
             WebkitMaskImage: EDGE_MASK,
