@@ -72,3 +72,42 @@ body {
   -ms-user-select: none;     /* IE 10 and IE 11 */
   user-select: none;         /* Standard syntax */
 }
+
+/* Skeleton shimmer sweep (1.5s — calm, never glitchy) */
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton-shimmer {
+  animation: skeleton-shimmer 1s ease-in-out infinite;
+}
+
+/* Row reveal: gentle fade + rise when data lands */
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-rise {
+  animation: fade-rise 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer,
+  .animate-fade-rise {
+    animation: none;
+  }
+  .animate-fade-rise {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -252,9 +252,10 @@ export function deviceKind(ua: string, mobileHint?: boolean): DeviceKind {
 }
 
 export function deviceLabelFor(info: DeviceSnapshot): string {
+  // PC label is the OS and never changes (keeps existing pc locks valid).
   if (info.kind === "pc") return info.os;
-  const versionSuffix = info.browserVersion ? ` ${info.browserVersion}` : "";
-  return `${info.browserName}${versionSuffix}`;
+  // Handhelds: icon + "surfing on <browser>" only — never a version number.
+  return `surfing on ${info.browserName}`;
 }
 
 export async function detectDeviceInfo(): Promise<DeviceSnapshot> {

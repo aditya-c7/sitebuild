@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Monitor, Smartphone, Tablet } from "lucide-react";
+import Skeleton from "@/components/ui/Skeleton";
 import {
   detectDeviceInfo,
   deviceLabelFor,
@@ -27,13 +28,14 @@ function timeout(ms: number): Promise<null> {
   return new Promise<null>((resolve) => setTimeout(() => resolve(null), ms));
 }
 
-export default function VisitorDevice() {
+export default function VisitorDevice({ active = true }: { active?: boolean }) {
   const [kind, setKind] = useState<DeviceKind | null>(null);
   const [label, setLabel] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
+    if (!active) return;
     const run = async () => {
       try {
         // Drop any stale non-pc device data first (mobile is always re-captured fresh).
@@ -71,20 +73,25 @@ export default function VisitorDevice() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [active]);
 
   if (failed) {
-    return <span className="font-mono text-xs text-zinc-500">Unknown device</span>;
+    return <span className="animate-fade-rise font-mono text-xs text-zinc-500">Unknown device</span>;
   }
 
   if (!kind || !label) {
-    return <span className="font-mono text-xs text-zinc-500">Detecting device…</span>;
+    return (
+      <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+        <span className="block h-3.5 w-3.5 rounded bg-zinc-800" />
+        <Skeleton className="w-28" />
+      </span>
+    );
   }
 
   const Icon = KIND_ICON[kind];
 
   return (
-    <span className="inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
+    <span className="animate-fade-rise inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
       <Icon className="h-3.5 w-3.5 text-zinc-400" aria-hidden="true" />
       {label}
     </span>

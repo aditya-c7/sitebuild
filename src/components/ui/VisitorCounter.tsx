@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Skeleton from "@/components/ui/Skeleton";
 
 // countapi.xyz is dead (2024+). Using its drop-in replacement:
 // https://countapi.mileshilliard.com — same idea, no signup, free.
@@ -21,12 +22,13 @@ function parseCount(data: unknown): number | null {
   return null;
 }
 
-export default function VisitorCounter() {
+export default function VisitorCounter({ active = true }: { active?: boolean }) {
   const [count, setCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+    if (!active) return;
 
     const hasVisited = localStorage.getItem(VISITED_FLAG);
 
@@ -80,20 +82,25 @@ export default function VisitorCounter() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [active]);
 
   if (loading) {
-    return <span className="font-mono text-xs text-zinc-500">Counting visitors…</span>;
+    return (
+      <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+        <span className="h-1.5 w-1.5 rounded-full bg-zinc-700" />
+        <Skeleton className="w-36" />
+      </span>
+    );
   }
 
   if (count === null) {
-    return <span className="font-mono text-xs text-zinc-500">— visitors so far</span>;
+    return <span className="animate-fade-rise font-mono text-xs text-zinc-500">— visitors so far</span>;
   }
 
   const formatted = new Intl.NumberFormat("en-IN").format(count);
 
   return (
-    <span className="inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
+    <span className="animate-fade-rise inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500/70" aria-hidden="true" />
       {formatted} visitors so far
     </span>

@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Skeleton from "@/components/ui/Skeleton";
 
 const LOCATION_CACHE_KEY = "adityahq_location";
 
-export default function VisitorLocation() {
+export default function VisitorLocation({ active = true }: { active?: boolean }) {
   const [text, setText] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    if (!active) return;
     const cached = localStorage.getItem(LOCATION_CACHE_KEY);
     if (cached) {
       setText(cached);
@@ -65,11 +67,15 @@ export default function VisitorLocation() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [active]);
 
   if (!text) {
-    return <span className="font-mono text-xs text-zinc-500">Detecting location…</span>;
+    return (
+      <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+        <Skeleton className="w-44" />
+      </span>
+    );
   }
 
-  return <span className="font-mono text-xs text-zinc-400">{text}</span>;
+  return <span className="animate-fade-rise font-mono text-xs text-zinc-400">{text}</span>;
 }
