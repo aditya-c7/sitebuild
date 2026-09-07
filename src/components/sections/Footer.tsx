@@ -1,5 +1,7 @@
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { HERO_DATA } from "@/data/portfolioData";
+import { LinkedinBrand } from "@/components/ui/TechIcons";
 import VisitorCounter from "@/components/ui/VisitorCounter";
 import VisitorLocation from "@/components/ui/VisitorLocation";
 import VisitorDevice from "@/components/ui/VisitorDevice";
@@ -13,8 +15,8 @@ const PAGES = [
 ];
 
 const SOCIALS = [
-  { label: "GitHub", href: HERO_DATA.socials.github, icon: Github },
-  { label: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: Linkedin },
+  { label: "GitHub", href: HERO_DATA.socials.github, icon: SiGithub },
+  { label: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: LinkedinBrand },
   { label: "Email", href: `mailto:${HERO_DATA.socials.email}`, icon: Mail },
 ];
 

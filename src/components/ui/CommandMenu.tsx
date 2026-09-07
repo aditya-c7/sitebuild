@@ -7,11 +7,11 @@ import {
   Check,
   Copy,
   ExternalLink,
-  Github,
-  Linkedin,
   Mail,
   MessageSquare,
 } from "lucide-react";
+import { SiGithub } from "react-icons/si";
+import { LinkedinBrand } from "@/components/ui/TechIcons";
 import { HERO_DATA } from "@/data/portfolioData";
 
 const NAV_ITEMS = [
@@ -20,8 +20,8 @@ const NAV_ITEMS = [
 ];
 
 const SOCIAL_ITEMS = [
-  { label: "GitHub", icon: Github, href: HERO_DATA.socials.github },
-  { label: "LinkedIn", icon: Linkedin, href: HERO_DATA.socials.linkedin },
+  { label: "GitHub", icon: SiGithub, href: HERO_DATA.socials.github },
+  { label: "LinkedIn", icon: LinkedinBrand, href: HERO_DATA.socials.linkedin },
   { label: "Email", icon: Mail, href: `mailto:${HERO_DATA.socials.email}` },
 ];
 

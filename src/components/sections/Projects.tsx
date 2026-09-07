@@ -7,7 +7,8 @@ import {
   useSpring,
   AnimatePresence,
 } from "framer-motion";
-import { ExternalLink, Github, Lock } from "lucide-react";
+import { ExternalLink, Lock } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { PROJECTS_DATA, type Project } from "@/data/portfolioData";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { Crosshairs } from "@/components/ui/Crosshairs";
@@ -115,7 +116,7 @@ function ProjectCard({ project }: { project: Project }) {
               aria-label="GitHub repository"
               className="rounded-md border border-zinc-800 p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
             >
-              <Github className="h-4 w-4" />
+              <SiGithub className="h-4 w-4" />
             </a>
           )}
           {project.liveUrl ? (

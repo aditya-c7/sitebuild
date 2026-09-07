@@ -3,17 +3,17 @@
 import {
   ArrowRight,
   FileText,
-  Github,
-  Linkedin,
   Mail,
 } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { useEffect } from "react";
 import { HERO_DATA } from "@/data/portfolioData";
 import { TimeOffset } from "@/components/ui/TimeOffset";
+import { LinkedinBrand } from "@/components/ui/TechIcons";
 
 const SOCIALS = [
-  { name: "GitHub", href: HERO_DATA.socials.github, icon: Github },
-  { name: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: Linkedin },
+  { name: "GitHub", href: HERO_DATA.socials.github, icon: SiGithub },
+  { name: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: LinkedinBrand },
   { name: "Email", href: `mailto:${HERO_DATA.socials.email}`, icon: Mail },
 ];
 
