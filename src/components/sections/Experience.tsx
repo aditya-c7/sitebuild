@@ -54,16 +54,16 @@ export default function Experience() {
                     </span>
                   )}
                   <div>
-                    <h3 className="font-display text-base font-semibold tracking-tight text-zinc-100 md:text-lg">
+                    <h3 className="font-display text-sm font-semibold tracking-tight text-zinc-100 md:text-base">
                       {item.organization}
                     </h3>
-                    <p className="mt-0.5 text-sm text-zinc-400">{item.role}</p>
+                    <p className="mt-0.5 text-xs text-zinc-400 md:text-sm">{item.role}</p>
                   </div>
                 </div>
 
                 <div className="flex shrink-0 items-center gap-3 pl-14 sm:pl-0">
                   <div className="flex flex-col items-end gap-1">
-                    <span className="whitespace-nowrap text-sm text-zinc-400">{item.period}</span>
+                    <span className="whitespace-nowrap text-xs text-zinc-400 md:text-sm">{item.period}</span>
                     <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                       {item.type}
                     </span>
