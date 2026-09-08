@@ -8,6 +8,7 @@ import VisitorDevice from "@/components/ui/VisitorDevice";
 import VisitorBrowser from "@/components/ui/VisitorBrowser";
 import LazyMount from "@/components/ui/LazyMount";
 import Skeleton from "@/components/ui/Skeleton";
+import BlinkingUnderscore from "@/components/ui/BlinkingUnderscore";
 
 const PAGES = [
   { label: "Projects", href: "#projects" },
@@ -23,12 +24,12 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer className="border-t border-zinc-800/80">
-      <div className="mx-auto max-w-4xl px-6 py-12">
+      <div className="mx-auto max-w-4xl px-6 py-12 md:max-w-[960px]">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
             <p className="font-mono text-sm font-semibold text-zinc-100">
               {HERO_DATA.name}
-              <span className="ml-1 animate-pulse text-blue-500">_</span>
+              <BlinkingUnderscore />
             </p>
             {/* Visitor stats — fetch once the footer top crosses the viewport bottom */}
             <div className="mt-3">

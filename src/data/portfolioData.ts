@@ -99,12 +99,12 @@ export const PROJECTS_DATA: Project[] = [
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     id: "marvedge-sdet",
-    role: "SDET",
+    role: "SDET Internship",
     organization: "Marvedge",
     period: "Sep 2026 - Present",
     location: "Remote",
     type: "REMOTE",
-    highlights: ["Updating soon..."],
+    highlights: ["testing and improving the security of their platform"],
     logo: "/marvedge-logo.jpg",
   },
 ];

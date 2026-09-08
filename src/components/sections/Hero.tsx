@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import {
   ArrowRight,
@@ -33,7 +33,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative mx-auto max-w-4xl px-6 pt-6 pb-16 text-center md:text-left md:pt-8 md:pb-20">
+    <section className="relative mx-auto max-w-4xl px-6 pt-6 pb-16 text-center md:max-w-[960px] md:pt-8 md:pb-20 md:text-left">
       <div>
         <p className="mb-4 font-mono text-sm text-blue-500">~/hello-world</p>
 
@@ -94,7 +94,7 @@ export default function Hero() {
                   <social.icon className="h-4 w-4" />
                 </a>
 
-                {/* LinkedIn badge – only on hover, body = badge */}
+                {/* LinkedIn badge - only on hover, body = badge */}
                 <div className="hidden group-hover:block absolute left-1/2 top-full z-50 mt-3 w-fit -translate-x-1/2 md:left-0 md:translate-x-0">
                   <div className="w-fit overflow-hidden rounded-lg shadow-xl">
                     <div

@@ -20,7 +20,7 @@ export default function Experience() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-6 pb-14 md:pb-16">
+    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-6 pb-14 md:max-w-[960px] md:pb-16">
       <SectionHeading index="02" title="Experience" />
 
       <div className="relative rounded-xl border border-zinc-800 bg-[#2E2A27]">
@@ -35,9 +35,9 @@ export default function Experience() {
                 onClick={() => setOpenId(open ? null : item.id)}
                 aria-expanded={open}
                 aria-label={`${item.organization} — ${item.role}`}
-                className="flex w-full flex-col gap-3 p-5 text-left sm:flex-row sm:items-start sm:justify-between md:p-6"
+                className="flex h-[72.5px] w-full items-center justify-between gap-3 px-5 text-left md:px-6"
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   {item.logo ? (
                     <img
                       src={item.logo}
@@ -64,7 +64,7 @@ export default function Experience() {
                 <div className="flex shrink-0 items-center gap-3 pl-14 sm:pl-0">
                   <div className="flex flex-col items-end gap-1">
                     <span className="whitespace-nowrap text-sm text-zinc-400">{item.period}</span>
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-600">
+                    <span className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">
                       {item.type}
                     </span>
                   </div>

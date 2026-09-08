@@ -40,9 +40,9 @@ export default function Navbar() {
         WebkitBackdropFilter: "blur(8px) saturate(150%)",
       }}
     >
-      <nav className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6">
+      <nav className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6 md:max-w-[960px]">
         <a href="#top" className="font-mono text-[15px] font-semibold tracking-tight text-zinc-100 transition-colors hover:text-white">
-          adityahq<span className="animate-pulse text-blue-500">_</span>
+          adityahq<span className="ml-1 text-blue-500">_</span>
         </a>
 
         <div className="hidden items-center gap-6 md:flex">
@@ -84,7 +84,7 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="border-t border-white/[0.07] bg-[#1c1917]/45 backdrop-blur-lg md:hidden">
-          <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4">
+          <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4 md:max-w-[960px]">
             {MOBILE_LINKS.map((link) => (
               <a
                 key={link.href}
