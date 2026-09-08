@@ -104,7 +104,7 @@ function ProjectCard({ project }: { project: Project }) {
       </AnimatePresence>
 
       <div className="flex items-start justify-between gap-4">
-        <h3 className="font-display text-xl font-semibold text-zinc-100 transition-colors duration-200 group-hover:text-blue-300">
+        <h3 className="font-display text-lg font-semibold text-zinc-100 transition-colors duration-200 group-hover:text-blue-300 md:text-xl">
           {project.title}
         </h3>
         <div className="relative flex shrink-0 items-center gap-2">
@@ -189,7 +189,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-4xl px-6 pb-16 md:max-w-[960px] md:pb-20 no-select select-none">
+    <section id="projects" className="mx-auto max-w-4xl px-5 pb-12 md:max-w-[960px] md:px-6 md:pb-20 no-select select-none">
       <SectionHeading index="03" title="Projects" />
 
       <div className="flex flex-col gap-6">

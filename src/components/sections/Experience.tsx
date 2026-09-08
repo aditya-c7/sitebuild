@@ -20,7 +20,7 @@ export default function Experience() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-6 pb-14 md:max-w-[960px] md:pb-16">
+    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16">
       <SectionHeading index="02" title="Experience" />
 
       <div className="relative rounded-xl border border-zinc-800 bg-[#2E2A27]">

@@ -33,18 +33,18 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative mx-auto max-w-4xl px-6 pt-6 pb-16 text-center md:max-w-[960px] md:pt-8 md:pb-20 md:text-left">
+    <section className="relative mx-auto max-w-4xl px-5 pt-6 pb-12 text-center md:max-w-[960px] md:px-6 md:pt-8 md:pb-20 md:text-left">
       <div>
         <p className="mb-4 font-mono text-sm text-blue-500">~/hello-world</p>
 
-        <h1 className="text-[2.6rem] font-normal leading-none tracking-tight text-zinc-50 sm:text-5xl md:text-7xl font-editorial no-select select-none">
+        <h1 className="text-[2rem] font-normal leading-none tracking-tight text-zinc-50 md:text-7xl font-editorial no-select select-none">
           {HERO_DATA.name.split(" ")[0]}{" "}
           <span className="text-white">
             {HERO_DATA.name.split(" ").slice(1).join(" ")}
           </span>
         </h1>
 
-        <p className="mt-4 font-mono text-lg text-zinc-400 md:text-xl">
+        <p className="mt-4 font-mono text-base text-zinc-400 md:text-xl">
           {HERO_DATA.role}
         </p>
 

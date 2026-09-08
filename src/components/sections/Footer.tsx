@@ -24,7 +24,7 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer className="border-t border-zinc-800/80">
-      <div className="mx-auto max-w-4xl px-6 py-12 md:max-w-[960px]">
+      <div className="mx-auto max-w-4xl px-5 py-8 md:max-w-[960px] md:px-6 md:py-12">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
             <p className="font-mono text-sm font-semibold text-zinc-100">

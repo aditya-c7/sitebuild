@@ -40,7 +40,7 @@ export default function Navbar() {
         WebkitBackdropFilter: "blur(8px) saturate(150%)",
       }}
     >
-      <nav className="mx-auto flex h-16 max-w-4xl items-center justify-between px-6 md:max-w-[960px]">
+      <nav className="mx-auto flex h-14 max-w-4xl items-center justify-between px-5 md:h-16 md:max-w-[960px] md:px-6">
         <a href="#top" className="font-mono text-[15px] font-semibold tracking-tight text-zinc-100 transition-colors hover:text-white">
           adityahq<span className="ml-1 text-blue-500">_</span>
         </a>
@@ -84,7 +84,7 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="border-t border-white/[0.07] bg-[#1c1917]/45 backdrop-blur-lg md:hidden">
-          <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4 md:max-w-[960px]">
+          <div className="mx-auto flex max-w-4xl flex-col gap-1 px-5 py-4 md:max-w-[960px] md:px-6">
             {MOBILE_LINKS.map((link) => (
               <a
                 key={link.href}
