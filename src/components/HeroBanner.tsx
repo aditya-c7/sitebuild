@@ -113,7 +113,7 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
       <div className={STRIPE_CLASS} />
 
       <div
-        className="relative aspect-[4096/1365] w-full select-none overflow-hidden bg-[#0d0d10]"
+        className="relative aspect-[4096/1365] w-full select-none overflow-hidden bg-[#1c1917]"
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
       >

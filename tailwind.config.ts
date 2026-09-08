@@ -1,4 +1,5 @@
 ﻿import type { Config } from "tailwindcss";
+import colors from "tailwindcss/colors";
 
 const config: Config = {
   darkMode: ["class"],
@@ -6,10 +7,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        canvas: "#0d0d10",
-        surface: "#121215",
-        "surface-card": "#18181b",
-        border: "#27272a",
+        zinc: colors.stone,
+        canvas: "#1c1917",
+        surface: "#2E2A27",
+        "surface-card": "#38332F",
+        border: "#44403C",
         accent: {
           blue: "#2563eb",
           "blue-glow": "#3b82f6",
@@ -19,6 +21,7 @@ const config: Config = {
         sans: ["var(--font-sans)", "Inter", "sans-serif"],
         mono: ["var(--font-mono)", "JetBrains Mono", "monospace"],
         editorial: ["PP Editorial New", "var(--font-editorial)", "Georgia", "serif"],
+        display: ["var(--font-display)", "Space Grotesk", "sans-serif"],
       },
       animation: {
         "marquee-left": "marquee-left 35s linear infinite",

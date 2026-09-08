@@ -16,6 +16,7 @@ import { HERO_DATA } from "@/data/portfolioData";
 
 const NAV_ITEMS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 
@@ -66,7 +67,7 @@ export default function CommandMenu() {
       onOpenChange={setOpen}
       label="Global Command Menu"
       overlayClassName="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
-      contentClassName="fixed left-1/2 top-[18%] z-[100] w-[92vw] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-zinc-800 bg-[#121215] shadow-2xl shadow-black/60"
+      contentClassName="fixed left-1/2 top-[18%] z-[100] w-[92vw] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-zinc-800 bg-[#2E2A27] shadow-2xl shadow-black/60"
     >
       <div className="flex items-center gap-3 border-b border-zinc-800 px-4">
         <span className="font-mono text-xs text-blue-500">&gt;</span>

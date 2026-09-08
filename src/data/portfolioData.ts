@@ -16,6 +16,7 @@ export interface ExperienceItem {
   location: string;
   type: "REMOTE" | "HYBRID" | "ONSITE";
   highlights: string[];
+  logo?: string;
 }
 
 export interface Article {
@@ -97,39 +98,14 @@ export const PROJECTS_DATA: Project[] = [
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
-    id: "ai-researcher",
-    role: "Autonomous AI & Systems Researcher",
-    organization: "Independent",
-    period: "2025 - Present",
+    id: "marvedge-sdet",
+    role: "SDET",
+    organization: "Marvedge",
+    period: "Sep 2026 - Present",
     location: "Remote",
     type: "REMOTE",
-    highlights: [
-      "Architecting multi-agent reasoning loops and telemetry diagnostics.",
-      "Developing deterministic evaluation pipelines with strict schema enforcement.",
-    ],
-  },
-  {
-    id: "fullstack-dev",
-    role: "Full-Stack & Cloud Developer",
-    organization: "Academic & Independent",
-    period: "2025 - Present",
-    location: "Remote",
-    type: "REMOTE",
-    highlights: [
-      "Building distributed asynchronous backend services and containerized workflows.",
-      "Developing state-driven frontends with responsive component architecture.",
-    ],
-  },
-  {
-    id: "education-jcet",
-    role: "B.Tech in Computer Science and Engineering",
-    organization: "Jain College of Engineering & Technology (VTU)",
-    period: "2025 - Expected 2029",
-    location: "Hubli-Dharwad, Karnataka",
-    type: "ONSITE",
-    highlights: [
-      "Core coursework: Systems Architecture, Data Structures & Algorithms, Machine Learning Foundations.",
-    ],
+    highlights: ["Updating soon..."],
+    logo: "/marvedge-logo.jpg",
   },
 ];
 

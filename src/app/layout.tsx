@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { Inter, JetBrains_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
@@ -26,6 +26,13 @@ const instrument = Instrument_Serif({
   display: "swap",
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-display",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://adityahq.me"),
   title: "Aditya Chitragar | Developer",
@@ -48,7 +55,7 @@ export const metadata: Metadata = {
     siteName: "adityahq",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.jpg",
         width: 1077,
         height: 560,
         alt: "Aditya Chitragar — Developer",
@@ -59,7 +66,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
 };
 
@@ -70,7 +77,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} ${instrument.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} ${instrument.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
         <CanvasBackground />
         <Navbar />
         <main>{children}</main>

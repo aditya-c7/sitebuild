@@ -13,7 +13,7 @@ export default function TechStack() {
           return (
             <span
               key={tech.name}
-              className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#18181b] px-3.5 py-2 text-sm text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-[#202023] hover:text-zinc-100"
+              className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#38332F] px-3.5 py-2 text-sm text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-[#44403C] hover:text-zinc-100"
             >
               <Icon className={`h-4 w-4 shrink-0 ${className}`} />
               {tech.name}

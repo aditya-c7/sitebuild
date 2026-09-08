@@ -53,7 +53,7 @@ function ProjectCard({ project }: { project: Project }) {
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setHovered(false)}
-      className="group relative rounded-xl border border-zinc-800 bg-[#121215] p-6 transition-colors duration-200 hover:border-zinc-600 hover:bg-[#18181b]"
+      className="group relative rounded-xl border border-zinc-800 bg-[#2E2A27] p-6 transition-colors duration-200 hover:border-zinc-600 hover:bg-[#38332F]"
     >
       <Crosshairs />
 
@@ -68,7 +68,7 @@ function ProjectCard({ project }: { project: Project }) {
             className="pointer-events-none absolute left-0 top-0 z-50 hidden md:block"
           >
             <div
-              className="overflow-hidden rounded-xl border border-zinc-700 bg-[#18181b] shadow-2xl shadow-black/60"
+              className="overflow-hidden rounded-xl border border-zinc-700 bg-[#38332F] shadow-2xl shadow-black/60"
               style={{ width: PREVIEW_WIDTH }}
             >
               <div className="flex items-center gap-2 border-b border-zinc-800 bg-zinc-900/80 px-3 py-2">
@@ -104,7 +104,7 @@ function ProjectCard({ project }: { project: Project }) {
       </AnimatePresence>
 
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-xl font-semibold text-zinc-100 transition-colors duration-200 group-hover:text-blue-300">
+        <h3 className="font-display text-xl font-semibold text-zinc-100 transition-colors duration-200 group-hover:text-blue-300">
           {project.title}
         </h3>
         <div className="relative flex shrink-0 items-center gap-2">
@@ -145,7 +145,7 @@ function ProjectCard({ project }: { project: Project }) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute bottom-full right-0 z-20 mb-2 w-64 overflow-hidden rounded-xl border border-zinc-800/80 bg-[#0d0d10]/75 backdrop-blur-xl shadow-2xl shadow-black/60"
+                    className="absolute bottom-full right-0 z-20 mb-2 w-64 overflow-hidden rounded-xl border border-zinc-800/80 bg-[#1c1917]/75 backdrop-blur-xl shadow-2xl shadow-black/60"
                   >
                     <div className="bg-gradient-to-br from-zinc-900/60 via-zinc-900/30 to-transparent p-3.5">
                       <div className="flex items-center gap-2.5">
@@ -190,7 +190,7 @@ function ProjectCard({ project }: { project: Project }) {
 export default function Projects() {
   return (
     <section id="projects" className="mx-auto max-w-4xl px-6 pb-16 md:pb-20 no-select select-none">
-      <SectionHeading index="02" title="Projects" />
+      <SectionHeading index="03" title="Projects" />
 
       <div className="flex flex-col gap-6">
         {PROJECTS_DATA.map((project) => (

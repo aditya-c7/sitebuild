@@ -73,7 +73,7 @@ export default function Hero() {
             href={HERO_DATA.socials.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#121215] px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-[#18181b]"
+            className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#2E2A27] px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-[#38332F]"
           >
             <FileText className="h-4 w-4" />
             Resume
@@ -89,7 +89,7 @@ export default function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.name}
-                  className="flex rounded-lg border border-zinc-800 bg-[#121215] p-2.5 text-zinc-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/50 hover:text-blue-400"
+                  className="flex rounded-lg border border-zinc-800 bg-[#2E2A27] p-2.5 text-zinc-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/50 hover:text-blue-400"
                 >
                   <social.icon className="h-4 w-4" />
                 </a>
@@ -124,7 +124,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.name}
-                className="rounded-lg border border-zinc-800 bg-[#121215] p-2.5 text-zinc-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/50 hover:text-blue-400"
+                className="rounded-lg border border-zinc-800 bg-[#2E2A27] p-2.5 text-zinc-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/50 hover:text-blue-400"
               >
                 <social.icon className="h-4 w-4" />
               </a>

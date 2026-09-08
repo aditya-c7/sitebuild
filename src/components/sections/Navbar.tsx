@@ -5,11 +5,13 @@ import { Command, Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 
 const MOBILE_LINKS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 
@@ -31,7 +33,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 border-b border-white/[0.07] backdrop-blur-lg transition-colors duration-300 ${
-        scrolled ? "bg-[#0a0a0a]/45 shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : "bg-[#0a0a0a]/20"
+        scrolled ? "bg-[#1c1917]/45 shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : "bg-[#1c1917]/20"
       }`}
       style={{
         backdropFilter: "blur(8px) saturate(150%)",
@@ -62,7 +64,7 @@ export default function Navbar() {
           <button
             onClick={openCommandMenu}
             aria-label="Open command menu"
-            className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#121215] px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-all hover:border-zinc-600 hover:text-zinc-200"
+            className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#2E2A27] px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-all hover:border-zinc-600 hover:text-zinc-200"
           >
             <Command className="h-3.5 w-3.5" />
             <span>Ctrl</span>
@@ -81,7 +83,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-white/[0.07] bg-[#0a0a0a]/45 backdrop-blur-lg md:hidden">
+        <div className="border-t border-white/[0.07] bg-[#1c1917]/45 backdrop-blur-lg md:hidden">
           <div className="mx-auto flex max-w-4xl flex-col gap-1 px-6 py-4">
             {MOBILE_LINKS.map((link) => (
               <a
