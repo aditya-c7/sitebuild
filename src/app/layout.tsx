@@ -27,6 +27,7 @@ const instrument = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://adityahq.me"),
   title: "Aditya Chitragar | Developer",
   description:
     "Portfolio of Aditya Chitragar — Developer building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
@@ -39,6 +40,27 @@ export const metadata: Metadata = {
     "Python",
     "FastAPI",
   ],
+  openGraph: {
+    title: "Aditya Chitragar | Developer",
+    description:
+      "Portfolio of Aditya Chitragar — Developer building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+    url: "https://adityahq.me",
+    siteName: "adityahq",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1077,
+        height: 560,
+        alt: "Aditya Chitragar — Developer",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
