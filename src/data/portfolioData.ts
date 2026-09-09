@@ -85,6 +85,15 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/aditya-c7",
     previewGradient: "from-emerald-600/30 via-teal-600/20 to-blue-600/30",
   },
+  {
+    id: "precedent",
+    title: "Precedent [AI Legal Contract Reviewer]",
+    description:
+      "LLM-powered tool that learns a law firm's past contract decisions and reviews new agreements clause by clause, telling lawyers whether to accept, counter, or escalate, with evidence from previous documents.",
+    tags: ["Python", "RAG", "LLM", "LegalTech"],
+    githubUrl: "https://github.com/aditya-c7/testlitmus",
+    previewGradient: "from-amber-600/30 via-orange-600/20 to-red-600/30",
+  },
 ];
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [
