@@ -77,15 +77,6 @@ export const TECH_STACK = [
 
 export const PROJECTS_DATA: Project[] = [
   {
-    id: "agentic-triage",
-    title: "Agentic Workflow Automation & Telemetry Triage Pipeline",
-    description:
-      "Autonomous data pipeline using AutoGen and localized LLMs to categorize, diagnose, and structure high-volume technical telemetry into strict schemas, mitigating reasoning degradation and manual toil.",
-    tags: ["Python", "FastAPI", "AutoGen"],
-    githubUrl: "https://github.com/aditya-c7",
-    previewGradient: "from-blue-600/30 via-indigo-600/20 to-purple-600/30",
-  },
-  {
     id: "farmers-swag",
     title: "Farmer's Swag (Agricultural AI Platform)",
     description:
