@@ -91,7 +91,7 @@ export const PROJECTS_DATA: Project[] = [
     description:
       "LLM-powered tool that learns a law firm's past contract decisions and reviews new agreements clause by clause, telling lawyers whether to accept, counter, or escalate, with evidence from previous documents.",
     tags: ["Python", "RAG", "LLM", "LegalTech"],
-    githubUrl: "https://github.com/aditya-c7/testlitmus",
+    liveUrl: "https://github.com/aditya-c7/testlitmus",
     previewGradient: "from-amber-600/30 via-orange-600/20 to-red-600/30",
   },
 ];

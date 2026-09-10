@@ -124,7 +124,7 @@ function ProjectCard({ project }: { project: Project }) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Live demo"
+              aria-label="Open project link"
               className="rounded-md border border-zinc-800 p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
             >
               <ExternalLink className="h-4 w-4" />
