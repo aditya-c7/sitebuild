@@ -8,7 +8,6 @@ import {
   Copy,
   ExternalLink,
   Mail,
-  MessageSquare,
 } from "lucide-react";
 import { SiGithub } from "react-icons/si";
 import { LinkedinBrand } from "@/components/ui/TechIcons";
@@ -127,21 +126,6 @@ export default function CommandMenu() {
               <Copy className="h-4 w-4 text-zinc-500" />
             )}
             {copied ? "Copied!" : "Copy email address"}
-          </Command.Item>
-          <Command.Item
-            value="copy discord"
-            onSelect={async () => {
-              try {
-                await navigator.clipboard.writeText(HERO_DATA.socials.discord);
-              } catch {
-                // clipboard unavailable - ignore
-              }
-              setOpen(false);
-            }}
-            className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-zinc-300 transition-colors data-[selected=true]:bg-blue-600/10 data-[selected=true]:text-blue-300"
-          >
-            <MessageSquare className="h-4 w-4 text-zinc-500" />
-            Copy Discord handle
           </Command.Item>
         </Command.Group>
       </Command.List>
