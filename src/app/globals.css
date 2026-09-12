@@ -58,14 +58,6 @@ body {
  * never requests a missing file (was a console 404).
  */
 
-/* LinkedIn badge — keep docs exact, just remove outer gap */
-.badge-base {
-  background: transparent !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 0 !important;
-}
-
 /* Copy-lock: text cannot be highlighted or copied */
 .no-select {
   -webkit-user-select: none; /* Safari */

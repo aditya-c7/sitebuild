@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Bot, User, ArrowLeft, ArrowRight } from "lucide-react";
+import { Bot, User, ArrowLeft, Send } from "lucide-react";
 import { Spotlight } from "@/components/ui/Spotlight";
 
 type ChatRole = "user" | "assistant";
@@ -275,31 +275,24 @@ export default function ChatPage() {
             </div>
           )}
 
-          <form
-            onSubmit={onSubmit}
-            className="sticky bottom-0 mt-4 rounded-2xl border border-[#222120] bg-[#0A0A0A]/80 p-1.5 backdrop-blur-md md:mt-6 md:p-2"
-          >
-            <div className="rounded-2xl border border-[#222120] bg-[#1E1D1C] p-2.5 md:p-4">
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask anything..."
-                maxLength={500}
-                disabled={busy}
-                className="w-full bg-transparent text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none disabled:opacity-50 md:text-[15px]"
-              />
-              <div className="mt-3 flex justify-end md:mt-4">
-                <button
-                  type="submit"
-                  disabled={busy || !input.trim()}
-                  aria-label="Send message"
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-zinc-900 transition-colors hover:bg-zinc-100 disabled:opacity-30 md:h-9 md:w-9"
-                >
-                  <ArrowRight className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                </button>
-              </div>
-            </div>
+          <form onSubmit={onSubmit} className="mt-4 flex gap-2 md:mt-6">
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask anything about Aditya..."
+              maxLength={500}
+              disabled={busy}
+              className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
+            />
+            <button
+              type="submit"
+              disabled={busy || !input.trim()}
+              aria-label="Send message"
+              className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-colors hover:bg-blue-500 disabled:opacity-40 disabled:hover:bg-blue-600"
+            >
+              <Send className="h-4 w-4" />
+            </button>
           </form>
         </div>
       </div>
