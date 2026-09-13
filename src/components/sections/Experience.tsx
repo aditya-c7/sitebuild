@@ -87,7 +87,7 @@ export default function Experience() {
                     transition={{ duration: 0.25 }}
                     className="overflow-hidden"
                   >
-                    <ul className="flex flex-col gap-3 px-5 pb-6 md:px-6">
+                    <ul className="flex flex-col gap-3 px-5 pb-2 md:px-6">
                       {item.highlights.map((highlight) => (
                         <li
                           key={highlight}
@@ -101,6 +101,26 @@ export default function Experience() {
                         </li>
                       ))}
                     </ul>
+                    {item.id === "marvedge-sdet" && (
+                      <div className="px-5 pb-4 md:px-6">
+                        <a
+                          href="https://github.com/Marvedge/marvedge/pull/328"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-[#1E1D1C] px-3 py-1 text-xs font-mono text-zinc-300 transition-colors hover:border-zinc-600 hover:bg-[#222120] hover:text-white"
+                        >
+                          <svg
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            className="h-3.5 w-3.5 text-[#8957E5]"
+                            aria-hidden="true"
+                          >
+                            <path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z" />
+                          </svg>
+                          PR #328
+                        </a>
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
