@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sanitizeUserMessage } from "@/lib/sanitize";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { SYSTEM_PROMPT } from "@/lib/assistant-knowledge";
+import { matchQuery, dedupeFollowups, type BankAction } from "@/lib/rag";
 
 export const runtime = "nodejs";
 
@@ -11,7 +12,7 @@ type HistoryItem = { role: ChatRole; content: string };
 type ChatResponse = {
   reply: string;
   followups: [string, string];
-  action: { label: string; url: string } | null;
+  action: BankAction | null;
 };
 
 function fallbackParse(raw: string): ChatResponse | null {
@@ -219,9 +220,17 @@ export async function POST(req: Request) {
     const ip = getClientIp(req.headers);
     const rl = await checkRateLimit(ip);
     if (!rl.allowed) {
+      const retryAfter = Math.max(1, Math.ceil(rl.resetMs / 1000));
       return NextResponse.json(
-        { error: "Rate limit exceeded. Try again in a few minutes.", remaining: 0 },
-        { status: 429 }
+        { error: "Rate limit exceeded. Try again in a few minutes.", remaining: 0, retryAfter, code: "RATE_LIMITED_LOOP" },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(retryAfter),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Date.now() + rl.resetMs),
+          },
+        }
       );
     }
 
@@ -239,11 +248,17 @@ export async function POST(req: Request) {
     const history = Array.isArray(body?.history) ? (body.history as HistoryItem[]).slice(-10) : [];
     const message = sanitizeUserMessage(rawMessage);
 
-    // Try Groq first if key exists, else local
-    let result = await callGroq(message, history);
+    // Pure-RAG first ($0): presets -> hard rules -> bank scoring.
+    // Groq only fires on complex/novel questions the bank can't answer.
+    const matched = matchQuery(message);
+    let result: ChatResponse | null = matched.confident
+      ? { reply: matched.reply, followups: matched.followups, action: matched.action }
+      : await callGroq(message, history);
     if (!result) {
       result = localReply(message);
     }
+    // Never echo the just-asked question (or recent turns) back as a suggestion
+    result = { ...result, followups: dedupeFollowups(result.followups, message, history) };
 
     // Fire-and-forget DB logging if configured (optional, no crash if missing)
     // Keep simple without Prisma dependency — if you add Prisma later, log here.
@@ -256,7 +271,7 @@ export async function POST(req: Request) {
     const fallback: ChatResponse = {
       reply:
         "I had trouble processing that, please try again. You can also reach Aditya via LinkedIn or email for direct contact.",
-      followups: ["What projects has he built?", "How to contact Aditya?"],
+      followups: dedupeFollowups(["What projects has he built?", "How to contact Aditya?"], "", []),
       action: { label: "Contact on LinkedIn", url: "https://linkedin.com/in/adityachitragar" },
     };
     return NextResponse.json(fallback, { status: 200 });

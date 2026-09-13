@@ -1,16 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Bot, User, ArrowLeft, Send } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Bot, User, ArrowLeft, Send, Mail, CornerDownRight } from "lucide-react";
+import { SiGithub } from "react-icons/si";
 import { Spotlight } from "@/components/ui/Spotlight";
+import { StreamingText } from "@/components/ui/StreamingText";
+import { LinkedinBrand } from "@/components/ui/TechIcons";
 
 type ChatRole = "user" | "assistant";
+type ActionIcon = "email" | "github" | "linkedin" | "link";
 type Msg = {
   role: ChatRole;
   content: string;
   followups?: [string, string];
-  action?: { label: string; url: string } | null;
+  action?: { label: string; url: string; icon?: ActionIcon } | null;
+  streaming?: boolean;
+  streamId?: number;
 };
+
+
 
 function getSessionId(): string {
   if (typeof window === "undefined") return "server";
@@ -24,14 +32,54 @@ function getSessionId(): string {
 }
 
 const THINKING_STEPS = ["Thinking…", "Analyzing your question…", "Generating response…"];
+// Infinite loop shown after 25/10m cap — cycles fetching → thinking → analysing → connecting
+const LOOP_STEPS = ["Fetching…", "Thinking…", "Analysing…", "Connecting…"];
+const LIMIT_STORAGE_KEY = "adityahq:chat:blockUntil";
+// Hidden sizer holds the longest state so the box never resizes mid-swap
+const THINK_SIZER = THINKING_STEPS.reduce((a, b) => (a.length >= b.length ? a : b));
+const THINK_HOLD_MS = 2000;
+const THINK_ENTER_MS = 30;
+const THINK_SETTLE_MS = 260;
+
+// Matrix dot loader (scan variant): 4x4 grid, delay = col * cycle/10 (cycle 1200ms → 120ms per column)
+const MATRIX_DOTS = Array.from({ length: 16 }, (_, i) => (i % 4) * 120);
+
+// Word-by-word stream pacing (mirrors StreamingText defaults)
+const STREAM_WORD_GAP = 45;
+const STREAM_FADE_MS = 320;
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [typing, setTyping] = useState(false);
-  const [typingText, setTypingText] = useState("");
-  const [thinkingIdx, setThinkingIdx] = useState(0);
+  const [streaming, setStreaming] = useState(false);
+  const msgIdRef = useRef(0);
+  const streamTimerRef = useRef(0);
+  const [thinkShown, setThinkShown] = useState(0);
+  const [blockedUntil, setBlockedUntil] = useState<number | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const v = localStorage.getItem(LIMIT_STORAGE_KEY);
+      const n = v ? Number(v) : 0;
+      if (n > Date.now()) return n;
+      if (v) localStorage.removeItem(LIMIT_STORAGE_KEY);
+      return null;
+    } catch {
+      return null;
+    }
+  });
+  const [blockedLeft, setBlockedLeft] = useState(() =>
+    blockedUntil ? Math.max(0, blockedUntil - Date.now()) : 0
+  );
+  const [thinkLeaving, setThinkLeaving] = useState<number | null>(null);
+  const [thinkEntering, setThinkEntering] = useState<number | null>(null);
+  const [thinkEnterStart, setThinkEnterStart] = useState(false);
+  const thinkIdxRef = useRef(0);
+  const loopIdxRef = useRef(0);
+  const [loopShown, setLoopShown] = useState(0);
+  const [loopLeaving, setLoopLeaving] = useState<number | null>(null);
+  const [loopEntering, setLoopEntering] = useState<number | null>(null);
+  const [loopEnterStart, setLoopEnterStart] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,31 +90,113 @@ export default function ChatPage() {
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading, typing, typingText]);
+  }, [messages, loading, streaming, blockedUntil]);
 
-  // Rotate thinking text while loading
+  const isBlocked = blockedUntil !== null && blockedUntil > Date.now();
+
+  // Blocked countdown + auto-unblock after 10m (survives refresh via localStorage)
   useEffect(() => {
-    if (!loading || typing) return;
-    const id = setInterval(() => setThinkingIdx((i) => (i + 1) % THINKING_STEPS.length), 700);
+    if (!blockedUntil) return;
+    const tick = () => {
+      const left = blockedUntil - Date.now();
+      if (left <= 0) {
+        try {
+          localStorage.removeItem(LIMIT_STORAGE_KEY);
+        } catch {}
+        setBlockedUntil(null);
+        setBlockedLeft(0);
+        setLoopLeaving(null);
+        setLoopEntering(null);
+      } else {
+        setBlockedLeft(left);
+      }
+    };
+    tick();
+    const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [loading, typing]);
+  }, [blockedUntil]);
 
-  // Reset thinking index when loading starts
+  // Infinite shimmer loop while blocked: Fetching → Thinking → Analysing → Connecting
   useEffect(() => {
-    if (loading) setThinkingIdx(0);
+    if (!isBlocked) return;
+    loopIdxRef.current = 0;
+    setLoopShown(0);
+    setLoopLeaving(null);
+    setLoopEntering(null);
+    setLoopEnterStart(false);
+    let tEnter = 0;
+    let tSettle = 0;
+    const id = setInterval(() => {
+      const cur = loopIdxRef.current;
+      const next = (cur + 1) % LOOP_STEPS.length;
+      loopIdxRef.current = next;
+      setLoopLeaving(cur);
+      setLoopEntering(next);
+      setLoopEnterStart(true);
+      tEnter = window.setTimeout(() => setLoopEnterStart(false), THINK_ENTER_MS);
+      tSettle = window.setTimeout(() => {
+        setLoopShown(next);
+        setLoopLeaving(null);
+        setLoopEntering(null);
+      }, THINK_SETTLE_MS);
+    }, THINK_HOLD_MS);
+    return () => {
+      clearInterval(id);
+      window.clearTimeout(tEnter);
+      window.clearTimeout(tSettle);
+    };
+  }, [isBlocked]);
+
+  useEffect(() => {
+    return () => window.clearTimeout(streamTimerRef.current);
+  }, []);
+
+  // Thinking-states swap machine: every THINK_HOLD_MS the outgoing line
+  // exits upward (.is-exit) while the incoming line enters from below
+  // (.is-enter-start → release), then settles as the shown line
+  useEffect(() => {
+    if (!loading) return;
+    thinkIdxRef.current = 0;
+    setThinkShown(0);
+    setThinkLeaving(null);
+    setThinkEntering(null);
+    setThinkEnterStart(false);
+    let tEnter = 0;
+    let tSettle = 0;
+    const id = setInterval(() => {
+      const cur = thinkIdxRef.current;
+      const next = (cur + 1) % THINKING_STEPS.length;
+      thinkIdxRef.current = next;
+      setThinkLeaving(cur);
+      setThinkEntering(next);
+      setThinkEnterStart(true);
+      tEnter = window.setTimeout(() => setThinkEnterStart(false), THINK_ENTER_MS);
+      tSettle = window.setTimeout(() => {
+        setThinkShown(next);
+        setThinkLeaving(null);
+        setThinkEntering(null);
+      }, THINK_SETTLE_MS);
+    }, THINK_HOLD_MS);
+    return () => {
+      clearInterval(id);
+      window.clearTimeout(tEnter);
+      window.clearTimeout(tSettle);
+    };
   }, [loading]);
 
   const send = async (text: string) => {
+    if (isBlocked) return;
     const trimmed = text.trim();
-    if (!trimmed || loading || typing) return;
+    if (!trimmed || loading || streaming) return;
     setError(null);
     const userMsg: Msg = { role: "user", content: trimmed };
     const history = messages.map((m) => ({ role: m.role, content: m.content }));
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    const sentAt = Date.now();
+    window.clearTimeout(streamTimerRef.current);
     setLoading(true);
-    setTyping(false);
-    setTypingText("");
+    setStreaming(false);
 
     try {
       const res = await fetch("/api/chat", {
@@ -78,14 +208,19 @@ export default function ChatPage() {
           sessionId: getSessionId(),
         }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => null);
       if (!res.ok) {
         if (res.status === 429) {
-          setError(data.error || "Rate limit exceeded. Try again in a few minutes.");
+          const retryAfter = (data as { retryAfter?: number })?.retryAfter ?? 600;
+          const until = Date.now() + retryAfter * 1000;
+          try {
+            localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
+          } catch {}
+          setBlockedUntil(until);
           setLoading(false);
           return;
         }
-        throw new Error(data.error || "Failed to get reply");
+        throw new Error((data as { error?: string })?.error || "Failed to get reply");
       }
       const reply: string = typeof data.reply === "string" ? data.reply : "I had trouble replying, please try again.";
       const followups: [string, string] =
@@ -97,31 +232,30 @@ export default function ChatPage() {
           ? { label: data.action.label, url: data.action.url }
           : null;
 
-      // Switch from thinking to typing
-      setLoading(false);
-      setTyping(true);
-      setTypingText("");
+      // Hold the thinking phase for at least ~2.5s so the matrix + shimmer
+      // sequence reads properly even when the API answers instantly
+      const MIN_THINK_MS = 2500;
+      const thinkWait = Math.max(0, MIN_THINK_MS - (Date.now() - sentAt));
 
-      let idx = 0;
-      const step = () => {
-        idx += 1;
-        setTypingText(reply.slice(0, idx));
-        if (idx >= reply.length) {
-          setTyping(false);
-          setMessages((prev) => [...prev, { role: "assistant", content: reply, followups, action }]);
-          setTypingText("");
-        } else {
-          // Smooth variable delay: faster on spaces/punctuation
-          const ch = reply[idx - 1];
-          const delay = ch === " " ? 8 : ch === "," || ch === "." ? 40 : 14;
-          setTimeout(step, delay);
-        }
-      };
-      // Kick off smooth typing with rAF for jank-free start
-      requestAnimationFrame(() => setTimeout(step, 80));
+      setTimeout(() => {
+        // Switch from thinking to word-by-word streaming
+        setLoading(false);
+        const id = ++msgIdRef.current;
+        const wordCount = reply.split(/\s+/).filter(Boolean).length;
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: reply, followups, action, streaming: true, streamId: id },
+        ]);
+        setStreaming(true);
+        // Reveal followups/action once the last word has resolved
+        streamTimerRef.current = window.setTimeout(() => {
+          setMessages((prev) => prev.map((m) => (m.streamId === id ? { ...m, streaming: false } : m)));
+          setStreaming(false);
+        }, wordCount * STREAM_WORD_GAP + STREAM_FADE_MS + 150);
+      }, thinkWait);
     } catch {
       setLoading(false);
-      setTyping(false);
+      setStreaming(false);
       const fallback: Msg = {
         role: "assistant",
         content: "I had trouble processing that, please try again. You can also reach Aditya via LinkedIn or email.",
@@ -130,9 +264,6 @@ export default function ChatPage() {
       };
       setMessages((prev) => [...prev, fallback]);
     } finally {
-      if (!typing) {
-        // keep loading false already handled
-      }
       inputRef.current?.focus();
     }
   };
@@ -142,12 +273,12 @@ export default function ChatPage() {
     send(input);
   };
 
-  const isEmpty = messages.length === 0 && !loading && !typing;
-  const busy = loading || typing;
+  const isEmpty = messages.length === 0 && !loading && !streaming && !isBlocked;
+  const busy = loading || streaming || isBlocked;
 
   return (
     <Spotlight>
-      <style>{`@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}} .shimmer-text{background:linear-gradient(90deg,#52525b 0%,#e4e4e7 45%,#52525b 55%,#52525b 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 1.2s ease-in-out infinite} @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}} .typing-cursor{display:inline-block;width:2px;height:1em;background:#e4e4e7;margin-left:2px;vertical-align:-2px;animation:blink 1s step-end infinite} .chat-scroll{scroll-behavior:smooth;will-change:scroll-position}`}</style>
+      <style>{`:root{--think-hold:2000ms;--think-swap:150ms;--think-gap:50ms;--think-distance:8px;--think-blur:2px;--think-shimmer:2000ms;--think-base:#9a9a9a;--think-highlight:#f5f5f5;--think-ease:ease-in-out} .t-think{position:relative;display:inline-block;text-align:center} .t-think-sizer{display:block;visibility:hidden;white-space:nowrap} .t-think-text{position:absolute;top:0;left:0;right:0;display:block;color:var(--think-base);white-space:nowrap;transform:translateY(0);filter:blur(0);opacity:1;transition:transform var(--think-swap) var(--think-ease),filter var(--think-swap) var(--think-ease),opacity var(--think-swap) var(--think-ease);will-change:transform,filter,opacity} .t-think-text::before{content:attr(data-text);position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,transparent 0%,transparent 40%,var(--think-highlight) 50%,transparent 60%,transparent 100%);background-size:400% 100%;background-repeat:no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:t-think-shimmer var(--think-shimmer) linear infinite} @keyframes t-think-shimmer{0%{background-position:100% 0}100%{background-position:0% 0}} .t-think-text.is-exit{transform:translateY(calc(var(--think-distance)*-1));filter:blur(var(--think-blur));opacity:0} .t-think-text.is-enter-start{transition:none;transform:translateY(var(--think-distance));filter:blur(var(--think-blur));opacity:0} @media (prefers-reduced-motion:reduce){.t-think-text{transition:none !important;transform:none !important;filter:none !important}.t-think-text::before{display:none !important}} :root{--matrix-cycle:1200ms;--matrix-base:#3a3a3e;--matrix-active:#b8b8c2;--matrix-ease:ease-in-out} .t-matrix{display:grid;grid-template-columns:repeat(4,2px);grid-auto-rows:2px;gap:2px} .t-matrix i{display:block;background:var(--matrix-base);animation:t-matrix-pulse var(--matrix-cycle) var(--matrix-ease) infinite;animation-delay:calc(var(--d,0)*1ms)} .t-matrix i.is-gap{visibility:hidden;animation:none} @keyframes t-matrix-pulse{0%,45%,100%{background-color:var(--matrix-base)}15%{background-color:var(--matrix-active)}} @media (prefers-reduced-motion:reduce){.t-matrix i{animation:none !important}} .chat-scroll{scroll-behavior:smooth;will-change:scroll-position} .st-stream{--word-blur:3px;--ease-out-quart:cubic-bezier(0.25,1,0.5,1)} .st-word{display:inline-block;opacity:0;filter:blur(var(--word-blur));transition:opacity var(--fade-duration,320ms) var(--ease-out-quart),filter var(--fade-duration,320ms) var(--ease-out-quart)} .st-word[data-in]{opacity:1;filter:blur(0)} .st-stream[data-resetting] .st-word{transition:none} @media (prefers-reduced-motion:reduce){.st-word{transition:none !important;filter:none !important;opacity:1 !important}}`}</style>
       <div className="mx-auto max-w-4xl px-5 pb-10 pt-24 md:max-w-[960px] md:px-6 md:pt-28 md:pb-16">
         <a
           href="/"
@@ -161,7 +292,7 @@ export default function ChatPage() {
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600 text-[13px] md:h-9 md:w-9 md:text-[15px]">✦</span>
             <div>
               <h1 className="text-[15px] font-semibold tracking-tight text-zinc-100 md:text-[18px]">Ask my AI assistant</h1>
-              <p className="text-xs text-zinc-500 md:text-[13px]">Trained on Aditya&apos;s projects &amp; background</p>
+              <p className="text-xs text-zinc-500 md:text-[13px]">Trained on Aditya&apos;s Data</p>
             </div>
           </div>
 
@@ -210,29 +341,42 @@ export default function ChatPage() {
                           : "border border-zinc-800 bg-[#1c1917] text-zinc-200"
                       }`}
                     >
-                      {m.content}
+                      {m.role === "assistant" ? (
+                        <StreamingText
+                          active={!!m.streaming}
+                          text={m.content}
+                          wordGap={STREAM_WORD_GAP}
+                          fadeDuration={STREAM_FADE_MS}
+                        />
+                      ) : (
+                        m.content
+                      )}
                     </div>
-                    {m.role === "assistant" && m.followups && m.followups.length === 2 && (
-                      <div className="flex flex-wrap gap-1.5 md:gap-2">
+                    {m.role === "assistant" && !m.streaming && m.followups && m.followups.length === 2 && (
+                      <div className="flex w-full flex-col">
                         {m.followups.map((q) => (
                           <button
                             key={q}
                             onClick={() => send(q)}
                             disabled={busy}
-                            className="rounded-full border border-zinc-700 bg-[#38332F] px-3 py-1 font-mono text-[11px] text-zinc-300 transition-colors hover:border-blue-500/50 hover:text-blue-300 disabled:opacity-50 md:px-3.5 md:py-1.5 md:text-sm"
+                            className="group flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left text-sm text-zinc-100 transition-colors hover:bg-white/[0.04] hover:text-white disabled:opacity-50 md:text-[15px]"
                           >
+                            <CornerDownRight className="h-4 w-4 shrink-0 text-zinc-500 transition-colors group-hover:text-zinc-200" aria-hidden="true" />
                             {q}
                           </button>
                         ))}
                       </div>
                     )}
-                    {m.role === "assistant" && m.action && (
+                    {m.role === "assistant" && !m.streaming && m.action && (
                       <a
                         href={m.action.url}
                         target={m.action.url.startsWith("/") ? undefined : "_blank"}
                         rel={m.action.url.startsWith("/") ? undefined : "noopener noreferrer"}
-                        className="inline-flex items-center gap-1 rounded-lg border border-zinc-800 bg-[#1c1917] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-[#1c1917] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
                       >
+                        {m.action.icon === "email" && <Mail className="h-3.5 w-3.5" aria-hidden="true" />}
+                        {m.action.icon === "github" && <SiGithub className="h-3.5 w-3.5" aria-hidden="true" />}
+                        {m.action.icon === "linkedin" && <LinkedinBrand className="h-3.5 w-3.5" aria-hidden="true" />}
                         {m.action.label} <span aria-hidden>→</span>
                       </a>
                     )}
@@ -245,28 +389,87 @@ export default function ChatPage() {
                 </div>
               ))}
 
-            {loading && (
-              <div className="flex gap-2.5 md:gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-[#1c1917] text-zinc-400 md:h-8 md:w-8">
-                  <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />
+            {isBlocked && (
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2.5 md:gap-3">
+                  <div className="inline-flex items-center gap-2.5 rounded-2xl border border-amber-900/30 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
+                    <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
+                      {MATRIX_DOTS.map((d, i) => (
+                        <i key={i} style={{ "--d": d } as CSSProperties} />
+                      ))}
+                    </span>
+                    <span className="t-think text-xs font-medium tracking-wide md:text-[13px]" role="status">
+                      <span className="t-think-sizer" aria-hidden="true">
+                        {LOOP_STEPS.reduce((a, b) => (a.length >= b.length ? a : b))}
+                      </span>
+                      {loopLeaving !== null && (
+                        <span
+                          className="t-think-text is-exit"
+                          data-text={LOOP_STEPS[loopLeaving]}
+                          aria-hidden="true"
+                        >
+                          {LOOP_STEPS[loopLeaving]}
+                        </span>
+                      )}
+                      {loopEntering !== null ? (
+                        <span
+                          className={`t-think-text${loopEnterStart ? " is-enter-start" : ""}`}
+                          data-text={LOOP_STEPS[loopEntering]}
+                        >
+                          {LOOP_STEPS[loopEntering]}
+                        </span>
+                      ) : (
+                        <span className="t-think-text" data-text={LOOP_STEPS[loopShown]}>
+                          {LOOP_STEPS[loopShown]}
+                        </span>
+                      )}
+                    </span>
+                  </div>
                 </div>
-                <div className="rounded-2xl border border-zinc-800 bg-[#1c1917] px-3 py-2.5 text-xs md:px-4 md:py-3 md:text-sm">
-                  <span className="shimmer-text text-xs font-medium tracking-wide md:text-[13px]">{THINKING_STEPS[thinkingIdx]}</span>
+                <p className="ml-10 font-mono text-[11px] text-zinc-500">
+                  Limit reached (25/25). Try again in {Math.ceil(blockedLeft / 60000)}m {Math.ceil((blockedLeft % 60000) / 1000)}s.
+                </p>
+              </div>
+            )}
+
+            {loading && !isBlocked && (
+              <div className="flex gap-2.5 md:gap-3">
+                <div className="inline-flex items-center gap-2.5 rounded-2xl border border-zinc-800 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
+                  <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
+                    {MATRIX_DOTS.map((d, i) => (
+                      <i key={i} style={{ "--d": d } as CSSProperties} />
+                    ))}
+                  </span>
+                  <span className="t-think text-xs font-medium tracking-wide md:text-[13px]" role="status">
+                    <span className="t-think-sizer" aria-hidden="true">
+                      {THINK_SIZER}
+                    </span>
+                    {thinkLeaving !== null && (
+                      <span
+                        className="t-think-text is-exit"
+                        data-text={THINKING_STEPS[thinkLeaving]}
+                        aria-hidden="true"
+                      >
+                        {THINKING_STEPS[thinkLeaving]}
+                      </span>
+                    )}
+                    {thinkEntering !== null ? (
+                      <span
+                        className={`t-think-text${thinkEnterStart ? " is-enter-start" : ""}`}
+                        data-text={THINKING_STEPS[thinkEntering]}
+                      >
+                        {THINKING_STEPS[thinkEntering]}
+                      </span>
+                    ) : (
+                      <span className="t-think-text" data-text={THINKING_STEPS[thinkShown]}>
+                        {THINKING_STEPS[thinkShown]}
+                      </span>
+                    )}
+                  </span>
                 </div>
               </div>
             )}
 
-            {typing && (
-              <div className="flex gap-2.5 md:gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-[#1c1917] text-zinc-400 md:h-8 md:w-8">
-                  <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                </div>
-                <div className="max-w-[86%] rounded-2xl border border-zinc-800 bg-[#1c1917] px-3.5 py-2.5 text-sm leading-relaxed text-zinc-200 will-change-contents md:max-w-[84%] md:px-5 md:py-3 md:text-[15px]">
-                  {typingText}
-                  <span className="typing-cursor" aria-hidden />
-                </div>
-              </div>
-            )}
           </div>
 
           {error && (
@@ -280,7 +483,7 @@ export default function ChatPage() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything about Aditya..."
+              placeholder={isBlocked ? "Limit reached — please wait…" : "Ask anything about Aditya..."}
               maxLength={500}
               disabled={busy}
               className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
@@ -294,6 +497,7 @@ export default function ChatPage() {
               <Send className="h-4 w-4" />
             </button>
           </form>
+          {isBlocked && <p className="mt-2 text-center font-mono text-[11px] text-zinc-600">25-query limit — resets automatically after 10 minutes. No messages are sent while blocked.</p>}
         </div>
       </div>
     </Spotlight>
