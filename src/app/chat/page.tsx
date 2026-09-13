@@ -287,7 +287,7 @@ export default function ChatPage() {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to home
         </a>
 
-        <div className="relative mt-6 rounded-[20px] border border-zinc-800 bg-[#0A0A0A] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.5)] md:p-8">
+        <div className="mt-6 flex flex-col">
           <div className="flex items-center gap-2.5 border-b border-white/[0.08] pb-4 md:gap-3.5 md:pb-5">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600 text-[13px] md:h-9 md:w-9 md:text-[15px]">✦</span>
             <div>
@@ -327,13 +327,13 @@ export default function ChatPage() {
             ) : null}
             {!isEmpty &&
               messages.map((m, i) => (
-                <div key={i} className={`flex gap-2.5 md:gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div key={i} className={`flex gap-2 md:gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   {m.role === "assistant" && (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-[#1c1917] text-zinc-400 md:h-8 md:w-8">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-[#1c1917] text-zinc-400 md:h-8 md:w-8">
                       <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     </div>
                   )}
-                  <div className={`flex max-w-[86%] flex-col gap-2 md:max-w-[84%] md:gap-2.5 ${m.role === "user" ? "items-end" : "items-start"}`}>
+                  <div className={`flex max-w-[80%] flex-col gap-2 md:max-w-[84%] md:gap-2.5 ${m.role === "user" ? "items-end" : "items-start"}`}>
                     <div
                       className={`rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed md:px-5 md:py-3 md:text-[15px] ${
                         m.role === "user"
@@ -382,7 +382,7 @@ export default function ChatPage() {
                     )}
                   </div>
                   {m.role === "user" && (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white md:h-8 md:w-8">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-white md:h-8 md:w-8">
                       <User className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     </div>
                   )}
