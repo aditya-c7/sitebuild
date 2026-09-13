@@ -32,8 +32,8 @@ function getSessionId(): string {
 }
 
 const THINKING_STEPS = ["Thinking…", "Analyzing your question…", "Generating response…"];
-// Infinite loop shown after 25/10m cap — cycles fetching → thinking → analysing → connecting
-const LOOP_STEPS = ["Fetching…", "Thinking…", "Analysing…", "Connecting…"];
+// Infinite loop shown after 25/10m cap — cycles connecting, updating, fetching, scanning, thinking repeatedly
+const LOOP_STEPS = ["Connecting…", "Updating…", "Fetching…", "Scanning…", "Thinking…"];
 const LIMIT_STORAGE_KEY = "adityahq:chat:blockUntil";
 // Hidden sizer holds the longest state so the box never resizes mid-swap
 const THINK_SIZER = THINKING_STEPS.reduce((a, b) => (a.length >= b.length ? a : b));
@@ -390,45 +390,40 @@ export default function ChatPage() {
               ))}
 
             {isBlocked && (
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-2.5 md:gap-3">
-                  <div className="inline-flex items-center gap-2.5 rounded-2xl border border-amber-900/30 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
-                    <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
-                      {MATRIX_DOTS.map((d, i) => (
-                        <i key={i} style={{ "--d": d } as CSSProperties} />
-                      ))}
+              <div className="flex gap-2.5 md:gap-3">
+                <div className="inline-flex items-center gap-2.5 rounded-2xl border border-zinc-800 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
+                  <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
+                    {MATRIX_DOTS.map((d, i) => (
+                      <i key={i} style={{ "--d": d } as CSSProperties} />
+                    ))}
+                  </span>
+                  <span className="t-think text-xs font-medium tracking-wide md:text-[13px]" role="status">
+                    <span className="t-think-sizer" aria-hidden="true">
+                      {LOOP_STEPS.reduce((a, b) => (a.length >= b.length ? a : b))}
                     </span>
-                    <span className="t-think text-xs font-medium tracking-wide md:text-[13px]" role="status">
-                      <span className="t-think-sizer" aria-hidden="true">
-                        {LOOP_STEPS.reduce((a, b) => (a.length >= b.length ? a : b))}
+                    {loopLeaving !== null && (
+                      <span
+                        className="t-think-text is-exit"
+                        data-text={LOOP_STEPS[loopLeaving]}
+                        aria-hidden="true"
+                      >
+                        {LOOP_STEPS[loopLeaving]}
                       </span>
-                      {loopLeaving !== null && (
-                        <span
-                          className="t-think-text is-exit"
-                          data-text={LOOP_STEPS[loopLeaving]}
-                          aria-hidden="true"
-                        >
-                          {LOOP_STEPS[loopLeaving]}
-                        </span>
-                      )}
-                      {loopEntering !== null ? (
-                        <span
-                          className={`t-think-text${loopEnterStart ? " is-enter-start" : ""}`}
-                          data-text={LOOP_STEPS[loopEntering]}
-                        >
-                          {LOOP_STEPS[loopEntering]}
-                        </span>
-                      ) : (
-                        <span className="t-think-text" data-text={LOOP_STEPS[loopShown]}>
-                          {LOOP_STEPS[loopShown]}
-                        </span>
-                      )}
-                    </span>
-                  </div>
+                    )}
+                    {loopEntering !== null ? (
+                      <span
+                        className={`t-think-text${loopEnterStart ? " is-enter-start" : ""}`}
+                        data-text={LOOP_STEPS[loopEntering]}
+                      >
+                        {LOOP_STEPS[loopEntering]}
+                      </span>
+                    ) : (
+                      <span className="t-think-text" data-text={LOOP_STEPS[loopShown]}>
+                        {LOOP_STEPS[loopShown]}
+                      </span>
+                    )}
+                  </span>
                 </div>
-                <p className="ml-10 font-mono text-[11px] text-zinc-500">
-                  Limit reached (25/25). Try again in {Math.ceil(blockedLeft / 60000)}m {Math.ceil((blockedLeft % 60000) / 1000)}s.
-                </p>
               </div>
             )}
 
@@ -483,7 +478,7 @@ export default function ChatPage() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={isBlocked ? "Limit reached — please wait…" : "Ask anything about Aditya..."}
+              placeholder="Ask anything about Aditya..."
               maxLength={500}
               disabled={busy}
               className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
@@ -497,7 +492,6 @@ export default function ChatPage() {
               <Send className="h-4 w-4" />
             </button>
           </form>
-          {isBlocked && <p className="mt-2 text-center font-mono text-[11px] text-zinc-600">25-query limit — resets automatically after 10 minutes. No messages are sent while blocked.</p>}
         </div>
       </div>
     </Spotlight>
