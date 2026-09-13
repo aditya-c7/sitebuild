@@ -16,6 +16,12 @@ html, body {
   background-size: 32px 32px;
 }
 
+@supports (height: 100dvh) {
+  html, body {
+    min-height: 100dvh;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }

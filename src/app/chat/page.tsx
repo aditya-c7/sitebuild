@@ -85,12 +85,35 @@ export default function ChatPage() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
+  }, []);
+
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+
+  // iOS Safari ignores interactive-widget: track the visual viewport so
+  // auto-scroll goes instant (not smooth) while the keyboard is open —
+  // smooth + native scroll-into-view fighting is half the bounce.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const onChange = () => {
+      setKeyboardOpen(vv.height < window.innerHeight * 0.85);
+    };
+    onChange();
+    vv.addEventListener("resize", onChange);
+    vv.addEventListener("scroll", onChange);
+    return () => {
+      vv.removeEventListener("resize", onChange);
+      vv.removeEventListener("scroll", onChange);
+    };
   }, []);
 
   useEffect(() => {
-    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading, streaming, blockedUntil]);
+    listRef.current?.scrollTo({
+      top: listRef.current.scrollHeight,
+      behavior: keyboardOpen ? "auto" : "smooth",
+    });
+  }, [messages, loading, streaming, blockedUntil, keyboardOpen]);
 
   const isBlocked = blockedUntil !== null && blockedUntil > Date.now();
 
@@ -264,7 +287,8 @@ export default function ChatPage() {
       };
       setMessages((prev) => [...prev, fallback]);
     } finally {
-      inputRef.current?.focus();
+      // Dismiss the keyboard after send instead of refocusing (refocus bounce)
+      inputRef.current?.blur();
     }
   };
 
@@ -298,7 +322,7 @@ export default function ChatPage() {
 
           <div
             ref={listRef}
-            className="chat-scroll flex max-h-[52vh] min-h-[340px] flex-col gap-3 overflow-y-auto py-6 pr-1 scrollbar-thin md:max-h-[60vh] md:min-h-[480px] md:gap-4 md:py-8"
+            className="chat-scroll flex max-h-[52vh] min-h-[340px] flex-col gap-3 overflow-y-auto py-6 pr-1 scrollbar-thin supports-[height:100dvh]:max-h-[52dvh] md:max-h-[60vh] md:min-h-[480px] supports-[height:100dvh]:md:max-h-[60dvh] md:gap-4 md:py-8"
             style={{ scrollbarWidth: "thin" }}
           >
             {isEmpty ? (
@@ -481,7 +505,9 @@ export default function ChatPage() {
               placeholder="Ask anything about Aditya..."
               maxLength={500}
               disabled={busy}
-              className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
+              enterKeyHint="send"
+              autoComplete="off"
+              className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-base text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
             />
             <button
               type="submit"
