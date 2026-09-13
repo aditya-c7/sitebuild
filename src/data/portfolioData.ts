@@ -104,7 +104,7 @@ export const EXPERIENCE_DATA: ExperienceItem[] = [
     period: "Sep 2026 - Present",
     location: "Remote",
     type: "REMOTE",
-    highlights: ["testing and improving the security of their platform"],
+    highlights: ["Testing and improving the security of the platform"],
     logo: "/marvedge-logo.jpg",
   },
 ];

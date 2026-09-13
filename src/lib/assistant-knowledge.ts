@@ -22,7 +22,7 @@ WORK EXPERIENCE
 - Tests APIs, platform reliability, and full-stack security.
 - Before officially starting, evaluated the platform and discovered two critical vulnerabilities: Unauthenticated File Upload and Email Injection.
 - Prepared code diffs to patch these endpoints using auth middleware, sanitization, and rate-limiting.
-- Focus: testing and improving the security of their platform.
+- Focus: Testing and improving the security of the platform.
 
 FEATURED PROJECTS (talk mainly about these two; for anything more, point to GitHub)
 - Farmer's Swag (Agricultural AI Platform): Built in Google AI Studio. AI-powered agricultural decision-support web app featuring crop disease detection, live market price tracking, and livestock care assistance. Tags: React, FastAPI, Gemini API, Tailwind.
