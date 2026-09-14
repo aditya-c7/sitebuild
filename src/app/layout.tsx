@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono, Instrument_Serif, Space_Grotesk } from "next/fon
 import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
-import CanvasBackground from "@/components/ui/CanvasBackground";
+import CanvasBackgroundWrapper from "@/components/ui/CanvasBackgroundWrapper";
 import ConsoleGreet from "@/components/ui/ConsoleGreet";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -78,7 +78,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${instrument.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
-        <CanvasBackground />
+        <CanvasBackgroundWrapper />
         <Navbar />
         <main>{children}</main>
         <CommandMenu />
