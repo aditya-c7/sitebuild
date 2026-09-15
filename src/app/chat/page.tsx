@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Bot, User, ArrowLeft, Send, Mail, CornerDownRight } from "lucide-react";
 import { SiGithub } from "react-icons/si";
-import { Spotlight } from "@/components/ui/Spotlight";
 import { StreamingText } from "@/components/ui/StreamingText";
 import { LinkedinBrand } from "@/components/ui/TechIcons";
 
@@ -301,7 +300,7 @@ export default function ChatPage() {
   const busy = loading || streaming || isBlocked;
 
   return (
-    <Spotlight>
+    <>
       <style>{`:root{--think-hold:2000ms;--think-swap:150ms;--think-gap:50ms;--think-distance:8px;--think-blur:2px;--think-shimmer:2000ms;--think-base:#9a9a9a;--think-highlight:#f5f5f5;--think-ease:ease-in-out} .t-think{position:relative;display:inline-block;text-align:center} .t-think-sizer{display:block;visibility:hidden;white-space:nowrap} .t-think-text{position:absolute;top:0;left:0;right:0;display:block;color:var(--think-base);white-space:nowrap;transform:translateY(0);filter:blur(0);opacity:1;transition:transform var(--think-swap) var(--think-ease),filter var(--think-swap) var(--think-ease),opacity var(--think-swap) var(--think-ease);will-change:transform,filter,opacity} .t-think-text::before{content:attr(data-text);position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,transparent 0%,transparent 40%,var(--think-highlight) 50%,transparent 60%,transparent 100%);background-size:400% 100%;background-repeat:no-repeat;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:t-think-shimmer var(--think-shimmer) linear infinite} @keyframes t-think-shimmer{0%{background-position:100% 0}100%{background-position:0% 0}} .t-think-text.is-exit{transform:translateY(calc(var(--think-distance)*-1));filter:blur(var(--think-blur));opacity:0} .t-think-text.is-enter-start{transition:none;transform:translateY(var(--think-distance));filter:blur(var(--think-blur));opacity:0} @media (prefers-reduced-motion:reduce){.t-think-text{transition:none !important;transform:none !important;filter:none !important}.t-think-text::before{display:none !important}} :root{--matrix-cycle:1200ms;--matrix-base:#3a3a3e;--matrix-active:#b8b8c2;--matrix-ease:ease-in-out} .t-matrix{display:grid;grid-template-columns:repeat(4,2px);grid-auto-rows:2px;gap:2px} .t-matrix i{display:block;background:var(--matrix-base);animation:t-matrix-pulse var(--matrix-cycle) var(--matrix-ease) infinite;animation-delay:calc(var(--d,0)*1ms)} .t-matrix i.is-gap{visibility:hidden;animation:none} @keyframes t-matrix-pulse{0%,45%,100%{background-color:var(--matrix-base)}15%{background-color:var(--matrix-active)}} @media (prefers-reduced-motion:reduce){.t-matrix i{animation:none !important}} .chat-scroll{scroll-behavior:smooth;will-change:scroll-position} .st-stream{--word-blur:3px;--ease-out-quart:cubic-bezier(0.25,1,0.5,1)} .st-word{display:inline-block;opacity:0;filter:blur(var(--word-blur));transition:opacity var(--fade-duration,320ms) var(--ease-out-quart),filter var(--fade-duration,320ms) var(--ease-out-quart)} .st-word[data-in]{opacity:1;filter:blur(0)} .st-stream[data-resetting] .st-word{transition:none} @media (prefers-reduced-motion:reduce){.st-word{transition:none !important;filter:none !important;opacity:1 !important}}`}</style>
       <div className="mx-auto max-w-4xl px-5 pb-10 pt-24 md:max-w-[960px] md:px-6 md:pt-28 md:pb-16">
         <a
@@ -520,6 +519,6 @@ export default function ChatPage() {
           </form>
         </div>
       </div>
-    </Spotlight>
+    </>
   );
 }

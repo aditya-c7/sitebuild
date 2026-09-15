@@ -128,7 +128,7 @@ export const BANK: BankEntry[] = [
   {
     id: "tech-stack",
     patterns: ["tech stack", "technologies", "skills", "tools", "programming languages", "stack", "what can he build with"],
-    reply: "His core stack: Advanced Python (Pandas, NumPy, Pydantic, OOP), JavaScript, SQL, FastAPI, Node.js, React, MongoDB, Firebase, plus RAG architectures, multi-agent orchestration (CrewAI, AutoGen), Linux, CI/CD, and Vercel.",
+    reply: "His core stack: Advanced Python (Pandas, NumPy, Pydantic, OOP), JavaScript, SQL, FastAPI, Node.js, React, MongoDB, Firebase, plus RAG architectures, multi-agent orchestration (CrewAI, AutoGen), Linux, CI/CD, Playwright, and Vercel.",
     followups: ["What is his experience?", "What projects has he built?"],
     action: null,
   },

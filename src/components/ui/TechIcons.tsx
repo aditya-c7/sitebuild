@@ -8,6 +8,7 @@ import {
   DatabaseZap,
   FileCode,
   FileText,
+  FlaskConical,
   Mail,
   MessageSquare,
   Network,
@@ -68,6 +69,7 @@ const TECH_ICON_MAP: Record<string, TechIconEntry> = {
   Git: { icon: SiGit, className: "text-orange-500" },
   "GitHub Actions": { icon: SiGithubactions, className: "text-zinc-100" },
   Postman: { icon: SiPostman, className: "text-orange-400" },
+  Playwright: { icon: FlaskConical, className: "text-green-400" },
   Vercel: { icon: SiVercel, className: "text-zinc-100" },
   // legacy fallbacks keep old portfolio working
   TypeScript: { icon: FileCode, className: "text-blue-400" },

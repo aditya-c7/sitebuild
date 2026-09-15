@@ -72,6 +72,7 @@ export const TECH_STACK = [
   { name: "Git", category: "Stack" },
   { name: "GitHub Actions", category: "Stack" },
   { name: "Postman", category: "Stack" },
+  { name: "Playwright", category: "Stack" },
   { name: "Vercel", category: "Stack" },
 ];
 
