@@ -99,9 +99,32 @@ body {
   animation: fade-rise 0.35s ease-out both;
 }
 
+/* 404 comets: slow diagonal fall, fade in/out at the ends */
+@keyframes comet-fall {
+  0% {
+    transform: translate3d(0, -15vh, 0) rotate(18deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(-10vw, 112vh, 0) rotate(18deg);
+    opacity: 0;
+  }
+}
+.animate-comet {
+  animation: comet-fall 20s linear infinite;
+  will-change: transform, opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer,
-  .animate-fade-rise {
+  .animate-fade-rise,
+  .animate-comet {
     animation: none;
   }
   .animate-fade-rise {
