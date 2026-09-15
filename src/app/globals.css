@@ -99,7 +99,9 @@ body {
   animation: fade-rise 0.35s ease-out both;
 }
 
-/* 404 comets: slow diagonal fall, fade in/out at the ends */
+/* 404 comets: slow diagonal fall.
+ * Full opacity until the streak has exited below the viewport (fade runs
+ * 97%→100% off-screen), so every bright head visibly touches the bottom. */
 @keyframes comet-fall {
   0% {
     transform: translate3d(0, -15vh, 0) rotate(18deg);
@@ -108,11 +110,11 @@ body {
   8% {
     opacity: 1;
   }
-  85% {
+  97% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(-10vw, 112vh, 0) rotate(18deg);
+    transform: translate3d(-10vw, 120vh, 0) rotate(18deg);
     opacity: 0;
   }
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "404 — Page not found | Aditya Chitragar",
+  title: "404 error",
   description: "This page drifted away. Head back home or ask Aditya's AI assistant.",
 };
 
