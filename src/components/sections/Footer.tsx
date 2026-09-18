@@ -10,11 +10,6 @@ import LazyMount from "@/components/ui/LazyMount";
 import Skeleton from "@/components/ui/Skeleton";
 import BlinkingUnderscore from "@/components/ui/BlinkingUnderscore";
 
-const PAGES = [
-  { label: "Projects", href: "#projects" },
-  { label: "Resume", href: "#" },
-];
-
 const SOCIALS = [
   { label: "GitHub", href: HERO_DATA.socials.github, icon: SiGithub },
   { label: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: LinkedinBrand },
@@ -65,18 +60,6 @@ export default function Footer() {
           </div>
 
           <div className="flex gap-16">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-zinc-600">Pages</p>
-              <ul className="mt-3 flex flex-col gap-2">
-                {PAGES.map((page) => (
-                  <li key={page.label}>
-                    <a href={page.href} className="text-sm text-zinc-400 transition-colors hover:text-blue-400">
-                      {page.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
             <div>
               <p className="font-mono text-xs uppercase tracking-widest text-zinc-600">Socials</p>
               <ul className="mt-3 flex flex-col gap-2">
