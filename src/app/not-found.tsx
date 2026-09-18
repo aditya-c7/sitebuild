@@ -46,7 +46,7 @@ export default function NotFound() {
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3.5rem)] max-w-4xl flex-col items-center justify-center px-5 pt-14 text-center md:min-h-[calc(100dvh-4rem)] md:max-w-[960px] md:px-6 md:pt-16">
-        <p className="mb-4 font-mono text-sm text-blue-500">~/404</p>
+<p className="mb-4 font-mono text-sm text-blue-500">Error</p>
         <h1 className="font-editorial text-[6rem] font-normal leading-none tracking-tight text-zinc-50 no-select select-none sm:text-8xl md:text-9xl">
           404
         </h1>
