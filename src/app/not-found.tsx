@@ -6,42 +6,60 @@ export const metadata: Metadata = {
   description: "This page drifted away. Head back home or ask Aditya's AI assistant.",
 };
 
-// Slow, sparse falling comets behind the content.
-// Negative delays keep them mid-flight on first paint.
+// Sparse meteor shower: 3 ambient + 1 blue hero. Shared parallel path —
+// uniform-phase delays keep ≤2 on screen and mid-flight on first paint.
+// Lanes stay off the center text band.
 const COMETS = [
-  { left: "8%", duration: "22s", delay: "-6s", length: 110, tone: "white" },
-  { left: "22%", duration: "17s", delay: "-14s", length: 80, tone: "white" },
-  { left: "38%", duration: "24s", delay: "-3s", length: 130, tone: "blue" },
-  { left: "55%", duration: "19s", delay: "-11s", length: 90, tone: "white" },
-  { left: "68%", duration: "23s", delay: "-17s", length: 120, tone: "white" },
-  { left: "82%", duration: "16s", delay: "-8s", length: 75, tone: "blue" },
-  { left: "93%", duration: "21s", delay: "-19s", length: 100, tone: "white" },
+  { left: "12%", duration: "9s", delay: "-1.25s", length: 100, width: 1.5, head: 3, tone: "white" },
+  { left: "30%", duration: "9s", delay: "-3.75s", length: 120, width: 1.5, head: 3, tone: "white" },
+  { left: "70%", duration: "9s", delay: "-6.25s", length: 95, width: 1.5, head: 3, tone: "white" },
+  { left: "88%", duration: "7s", delay: "-8.75s", length: 140, width: 2, head: 4, tone: "blue" },
 ] as const;
+
+const TAIL_BG = {
+  white:
+    "linear-gradient(to bottom, transparent 0%, rgba(231, 229, 228, 0) 15%, rgba(231, 229, 228, 0.25) 55%, rgba(255, 255, 255, 0.85) 88%, #fff 100%)",
+  blue: "linear-gradient(to bottom, transparent 0%, rgba(96, 165, 250, 0) 10%, rgba(147, 197, 253, 0.35) 60%, rgba(219, 234, 254, 0.95) 90%, #fff 100%)",
+} as const;
 
 export default function NotFound() {
   return (
-    <div className="relative overflow-hidden">
-      {/* Comet field — decorative only */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+    <>
+      {/* Comet field — viewport-locked decorative layer */}
+      <div aria-hidden="true" className="comet-field pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {COMETS.map((c, i) => (
           <span
             key={i}
-            className="animate-comet absolute top-0 block w-px rounded-full"
+            className="animate-comet absolute top-0 block rounded-full"
             style={{
               left: c.left,
+              width: c.width,
               height: c.length,
               animationDuration: c.duration,
               animationDelay: c.delay,
-              background:
-                c.tone === "blue"
-                  ? "linear-gradient(to bottom, transparent, rgba(96, 165, 250, 0.85))"
-                  : "linear-gradient(to bottom, transparent, rgba(231, 229, 228, 0.55))",
+              background: TAIL_BG[c.tone],
               boxShadow:
                 c.tone === "blue"
-                  ? "0 0 8px 1px rgba(96, 165, 250, 0.35)"
-                  : "0 0 6px 1px rgba(231, 229, 228, 0.22)",
+                  ? "0 0 8px 0 rgba(147, 197, 253, 0.45)"
+                  : "0 0 6px 0 rgba(255, 255, 255, 0.35)",
             }}
-          />
+          >
+            <span
+              className="absolute left-1/2 block rounded-full"
+              style={{
+                width: c.head,
+                height: c.head,
+                bottom: -c.head / 2,
+                transform: "translateX(-50%)",
+                background:
+                  "radial-gradient(circle, #fff 0%, rgba(255, 255, 255, 0.9) 30%, rgba(191, 219, 254, 0.35) 55%, transparent 70%)",
+                boxShadow:
+                  c.tone === "blue"
+                    ? "0 0 10px 2px rgba(147, 197, 253, 0.7)"
+                    : "0 0 8px 2px rgba(255, 255, 255, 0.8)",
+              }}
+            />
+          </span>
         ))}
       </div>
 
@@ -70,6 +88,6 @@ export default function NotFound() {
           </a>
         </div>
       </div>
-    </div>
+    </>
   );
 }
