@@ -7,7 +7,6 @@ import {
   Cpu,
   DatabaseZap,
   FileCode,
-  FileText,
   Mail,
   MessageSquare,
   Network,
@@ -157,5 +156,4 @@ export const SOCIAL_LINKS: {
   { name: "GitHub", href: "https://github.com/aditya-c7", icon: SiGithub },
   { name: "LinkedIn", href: "https://linkedin.com/in/adityachitragar", icon: LinkedinBrand },
   { name: "Email", href: "mailto:adityac@googlegroups.com", icon: Mail },
-  { name: "Resume", href: "#", icon: FileText },
 ];

@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  ArrowRight,
-  FileText,
   Mail,
 } from "lucide-react";
 import { SiGithub } from "react-icons/si";
@@ -14,7 +12,6 @@ import { LinkedinBrand } from "@/components/ui/TechIcons";
 const SOCIALS = [
   { name: "GitHub", href: HERO_DATA.socials.github, icon: SiGithub },
   { name: "LinkedIn", href: HERO_DATA.socials.linkedin, icon: LinkedinBrand },
-  { name: "Email", href: `mailto:${HERO_DATA.socials.email}`, icon: Mail },
 ];
 
 export default function Hero() {
@@ -66,17 +63,8 @@ export default function Hero() {
             href={`mailto:${HERO_DATA.socials.email}`}
             className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-blue-glow hover:shadow-blue-500/30"
           >
-            Get in touch
-            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-          </a>
-          <a
-            href={HERO_DATA.socials.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#2E2A27] px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-[#38332F]"
-          >
-            <FileText className="h-4 w-4" />
-            Resume
+            Contact me
+            <Mail className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
         </div>
 

@@ -55,12 +55,6 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#"
-            className="text-sm text-zinc-400 transition-colors hover:text-blue-400"
-          >
-            Resume
-          </a>
           <button
             onClick={openCommandMenu}
             aria-label="Open command menu"
