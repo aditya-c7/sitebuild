@@ -5,11 +5,13 @@ import { Command, Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 
 const MOBILE_LINKS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 

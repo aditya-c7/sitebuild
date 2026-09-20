@@ -15,6 +15,7 @@ import { HERO_DATA } from "@/data/portfolioData";
 
 const NAV_ITEMS = [
   { label: "Tech Stack", href: "#tech-stack" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
 ];
 
