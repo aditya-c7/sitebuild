@@ -7,7 +7,7 @@ export default function TechStack() {
     <section id="tech-stack" className="mx-auto max-w-4xl px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16 no-select select-none">
       <SectionHeading index="01" title="Tech Stack" />
 
-      <div className="flex flex-wrap gap-2.5">
+      <div className="flex flex-wrap justify-center gap-2.5">
         {TECH_STACK.map((tech) => {
           const { icon: Icon, className } = getTechIcon(tech.name);
           return (
