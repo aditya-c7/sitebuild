@@ -33,9 +33,14 @@ function getSessionId(): string {
 }
 
 const THINKING_STEPS = ["Thinking…", "Analyzing your question…", "Generating response…"];
-// Infinite loop shown after 25/10m cap — cycles connecting, updating, fetching, scanning, thinking repeatedly
-const LOOP_STEPS = ["Connecting…", "Updating…", "Fetching…", "Scanning…", "Thinking…"];
 const LIMIT_STORAGE_KEY = "adityahq:chat:blockUntil";
+const BLOCK_REASON_KEY = "adityahq:chat:blockReason";
+type BlockReason = "profanity" | "rate-limit";
+
+const formatBlockedLeft = (ms: number) => {
+  const totalSec = Math.min(600, Math.max(0, Math.ceil(ms / 1000)));
+  return `${Math.floor(totalSec / 60)}:${String(totalSec % 60).padStart(2, "0")}`;
+};
 // Hidden sizer holds the longest state so the box never resizes mid-swap
 const THINK_SIZER = THINKING_STEPS.reduce((a, b) => (a.length >= b.length ? a : b));
 const THINK_HOLD_MS = 2000;
@@ -56,6 +61,7 @@ export default function ChatPage() {
   const [streaming, setStreaming] = useState(false);
   const msgIdRef = useRef(0);
   const streamTimerRef = useRef(0);
+  const thinkTimerRef = useRef(0);
   const [thinkShown, setThinkShown] = useState(0);
   const [blockedUntil, setBlockedUntil] = useState<number | null>(() => {
     if (typeof window === "undefined") return null;
@@ -64,7 +70,21 @@ export default function ChatPage() {
       const n = v ? Number(v) : 0;
       if (n > Date.now()) return n;
       if (v) localStorage.removeItem(LIMIT_STORAGE_KEY);
+      try {
+        localStorage.removeItem(BLOCK_REASON_KEY);
+      } catch {}
       return null;
+    } catch {
+      return null;
+    }
+  });
+  const [blockReason, setBlockReason] = useState<BlockReason | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const v = localStorage.getItem(LIMIT_STORAGE_KEY);
+      if (!v || Number(v) <= Date.now()) return null;
+      const r = localStorage.getItem(BLOCK_REASON_KEY);
+      return r === "profanity" || r === "rate-limit" ? r : null;
     } catch {
       return null;
     }
@@ -76,11 +96,6 @@ export default function ChatPage() {
   const [thinkEntering, setThinkEntering] = useState<number | null>(null);
   const [thinkEnterStart, setThinkEnterStart] = useState(false);
   const thinkIdxRef = useRef(0);
-  const loopIdxRef = useRef(0);
-  const [loopShown, setLoopShown] = useState(0);
-  const [loopLeaving, setLoopLeaving] = useState<number | null>(null);
-  const [loopEntering, setLoopEntering] = useState<number | null>(null);
-  const [loopEnterStart, setLoopEnterStart] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -127,10 +142,12 @@ export default function ChatPage() {
         try {
           localStorage.removeItem(LIMIT_STORAGE_KEY);
         } catch {}
+        try {
+          localStorage.removeItem(BLOCK_REASON_KEY);
+        } catch {}
         setBlockedUntil(null);
         setBlockedLeft(0);
-        setLoopLeaving(null);
-        setLoopEntering(null);
+        setBlockReason(null);
       } else {
         setBlockedLeft(left);
       }
@@ -140,39 +157,11 @@ export default function ChatPage() {
     return () => clearInterval(id);
   }, [blockedUntil]);
 
-  // Infinite shimmer loop while blocked: Fetching → Thinking → Analysing → Connecting
   useEffect(() => {
-    if (!isBlocked) return;
-    loopIdxRef.current = 0;
-    setLoopShown(0);
-    setLoopLeaving(null);
-    setLoopEntering(null);
-    setLoopEnterStart(false);
-    let tEnter = 0;
-    let tSettle = 0;
-    const id = setInterval(() => {
-      const cur = loopIdxRef.current;
-      const next = (cur + 1) % LOOP_STEPS.length;
-      loopIdxRef.current = next;
-      setLoopLeaving(cur);
-      setLoopEntering(next);
-      setLoopEnterStart(true);
-      tEnter = window.setTimeout(() => setLoopEnterStart(false), THINK_ENTER_MS);
-      tSettle = window.setTimeout(() => {
-        setLoopShown(next);
-        setLoopLeaving(null);
-        setLoopEntering(null);
-      }, THINK_SETTLE_MS);
-    }, THINK_HOLD_MS);
     return () => {
-      clearInterval(id);
-      window.clearTimeout(tEnter);
-      window.clearTimeout(tSettle);
+      window.clearTimeout(streamTimerRef.current);
+      window.clearTimeout(thinkTimerRef.current);
     };
-  }, [isBlocked]);
-
-  useEffect(() => {
-    return () => window.clearTimeout(streamTimerRef.current);
   }, []);
 
   // Thinking-states swap machine: every THINK_HOLD_MS the outgoing line
@@ -217,7 +206,11 @@ export default function ChatPage() {
       try {
         localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
       } catch {}
+      try {
+        localStorage.setItem(BLOCK_REASON_KEY, "profanity");
+      } catch {}
       setBlockedUntil(until);
+      setBlockReason("profanity");
       window.location.href = "/";
       return;
     }
@@ -229,6 +222,7 @@ export default function ChatPage() {
     setInput("");
     const sentAt = Date.now();
     window.clearTimeout(streamTimerRef.current);
+    window.clearTimeout(thinkTimerRef.current);
     setLoading(true);
     setStreaming(false);
 
@@ -250,7 +244,11 @@ export default function ChatPage() {
           try {
             localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
           } catch {}
+          try {
+            localStorage.setItem(BLOCK_REASON_KEY, "profanity");
+          } catch {}
           setBlockedUntil(until);
+          setBlockReason("profanity");
           setLoading(false);
           window.location.href = "/";
           return;
@@ -261,7 +259,11 @@ export default function ChatPage() {
           try {
             localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
           } catch {}
+          try {
+            localStorage.setItem(BLOCK_REASON_KEY, "rate-limit");
+          } catch {}
           setBlockedUntil(until);
+          setBlockReason("rate-limit");
           setLoading(false);
           return;
         }
@@ -281,7 +283,7 @@ export default function ChatPage() {
       const MIN_THINK_MS = 700;
       const thinkWait = Math.max(0, MIN_THINK_MS - (Date.now() - sentAt));
 
-      setTimeout(() => {
+      thinkTimerRef.current = window.setTimeout(() => {
         // Switch from thinking to word-by-word streaming
         setLoading(false);
         const id = ++msgIdRef.current;
@@ -356,7 +358,7 @@ export default function ChatPage() {
                     "What's Aditya's tech stack?",
                     "Tell me about Precedent",
                     "Is Aditya open to internships?",
-                    "What is he currently building?",
+                    "What is Precedent known for?",
                   ].map((q) => (
                     <button
                       key={q}
@@ -435,39 +437,18 @@ export default function ChatPage() {
               ))}
 
             {isBlocked && (
-              <div className="flex gap-2.5 md:gap-3">
-                <div className="inline-flex items-center gap-2.5 rounded-2xl border border-zinc-800 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
-                  <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
-                    {MATRIX_DOTS.map((d, i) => (
-                      <i key={i} style={{ "--d": d } as CSSProperties} />
-                    ))}
-                  </span>
-                  <span className="t-think text-xs font-medium tracking-wide md:text-[13px]" role="status">
-                    <span className="t-think-sizer" aria-hidden="true">
-                      {LOOP_STEPS.reduce((a, b) => (a.length >= b.length ? a : b))}
-                    </span>
-                    {loopLeaving !== null && (
-                      <span
-                        className="t-think-text is-exit"
-                        data-text={LOOP_STEPS[loopLeaving]}
-                        aria-hidden="true"
-                      >
-                        {LOOP_STEPS[loopLeaving]}
-                      </span>
-                    )}
-                    {loopEntering !== null ? (
-                      <span
-                        className={`t-think-text${loopEnterStart ? " is-enter-start" : ""}`}
-                        data-text={LOOP_STEPS[loopEntering]}
-                      >
-                        {LOOP_STEPS[loopEntering]}
-                      </span>
-                    ) : (
-                      <span className="t-think-text" data-text={LOOP_STEPS[loopShown]}>
-                        {LOOP_STEPS[loopShown]}
-                      </span>
-                    )}
-                  </span>
+              <div className="flex justify-start">
+                <div
+                  role="status"
+                  className="w-full rounded-lg border border-amber-900/50 bg-amber-950/30 px-3 py-2 font-mono text-xs text-amber-300"
+                >
+                  {blockReason === "profanity"
+                    ? "Take a breather, that language paused the chat."
+                    : "Lots of interest right now, chat is taking a short break."}{" "}
+                  Back in {formatBlockedLeft(blockedLeft)}.{" "}
+                  <a href="/" className="underline underline-offset-2 hover:text-amber-200">
+                    Back to home
+                  </a>
                 </div>
               </div>
             )}
