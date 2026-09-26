@@ -92,9 +92,16 @@ function scoreQuery(query: string): { id: string; score: number } {
 
 // Hard rules: always win, never matchable, never sent to Groq.
 function hardRules(m: string): BankAnswer | null {
-  if (/salary|compensation|\bctc\b|package\b|\bpay\b|stipend|expected pay/.test(m)) {
+  if (/how old|\bage\b|\bdob\b|date of birth|birthday|\bborn\b|\b19\b/.test(m)) {
     return {
-      reply: "Salary details are not shared here, please reach out via LinkedIn or email for professional discussions.",
+      reply: "Aditya is 19.",
+      followups: ["What projects has he built?", "What is his experience?"],
+      action: null,
+    };
+  }
+  if (/salary|income|\bearnings?\b|compensation|\bctc\b|\bpackages?\b|\bpay\b|stipend|expected pay/.test(m)) {
+    return {
+      reply: "That's private 🤫. For professional discussions, reach out via LinkedIn or email.",
       followups: ["How to contact Aditya?", "Why should I hire Aditya?"],
       action: { label: "Contact on LinkedIn", url: "https://linkedin.com/in/adityachitragar", icon: "linkedin" },
     };
@@ -106,7 +113,7 @@ function hardRules(m: string): BankAnswer | null {
       action: null,
     };
   }
-  if (/phone|mobile number|call him|address|home address|family|parents|politics|religion|date of birth|\bdob\b|\bage\b|girlfriend|boyfriend|relationship/.test(m)) {
+  if (/phone|mobile number|call him|address|home address|family|parents|politics|religion|girlfriend|boyfriend|relationship/.test(m)) {
     return {
       reply: "That's personal and stays private. For anything professional, reaching out via LinkedIn or email works best.",
       followups: ["How to contact Aditya?", "What projects has he built?"],

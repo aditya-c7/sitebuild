@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { Bot, User, ArrowLeft, Send, Mail, CornerDownRight } from "lucide-react";
+import { Bot, User, ArrowLeft, Mail, CornerDownRight } from "lucide-react";
 import { SiGithub } from "react-icons/si";
 import { StreamingText } from "@/components/ui/StreamingText";
+import ChatComposerBox from "@/components/ui/ChatComposerBox";
 import { LinkedinBrand } from "@/components/ui/TechIcons";
+import { PROFANITY_RE } from "@/lib/sanitize";
 
 type ChatRole = "user" | "assistant";
 type ActionIcon = "email" | "github" | "linkedin" | "link";
@@ -209,6 +211,16 @@ export default function ChatPage() {
   const send = async (text: string) => {
     if (isBlocked) return;
     const trimmed = text.trim();
+    // Vulgar content stops the chat: short session block, then home.
+    if (PROFANITY_RE.test(trimmed.toLowerCase())) {
+      const until = Date.now() + 10 * 60 * 1000;
+      try {
+        localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
+      } catch {}
+      setBlockedUntil(until);
+      window.location.href = "/";
+      return;
+    }
     if (!trimmed || loading || streaming) return;
     setError(null);
     const userMsg: Msg = { role: "user", content: trimmed };
@@ -232,6 +244,17 @@ export default function ChatPage() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) {
+        if (res.status === 403 && (data as { code?: string })?.code === "PROFANITY_BLOCK") {
+          const retryAfter = (data as { retryAfter?: number })?.retryAfter ?? 600;
+          const until = Date.now() + retryAfter * 1000;
+          try {
+            localStorage.setItem(LIMIT_STORAGE_KEY, String(until));
+          } catch {}
+          setBlockedUntil(until);
+          setLoading(false);
+          window.location.href = "/";
+          return;
+        }
         if (res.status === 429) {
           const retryAfter = (data as { retryAfter?: number })?.retryAfter ?? 600;
           const until = Date.now() + retryAfter * 1000;
@@ -254,9 +277,8 @@ export default function ChatPage() {
           ? { label: data.action.label, url: data.action.url }
           : null;
 
-      // Hold the thinking phase for at least ~2.5s so the matrix + shimmer
-      // sequence reads properly even when the API answers instantly
-      const MIN_THINK_MS = 2500;
+      // Brief hold so the thinking shimmer reads even on instant answers
+      const MIN_THINK_MS = 700;
       const thinkWait = Math.max(0, MIN_THINK_MS - (Date.now() - sentAt));
 
       setTimeout(() => {
@@ -496,27 +518,13 @@ export default function ChatPage() {
             </div>
           )}
 
-          <form onSubmit={onSubmit} className="mt-4 flex gap-2 md:mt-6">
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask anything about Aditya..."
-              maxLength={500}
-              disabled={busy}
-              enterKeyHint="send"
-              autoComplete="off"
-              className="flex-1 rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 text-base text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500/50 focus:outline-none focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 md:text-[15px]"
-            />
-            <button
-              type="submit"
-              disabled={busy || !input.trim()}
-              aria-label="Send message"
-              className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-colors hover:bg-blue-500 disabled:opacity-40 disabled:hover:bg-blue-600"
-            >
-              <Send className="h-4 w-4" />
-            </button>
-          </form>
+          <ChatComposerBox
+            ref={inputRef}
+            value={input}
+            onChange={setInput}
+            onSubmit={onSubmit}
+            disabled={busy}
+          />
         </div>
       </div>
     </>

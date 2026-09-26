@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { sanitizeUserMessage } from "@/lib/sanitize";
+import { sanitizeUserMessage, PROFANITY_RE } from "@/lib/sanitize";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { SYSTEM_PROMPT } from "@/lib/assistant-knowledge";
-import { matchQuery, dedupeFollowups, type BankAction } from "@/lib/rag";
+import { matchQuery, dedupeFollowups, exactKey, type BankAction } from "@/lib/rag";
 
 export const runtime = "nodejs";
 
@@ -45,13 +45,21 @@ function fallbackParse(raw: string): ChatResponse | null {
 function localReply(message: string): ChatResponse {
   const m = message.toLowerCase();
 
-  const isSalary = /salary|compensation|ctc|package|pay/.test(m);
+  const isSalary = /salary|income|\bearnings?\b|compensation|\bctc\b|\bpackages?\b|\bpay\b|stipend/.test(m);
   if (isSalary) {
     return {
       reply:
-        "Salary details are not shared here, please reach out via LinkedIn or email for professional discussions. You can explore his work in the Projects section or check his availability for internships.",
+        "That's private 🤫. For professional discussions, reach out via LinkedIn or email.",
       followups: ["How to contact Aditya?", "What is Precedent?"],
       action: { label: "Contact on LinkedIn", url: "https://linkedin.com/in/adityachitragar" },
+    };
+  }
+  const isAge = /how old|\bage\b|\bdob\b|date of birth|birthday|\bborn\b|\b19\b/.test(m);
+  if (isAge) {
+    return {
+      reply: "Aditya is 19.",
+      followups: ["What projects has he built?", "What is his experience?"],
+      action: null,
     };
   }
 
@@ -163,10 +171,10 @@ function localReply(message: string): ChatResponse {
     };
   }
 
-  // Fallback — friendly redirect
+  // Fallback — honest boundary plus redirect
   return {
     reply:
-      "I can answer from Aditya's facts about his studies at VTU, his SDET internship at Marvedge, and his projects Farmer's Swag and Precedent. For anything outside that, please reach out via LinkedIn or email and he will get back to you.",
+      "I don't have that on Aditya's profile yet. I know his studies at VTU, his SDET internship at Marvedge, and his projects Farmer's Swag and Precedent best. For anything beyond that, LinkedIn or email reaches him directly.",
     followups: ["What is Precedent?", "How to contact Aditya?"],
     action: { label: "View Projects", url: "/#projects" },
   };
@@ -247,6 +255,14 @@ export async function POST(req: Request) {
 
     const history = Array.isArray(body?.history) ? (body.history as HistoryItem[]).slice(-10) : [];
     const message = sanitizeUserMessage(rawMessage);
+
+    // Vulgar content stops the chat: distinct code so the client redirects home.
+    if (PROFANITY_RE.test(exactKey(message))) {
+      return NextResponse.json(
+        { error: "Not allowed.", code: "PROFANITY_BLOCK", retryAfter: 600 },
+        { status: 403, headers: { "Retry-After": "600" } }
+      );
+    }
 
     // Pure-RAG first ($0): presets -> hard rules -> bank scoring.
     // Groq only fires on complex/novel questions the bank can't answer.

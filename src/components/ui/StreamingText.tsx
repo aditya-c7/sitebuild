@@ -36,8 +36,11 @@ export function StreamingText({
     frameA = requestAnimationFrame(() => {
       frameB = requestAnimationFrame(() => {
         setResetting(false);
+        // Human cadence: jittered per-word timing, same average as wordGap.
+        let t = 0;
         words.forEach((_, i) => {
-          timeouts.push(setTimeout(() => setRevealed(i + 1), i * wordGap));
+          t += wordGap * 0.55 + Math.random() * wordGap * 0.9;
+          timeouts.push(setTimeout(() => setRevealed(i + 1), t));
         });
       });
     });
