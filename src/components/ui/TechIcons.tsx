@@ -6,7 +6,6 @@ import {
   Container,
   Cpu,
   DatabaseZap,
-  FileCode,
   Mail,
   MessageSquare,
   Network,
@@ -31,6 +30,7 @@ import {
   SiPostman,
   SiReact,
   SiTailwindcss,
+  SiTypescript,
   SiVercel,
   SiGithub,
 } from "react-icons/si";
@@ -48,6 +48,7 @@ export interface TechIconEntry {
 const TECH_ICON_MAP: Record<string, TechIconEntry> = {
   Python: { icon: PythonBrand, className: "" },
   JavaScript: { icon: SiJavascript, className: "text-yellow-400" },
+  TypeScript: { icon: SiTypescript, className: "text-[#3178C6]" },
   HTML: { icon: SiHtml5, className: "text-orange-400" },
   C: { icon: SiC, className: "text-blue-400" },
   SQL: { icon: SiMysql, className: "text-violet-400" },
@@ -69,7 +70,6 @@ const TECH_ICON_MAP: Record<string, TechIconEntry> = {
   Playwright: { icon: PlaywrightStreamline, className: "" },
   Vercel: { icon: SiVercel, className: "text-zinc-100" },
   // legacy fallbacks keep old portfolio working
-  TypeScript: { icon: FileCode, className: "text-blue-400" },
   Docker: { icon: Container, className: "text-blue-400" },
   Kubernetes: { icon: Ship, className: "text-indigo-400" },
   LangGraph: { icon: Network, className: "text-rose-400" },

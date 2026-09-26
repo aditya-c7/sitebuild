@@ -85,7 +85,7 @@ function localReply(message: string): ChatResponse {
   if (/tech|stack|skill|language|framework/.test(m)) {
     return {
       reply:
-        "His stack includes Python, JavaScript, HTML, C, SQL, NumPy, Linux, CI/CD, FastAPI, Node.js, MongoDB, Firebase, React, Next.js, Tailwind CSS, RAG architectures, Git, GitHub Actions, Postman, Playwright, and Vercel. He builds AI-driven web apps and scalable backends.",
+        "His stack includes Python, JavaScript, TypeScript, HTML, C, SQL, NumPy, Linux, CI/CD, FastAPI, Node.js, MongoDB, Firebase, React, Next.js, Tailwind CSS, RAG architectures, Git, GitHub Actions, Postman, Playwright, and Vercel. He builds AI-driven web apps and scalable backends.",
       followups: ["What is his experience?", "What projects has he built?"],
       action: null,
     };

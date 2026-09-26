@@ -55,6 +55,7 @@ export const HERO_DATA = {
 export const TECH_STACK = [
   { name: "Python", category: "Stack" },
   { name: "JavaScript", category: "Stack" },
+  { name: "TypeScript", category: "Stack" },
   { name: "HTML", category: "Stack" },
   { name: "C", category: "Stack" },
   { name: "SQL", category: "Stack" },
