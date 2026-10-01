@@ -101,7 +101,7 @@ export const PROJECTS_DATA: Project[] = [
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     id: "marvedge-sdet",
-    role: "SDET Internship",
+    role: "SDET Intern",
     organization: "Marvedge",
     period: "Sep 2026 - Present",
     location: "Remote",
