@@ -96,6 +96,14 @@ export const PROJECTS_DATA: Project[] = [
     liveUrl: "https://github.com/aditya-c7/testlitmus",
     previewGradient: "from-amber-600/30 via-orange-600/20 to-red-600/30",
   },
+  {
+    id: "finance-agentx",
+    title: "Finance AgentX [Personal Finance Decision Tool]",
+    description:
+      "Personal finance tool that checks upcoming income and recurring expenses to help decide whether a purchase is safe to make now, better split into installments, or worth postponing.",
+    tags: ["Python", "Data Analysis", "Financial Forecasting", "Decision Engine"],
+    previewGradient: "from-purple-600/30 via-indigo-600/20 to-cyan-600/30",
+  },
 ];
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [

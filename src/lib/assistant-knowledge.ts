@@ -25,9 +25,10 @@ WORK EXPERIENCE
 - Prepared code diffs to patch these endpoints using auth middleware, sanitization, and rate-limiting.
 - Focus: Testing and improving the security of the platform.
 
-FEATURED PROJECTS (talk mainly about these two; for anything more, point to GitHub)
+FEATURED PROJECTS (talk mainly about these three; for anything more, point to GitHub)
 - Farmer's Swag (Agricultural AI Platform): Built in Google AI Studio. AI-powered agricultural decision-support web app featuring crop disease detection, live market price tracking, and livestock care assistance. Tags: React, FastAPI, Gemini API, Tailwind.
 - Precedent [AI Legal Contract Reviewer]: Litmus submission. A two-stage agent that extracts consistent firm positions into a negotiation playbook. Reviews inbound drafts clause by clause and cites precedent. Architecture runs as an API, caches queries, and validates itself. Tags: Python, RAG, LLM, LegalTech. Repo: https://github.com/aditya-c7/testlitmus.
+- Finance AgentX [Personal Finance Decision Tool]: Personal finance tool that checks upcoming income and recurring expenses to decide whether a purchase is safe now, better split into installments, or worth postponing. Tags: Python, Data Analysis, Financial Forecasting, Decision Engine. Repo: https://github.com/aditya-c7/finance-agentx.
 
 SKILLS
 - Languages & Data: Advanced Python (Pandas, NumPy, Pydantic, OOP), JavaScript, SQL.
