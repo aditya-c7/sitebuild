@@ -84,7 +84,7 @@ function localReply(message: string): ChatResponse {
   if (/project/.test(m)) {
     return {
       reply:
-        "Aditya has two featured projects, Farmer's Swag for agriculture and Precedent for legal contract review. Farmer's Swag helps with crop disease and market prices, Precedent reviews contracts clause by clause with evidence.",
+        "Aditya has three featured projects: Farmer's Swag for agriculture, Precedent for legal contract review, and Finance AgentX for personal finance decisions. Farmer's Swag helps with crop disease and market prices, Precedent reviews contracts clause by clause with evidence, and Finance AgentX checks income versus expenses before a purchase.",
       followups: ["Tell me about Precedent", "Tell me about Farmer's Swag"],
       action: { label: "View Projects", url: "/#projects" },
     };
@@ -295,5 +295,5 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  return NextResponse.json({ ok: true, chat: "POST /api/chat with { message, history, sessionId }" });
+  return NextResponse.json({ ok: true, chat: "POST /api/ai with { message, history, sessionId }" });
 }

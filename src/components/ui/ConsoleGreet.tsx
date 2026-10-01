@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // Console easter egg: subtle greeting in the console.
 // Note: DevTools matrix-rain overlay intentionally removed —
 // window outer/inner size-diff detection false-triggered on mobile
-// when the keyboard opens (innerHeight shrinks), covering /chat input.
+// when the keyboard opens (innerHeight shrinks), covering /ai input.
 
 export default function ConsoleGreet() {
   useEffect(() => {

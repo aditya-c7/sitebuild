@@ -73,7 +73,7 @@ export default function NotFound() {
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <a
-            href="/chat"
+            href="/ai"
             className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-blue-glow hover:shadow-blue-500/30"
           >
             Ask my AI assistant

@@ -227,7 +227,7 @@ export default function ChatPage() {
     setStreaming(false);
 
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
