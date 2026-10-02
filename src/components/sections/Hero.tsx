@@ -61,7 +61,7 @@ export default function Hero() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">
           <a
             href={`mailto:${HERO_DATA.socials.email}`}
-            className="group inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-accent-blue-glow hover:shadow-blue-500/30"
+            className="group inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.25),0_0_0_1px_rgba(0,0,0,0.35),0_8px_24px_-6px_rgba(37,99,235,0.55)] transition-all duration-200 hover:-translate-y-0.5 hover:brightness-[1.08] hover:shadow-[inset_0_1px_2px_0_rgba(255,255,255,0.3),0_0_0_1px_rgba(0,0,0,0.35),0_12px_32px_-6px_rgba(59,130,246,0.6)]"
           >
             Contact me
             <Mail className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
@@ -76,7 +76,7 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.name}
-              className="rounded-lg border border-zinc-800 bg-[#2E2A27] p-2.5 text-zinc-400 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-500/50 hover:text-blue-400"
+              className="rounded-xl bg-[linear-gradient(180deg,#34302C_0%,#2E2A27_45%,#282524_100%)] p-2.5 text-zinc-400 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.55),0_1px_2px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-400 hover:brightness-[1.08]"
             >
               <social.icon className="h-4 w-4" />
             </a>
