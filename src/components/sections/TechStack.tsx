@@ -13,9 +13,9 @@ export default function TechStack() {
           return (
             <span
               key={tech.name}
-              className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#38332F] px-2.5 py-1.5 text-xs text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-700 hover:bg-[#44403C] hover:text-zinc-100 md:px-3.5 md:py-2 md:text-sm"
+              className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(180deg,#34302C_0%,#2E2A27_45%,#282524_100%)] px-3 py-[7px] text-sm text-zinc-400 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.55),0_1px_2px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:text-zinc-200 hover:brightness-[1.08] hover:shadow-[inset_0_1px_2px_0_rgba(255,255,255,0.2),inset_0_-1px_0_0_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.55),0_4px_12px_rgba(0,0,0,0.45)] md:px-3.5 md:py-2"
             >
-              <Icon className={`h-3.5 w-3.5 shrink-0 md:h-4 md:w-4 ${className}`} />
+              <Icon className={`h-[18px] w-[18px] shrink-0 md:h-5 md:w-5 ${className}`} />
               {tech.name}
             </span>
           );
