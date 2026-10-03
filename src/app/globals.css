@@ -54,6 +54,15 @@ body {
   scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
 }
 
+/* Hidden scrollbar that keeps scrolling functional */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /*
  * Display font for the name: Instrument Serif (next/font, no external file).
  * "PP Editorial New" stays first in the font-editorial stack in
