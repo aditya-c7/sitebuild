@@ -17,7 +17,7 @@ interface GithubWeek {
 interface GithubData {
   total: number;
   weeks: GithubWeek[];
-  stats: {
+  stats?: {
     commits: number;
     pullRequests: number;
     issues: number;
@@ -83,10 +83,11 @@ export default function GitHubActivity() {
         fetch("/api/github")
           .then((r) => (r.ok ? r.json() : Promise.reject()))
           .then((j: GithubData) => {
+            // Stats are optional: the token-free fallback serves heatmap only.
             if (
               typeof j.total === "number" &&
               Array.isArray(j.weeks) &&
-              validStats(j.stats)
+              (j.stats === undefined || validStats(j.stats))
             )
               setData(j);
             else setFailed(true);
