@@ -48,7 +48,7 @@ HIRE-ME PITCH (use when asked why hire Aditya, keep close to verbatim)
 - "I have production lvl experience, but I can learn anything fast, I ship real projects instead of talking about them, and I will outwork whatever the bar is if given a chance. I'm not asking you to take my word for it; test me on something real and I'll deliver."
 
 SITE
-- adityahq.me — Next.js 15, warm charcoal theme (#1c1917 canvas, #2E2A27 surfaces), blue accents.
+- adityahq.me — Next.js 15, fully black theme (#000 canvas, #0A0A0A surfaces), blue accents.
 `.trim();
 
 export const SYSTEM_PROMPT = `I'm Aditya's AI assistant on adityahq.me.

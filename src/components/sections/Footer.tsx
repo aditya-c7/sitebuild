@@ -18,7 +18,7 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="border-t border-zinc-800/80">
+    <footer className="border-t border-white/[0.08]">
       <div className="mx-auto max-w-4xl px-5 py-8 md:max-w-[960px] md:px-6 md:py-12">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
@@ -81,7 +81,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex justify-center border-t border-zinc-800/80 pt-6 text-center font-mono text-xs text-zinc-600">
+        <div className="mt-12 flex justify-center border-t border-white/[0.08] pt-6 text-center font-mono text-xs text-zinc-600">
           <span>Copyright 2026 Aditya Chitragar. All rights reserved.</span>
         </div>
       </div>

@@ -33,7 +33,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 border-b border-white/[0.07] backdrop-blur-lg transition-colors duration-300 ${
-        scrolled ? "bg-[#1c1917]/45 shadow-[0_4px_20px_rgba(0,0,0,0.25)]" : "bg-[#1c1917]/20"
+        scrolled ? "bg-black/70 shadow-[0_4px_24px_rgba(0,0,0,0.6)]" : "bg-black/40"
       }`}
       style={{
         backdropFilter: "blur(8px) saturate(150%)",
@@ -58,11 +58,11 @@ export default function Navbar() {
           <button
             onClick={openCommandMenu}
             aria-label="Open command menu"
-            className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-[#2E2A27] px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-all hover:border-zinc-600 hover:text-zinc-200"
+            className="flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.06] px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-all hover:border-white/[0.16] hover:text-zinc-200"
           >
             <Command className="h-3.5 w-3.5" />
             <span>Ctrl</span>
-            <span className="text-zinc-600">+</span>
+            <span className="text-zinc-500">+</span>
             <span>K</span>
           </button>
         </div>
@@ -77,14 +77,14 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="border-t border-white/[0.07] bg-[#1c1917]/45 backdrop-blur-lg md:hidden">
+        <div className="border-t border-white/[0.08] bg-black/70 backdrop-blur-lg md:hidden">
           <div className="mx-auto flex max-w-4xl flex-col gap-1 px-5 py-4 md:max-w-[960px] md:px-6">
             {MOBILE_LINKS.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="rounded-md px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-zinc-900 hover:text-blue-400"
+                className="rounded-md px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-blue-400"
               >
                 {link.label}
               </a>
@@ -94,7 +94,7 @@ export default function Navbar() {
                 setMobileOpen(false);
                 openCommandMenu();
               }}
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-sm text-zinc-300 transition-colors hover:bg-zinc-900 hover:text-blue-400"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-sm text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-blue-400"
             >
               <Command className="h-4 w-4" />
               Command Menu

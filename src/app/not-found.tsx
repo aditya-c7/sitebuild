@@ -81,7 +81,7 @@ export default function NotFound() {
           </a>
           <a
             href="/"
-            className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#2E2A27] px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-zinc-600 hover:bg-[#38332F]"
+            className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-[#0A0A0A] px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/[0.16] hover:bg-[#111111]"
           >
             <ArrowLeft className="h-4 w-4" />
             Back home

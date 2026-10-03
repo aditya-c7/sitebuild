@@ -8,10 +8,10 @@ const config: Config = {
     extend: {
       colors: {
         zinc: colors.stone,
-        canvas: "#1c1917",
-        surface: "#2E2A27",
-        "surface-card": "#38332F",
-        border: "#44403C",
+        canvas: "#000000",
+        surface: "#0A0A0A",
+        "surface-card": "#171717",
+        border: "rgba(255, 255, 255, 0.08)",
         accent: {
           blue: "#2563eb",
           "blue-glow": "#3b82f6",

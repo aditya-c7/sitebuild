@@ -23,7 +23,7 @@ const ChatComposerBox = forwardRef<HTMLInputElement, ChatComposerBoxProps>(
           onClick={() => {
             if (typeof ref === "object" && ref?.current) ref.current.focus();
           }}
-          className="cursor-text rounded-xl border border-zinc-800 bg-[#1c1917] px-4 py-3 transition-colors focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/30"
+          className="cursor-text rounded-xl border border-white/[0.08] bg-[#0A0A0A] px-4 py-3 transition-colors focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/30"
         >
           <input
             ref={ref}
@@ -35,7 +35,7 @@ const ChatComposerBox = forwardRef<HTMLInputElement, ChatComposerBoxProps>(
             disabled={disabled}
             enterKeyHint="send"
             autoComplete="off"
-            className="w-full bg-transparent text-base text-zinc-100 placeholder:text-zinc-600 focus:outline-none disabled:opacity-50 md:text-[15px]"
+            className="w-full bg-transparent text-base text-zinc-100 placeholder:text-zinc-500 focus:outline-none disabled:opacity-50 md:text-[15px]"
           />
           <div className="mt-2 flex items-center justify-end">
             <button

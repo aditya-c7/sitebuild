@@ -53,7 +53,7 @@ function ProjectCard({ project }: { project: Project }) {
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setHovered(false)}
-      className="group relative rounded-xl border border-zinc-800 bg-[#2E2A27] p-6 transition-colors duration-200 hover:border-zinc-600 hover:bg-[#38332F]"
+      className="group relative rounded-xl border border-white/[0.08] bg-[#0A0A0A] p-6 transition-colors duration-200 hover:border-white/[0.16] hover:bg-[#111111]"
     >
       <Crosshairs />
 
@@ -68,14 +68,14 @@ function ProjectCard({ project }: { project: Project }) {
             className="pointer-events-none absolute left-0 top-0 z-50 hidden md:block"
           >
             <div
-              className="overflow-hidden rounded-xl border border-zinc-700 bg-[#38332F] shadow-2xl shadow-black/60"
+              className="overflow-hidden rounded-xl border border-white/[0.08] bg-[#111111] shadow-2xl shadow-black/60 ring-1 ring-white/[0.06]"
               style={{ width: PREVIEW_WIDTH }}
             >
-              <div className="flex items-center gap-2 border-b border-zinc-800 bg-zinc-900/80 px-3 py-2">
+              <div className="flex items-center gap-2 border-b border-white/[0.08] bg-white/[0.05] px-3 py-2">
                 <span className="h-2 w-2 rounded-full bg-red-500/80" />
                 <span className="h-2 w-2 rounded-full bg-yellow-500/80" />
                 <span className="h-2 w-2 rounded-full bg-green-500/80" />
-                <span className="ml-2 flex-1 truncate rounded bg-zinc-800/80 px-2 py-0.5 font-mono text-[10px] text-zinc-500">
+                <span className="ml-2 flex-1 truncate rounded bg-white/[0.06] px-2 py-0.5 font-mono text-[10px] text-zinc-500">
                   {project.liveUrl ?? project.githubUrl ?? "localhost:3000"}
                 </span>
               </div>
@@ -114,7 +114,7 @@ function ProjectCard({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub repository"
-              className="rounded-md border border-zinc-800 p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
+              className="rounded-md border border-white/[0.08] p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
             >
               <SiGithub className="h-4 w-4" />
             </a>
@@ -125,7 +125,7 @@ function ProjectCard({ project }: { project: Project }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Open project link"
-              className="rounded-md border border-zinc-800 p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
+              className="rounded-md border border-white/[0.08] p-2 text-zinc-400 transition-colors hover:border-blue-500/50 hover:text-blue-400"
             >
               <ExternalLink className="h-4 w-4" />
             </a>
@@ -134,7 +134,7 @@ function ProjectCard({ project }: { project: Project }) {
               <button
                 onClick={() => setShowPrivate((v) => !v)}
                 aria-label="Private demo"
-                className="rounded-md border border-zinc-800 p-2 text-zinc-400 transition-colors hover:border-zinc-600 hover:text-zinc-200"
+                className="rounded-md border border-white/[0.08] p-2 text-zinc-400 transition-colors hover:border-white/[0.16] hover:text-zinc-200"
               >
                 <ExternalLink className="h-4 w-4" />
               </button>
@@ -145,7 +145,7 @@ function ProjectCard({ project }: { project: Project }) {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.18 }}
-                    className="absolute bottom-full right-0 z-20 mb-2 w-64 overflow-hidden rounded-xl border border-zinc-800/80 bg-[#1c1917]/75 backdrop-blur-xl shadow-2xl shadow-black/60"
+                    className="absolute bottom-full right-0 z-20 mb-2 w-64 overflow-hidden rounded-xl border border-white/[0.08] bg-black/70 backdrop-blur-xl shadow-2xl shadow-black/60"
                   >
                     <div className="bg-gradient-to-br from-zinc-900/60 via-zinc-900/30 to-transparent p-3.5">
                       <div className="flex items-center gap-2.5">
@@ -177,7 +177,7 @@ function ProjectCard({ project }: { project: Project }) {
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-md bg-zinc-800/60 px-2 py-1 font-mono text-xs text-zinc-400 transition-colors group-hover:text-zinc-300"
+            className="rounded-md bg-white/[0.06] px-2 py-1 font-mono text-xs text-zinc-400 transition-colors group-hover:text-zinc-300"
           >
             #{tag}
           </span>

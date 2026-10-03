@@ -376,7 +376,7 @@ export default function ChatPage() {
               messages.map((m, i) => (
                 <div key={i} className={`flex gap-2 md:gap-3 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                   {m.role === "assistant" && (
-                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-800 bg-[#1c1917] text-zinc-400 md:h-8 md:w-8">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/[0.08] bg-[#0A0A0A] text-zinc-400 md:h-8 md:w-8">
                       <Bot className="h-3.5 w-3.5 md:h-4 md:w-4" />
                     </div>
                   )}
@@ -385,7 +385,7 @@ export default function ChatPage() {
                       className={`rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed md:px-5 md:py-3 md:text-[15px] ${
                         m.role === "user"
                           ? "bg-blue-600 text-white"
-                          : "border border-zinc-800 bg-[#1c1917] text-zinc-200"
+                          : "border border-white/[0.08] bg-[#0A0A0A] text-zinc-200"
                       }`}
                     >
                       {m.role === "assistant" ? (
@@ -419,7 +419,7 @@ export default function ChatPage() {
                         href={m.action.url}
                         target={m.action.url.startsWith("/") ? undefined : "_blank"}
                         rel={m.action.url.startsWith("/") ? undefined : "noopener noreferrer"}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-[#1c1917] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-[#0A0A0A] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
                       >
                         {m.action.icon === "email" && <Mail className="h-3.5 w-3.5" aria-hidden="true" />}
                         {m.action.icon === "github" && <SiGithub className="h-3.5 w-3.5" aria-hidden="true" />}
@@ -455,7 +455,7 @@ export default function ChatPage() {
 
             {loading && !isBlocked && (
               <div className="flex gap-2.5 md:gap-3">
-                <div className="inline-flex items-center gap-2.5 rounded-2xl border border-zinc-800 bg-[#1c1917] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
+                <div className="inline-flex items-center gap-2.5 rounded-2xl border border-white/[0.08] bg-[#0A0A0A] px-3 py-2.5 text-xs md:gap-3 md:px-4 md:py-3 md:text-sm">
                   <span className="t-matrix shrink-0" data-variant="scan" aria-hidden="true">
                     {MATRIX_DOTS.map((d, i) => (
                       <i key={i} style={{ "--d": d } as CSSProperties} />

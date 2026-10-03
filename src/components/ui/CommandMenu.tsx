@@ -66,15 +66,15 @@ export default function CommandMenu() {
       onOpenChange={setOpen}
       label="Global Command Menu"
       overlayClassName="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
-      contentClassName="fixed left-1/2 top-[18%] z-[100] w-[92vw] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-zinc-800 bg-[#2E2A27] shadow-2xl shadow-black/60"
+      contentClassName="fixed left-1/2 top-[18%] z-[100] w-[92vw] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0E0E10] shadow-2xl shadow-black/60 ring-1 ring-white/[0.06]"
     >
-      <div className="flex items-center gap-3 border-b border-zinc-800 px-4">
+      <div className="flex items-center gap-3 border-b border-white/[0.08] px-4">
         <span className="font-mono text-xs text-blue-500">&gt;</span>
         <Command.Input
           placeholder="Type a command or search..."
           className="w-full bg-transparent py-4 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
         />
-        <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">ESC</kbd>
+        <kbd className="rounded border border-white/[0.08] bg-white/[0.06] px-1.5 py-0.5 font-mono text-[10px] text-zinc-500">ESC</kbd>
       </div>
 
       <Command.List className="max-h-80 overflow-y-auto overflow-x-hidden p-2">
@@ -90,7 +90,7 @@ export default function CommandMenu() {
               onSelect={() => navigate(item.href)}
               className="group flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-zinc-300 transition-colors data-[selected=true]:bg-blue-600/10 data-[selected=true]:text-blue-300"
             >
-              <ArrowRight className="h-4 w-4 text-zinc-600 transition-transform group-data-[selected=true]:translate-x-0.5 group-data-[selected=true]:text-blue-400" />
+              <ArrowRight className="h-4 w-4 text-zinc-500 transition-transform group-data-[selected=true]:translate-x-0.5 group-data-[selected=true]:text-blue-400" />
               {item.label}
             </Command.Item>
           ))}
@@ -109,7 +109,7 @@ export default function CommandMenu() {
             >
               <item.icon className="h-4 w-4 text-zinc-500 data-[selected=true]:text-blue-400" />
               {item.label}
-              <ExternalLink className="ml-auto h-3.5 w-3.5 text-zinc-700" />
+              <ExternalLink className="ml-auto h-3.5 w-3.5 text-zinc-500" />
             </Command.Item>
           ))}
         </Command.Group>
@@ -130,12 +130,12 @@ export default function CommandMenu() {
         </Command.Group>
       </Command.List>
 
-      <div className="flex items-center justify-between border-t border-zinc-800 px-4 py-2.5 font-mono text-[10px] text-zinc-600">
+      <div className="flex items-center justify-between border-t border-white/[0.08] px-4 py-2.5 font-mono text-[10px] text-zinc-500">
         <span>Navigation</span>
         <span>
-          <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5">Ctrl</kbd>{" "}
+          <kbd className="rounded border border-white/[0.08] bg-white/[0.06] px-1 py-0.5">Ctrl</kbd>{" "}
           +{" "}
-          <kbd className="rounded border border-zinc-800 bg-zinc-900 px-1 py-0.5">K</kbd>{" "}
+          <kbd className="rounded border border-white/[0.08] bg-white/[0.06] px-1 py-0.5">K</kbd>{" "}
           to toggle
         </span>
       </div>

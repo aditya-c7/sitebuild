@@ -76,7 +76,7 @@ export default function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={social.name}
-              className="rounded-xl bg-[linear-gradient(180deg,#34302C_0%,#2E2A27_45%,#282524_100%)] p-2.5 text-zinc-400 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.55),0_1px_2px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-400 hover:brightness-[1.08]"
+              className="rounded-xl bg-[linear-gradient(180deg,#1C1C1E_0%,#101012_45%,#0A0A0B_100%)] p-2.5 text-zinc-400 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_0_rgba(0,0,0,0.4),0_0_0_1px_rgba(0,0,0,0.55),0_1px_2px_rgba(0,0,0,0.5)] transition-all duration-200 hover:-translate-y-0.5 hover:text-blue-400 hover:brightness-[1.08]"
             >
               <social.icon className="h-4 w-4" />
             </a>

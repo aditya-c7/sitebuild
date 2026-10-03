@@ -8,7 +8,7 @@ export default function SectionHeading({ index, title }: SectionHeadingProps) {
     <div className="mb-8 flex items-baseline gap-3">
       <span className="font-mono text-sm text-blue-500">/{index}</span>
       <h2 className="font-display text-lg font-semibold tracking-tight text-zinc-100 md:text-2xl">{title}</h2>
-      <span className="ml-2 hidden h-px flex-1 self-center bg-gradient-to-r from-zinc-800 to-transparent sm:block" />
+      <span className="ml-2 hidden h-px flex-1 self-center bg-gradient-to-r from-white/[0.12] to-transparent sm:block" />
     </div>
   );
 }

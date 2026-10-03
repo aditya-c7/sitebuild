@@ -22,7 +22,7 @@ const PARTICLE_COUNT = 40;
 const EDGE_BUFFER = 6;
 
 const STRIPE_CLASS =
-  "h-3 w-full border-y border-zinc-800/80 bg-[repeating-linear-gradient(-45deg,rgba(255,255,255,0.06),rgba(255,255,255,0.06)_1px,transparent_1px,transparent_8px)]";
+  "h-3 w-full border-y border-white/[0.08] bg-[repeating-linear-gradient(-45deg,rgba(255,255,255,0.06),rgba(255,255,255,0.06)_1px,transparent_1px,transparent_8px)]";
 
 const EDGE_MASK =
   "radial-gradient(ellipse 92% 82% at 50% 50%, black 45%, transparent 100%)";
@@ -113,7 +113,7 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
       <div className={STRIPE_CLASS} />
 
       <div
-        className="relative aspect-[4096/1365] w-full select-none overflow-hidden bg-[#1c1917]"
+        className="relative aspect-[4096/1365] w-full select-none overflow-hidden bg-black"
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
       >

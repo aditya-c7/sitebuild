@@ -23,14 +23,14 @@ export default function Experience() {
     <section id="experience" className="no-select mx-auto max-w-4xl select-none px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16">
       <SectionHeading index="02" title="Experience" />
 
-      <div className="relative rounded-xl border border-zinc-800 bg-[#2E2A27]">
+      <div className="relative rounded-xl border border-white/[0.08] bg-[#0A0A0A]">
         <Crosshairs />
 
         {EXPERIENCE_DATA.map((item, i) => {
           const open = openId === item.id;
           const expandable = item.highlights.length > 0;
           return (
-            <div key={item.id} className={i > 0 ? "border-t border-zinc-800/80" : ""}>
+            <div key={item.id} className={i > 0 ? "border-t border-white/[0.08]" : ""}>
               <button
                 onClick={() => setOpenId(open ? null : item.id)}
                 aria-expanded={open}
@@ -43,12 +43,12 @@ export default function Experience() {
                       src={item.logo}
                       alt={`${item.organization} logo`}
                       draggable={false}
-                      className="h-10 w-10 shrink-0 rounded-full object-cover"
+                      className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-white/10"
                     />
                   ) : (
                     <span
                       aria-hidden="true"
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-800 font-mono text-xs font-semibold text-zinc-300"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.06] font-mono text-xs font-semibold text-zinc-300"
                     >
                       {initials(item.organization)}
                     </span>
@@ -104,7 +104,7 @@ export default function Experience() {
                     {item.id === "marvedge-sdet" && (
                       <div className="px-5 pb-4 md:px-6">
                         <span
-                          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-[#1E1D1C] px-3 py-1 text-xs font-mono text-zinc-300"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-mono text-zinc-300"
                         >
                           <svg
                             viewBox="0 0 16 16"

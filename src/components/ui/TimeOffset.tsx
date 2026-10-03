@@ -30,7 +30,7 @@ export function TimeOffset({
 
   if (!mounted) {
     return (
-      <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-3 py-1 rounded-full">
+      <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-white/[0.04] border border-white/[0.08] px-3 py-1 rounded-full">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         <span>{city}</span>
       </div>
@@ -38,10 +38,10 @@ export function TimeOffset({
   }
 
   return (
-    <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-3 py-1 rounded-full shadow-sm">
+    <div className="inline-flex items-center gap-2 text-xs font-mono text-zinc-400 bg-white/[0.04] border border-white/[0.08] px-3 py-1 rounded-full shadow-sm">
       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
       <span>{city}</span>
-      <span className="text-zinc-600">&middot;</span>
+      <span className="text-zinc-500">&middot;</span>
       <span>{timeString}</span>
     </div>
   );
