@@ -68,37 +68,30 @@ function validStats(s: unknown): s is GithubData["stats"] {
 export default function GitHubActivity() {
   const [data, setData] = useState<GithubData | null>(null);
   const [failed, setFailed] = useState(false);
-  const boxRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const startedRef = useRef(false);
   const snappedRef = useRef(false);
 
   useEffect(() => {
-    const el = boxRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || startedRef.current) return;
-        startedRef.current = true;
-        fetch("/api/github")
-          .then((r) => (r.ok ? r.json() : Promise.reject()))
-          .then((j: GithubData) => {
-            // Stats are optional: the token-free fallback serves heatmap only.
-            if (
-              typeof j.total === "number" &&
-              Array.isArray(j.weeks) &&
-              (j.stats === undefined || validStats(j.stats))
-            )
-              setData(j);
-            else setFailed(true);
-          })
-          .catch(() => setFailed(true));
-        io.disconnect();
-      },
-      { rootMargin: "200px" }
-    );
-    io.observe(el);
-    return () => io.disconnect();
+    let cancelled = false;
+    fetch("/api/github")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((j: GithubData) => {
+        if (cancelled) return;
+        // Stats are optional: the token-free fallback serves heatmap only.
+        if (
+          typeof j.total === "number" &&
+          Array.isArray(j.weeks) &&
+          (j.stats === undefined || validStats(j.stats))
+        )
+          setData(j);
+        else setFailed(true);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Start scrolled fully right (latest month) wherever the grid overflows.
@@ -116,11 +109,15 @@ export default function GitHubActivity() {
 
   return (
     <section id="activity" className="mx-auto max-w-4xl px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16 no-select select-none">
-      <SectionHeading index="03" title="GitHub Activity" />
+      <SectionHeading title="GitHub Activity" />
 
-      <div ref={boxRef}>
+      <div>
         {!data && !failed && (
-          <div className="animate-pulse">
+          <div
+            role="status"
+            aria-label="Loading contribution graph"
+            className="animate-pulse min-h-[220px]"
+          >
             <div className="h-4 w-48 rounded bg-white/[0.06]" />
             <div className="mt-4 flex gap-[2px]">
               {Array.from({ length: 24 }).map((_, i) => (
@@ -133,35 +130,17 @@ export default function GitHubActivity() {
             </div>
           </div>
         )}
-
-        {failed && (
-          <div className="flex flex-col items-start gap-3">
-            <p className="text-sm text-zinc-400">
-              Live contribution data is unavailable right now.
-            </p>
-            <a
-              href="https://github.com/aditya-c7"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-[#0A0A0A] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
-            >
-              <SiGithub className="h-3.5 w-3.5" aria-hidden="true" />
-              View GitHub profile <span aria-hidden>→</span>
-            </a>
-          </div>
-        )}
-
-        {data && (
+        {data ? (
           <>
             <div className="flex items-baseline justify-between gap-4">
-              <p className="text-sm text-zinc-400">
+              <p className="text-xs md:text-sm text-zinc-400">
                 {data.total.toLocaleString()} contributions in the last year
               </p>
               <a
                 href="https://github.com/aditya-c7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 text-sm text-zinc-400 transition-colors hover:text-zinc-200 hover:underline hover:underline-offset-4"
+                className="shrink-0 text-xs md:text-sm text-zinc-400 transition-colors hover:text-zinc-200 hover:underline hover:underline-offset-4"
               >
                 @aditya-c7
               </a>
@@ -210,9 +189,25 @@ export default function GitHubActivity() {
               ))}
               More
             </div>
-          </>
-        )}
+          </>) : null}
       </div>
+
+        {failed && (
+          <div className="flex flex-col items-start gap-3">
+            <p className="text-sm text-zinc-400">
+              Live contribution data is unavailable right now.
+            </p>
+            <a
+              href="https://github.com/aditya-c7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-[#0A0A0A] px-3 py-1.5 text-xs font-medium text-blue-400 transition-colors hover:border-blue-500/50 hover:text-blue-300 md:px-3.5 md:py-2 md:text-sm"
+            >
+              <SiGithub className="h-3.5 w-3.5" aria-hidden="true" />
+              View GitHub profile <span aria-hidden>→</span>
+            </a>
+          </div>
+        )}
     </section>
   );
 }
