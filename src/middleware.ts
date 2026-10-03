@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 // page that calls notFound(), so unknown API URLs render the custom 404
 // page (same as unknown site paths) instead of a bare framework 404.
 // NOTE: add future API routes to this list.
-const KNOWN_API_PATHS = new Set(["/api/ai", "/api/visitors"]);
+const KNOWN_API_PATHS = new Set(["/api/ai", "/api/visitors", "/api/github"]);
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname.replace(/\/+$/, "") || "/api";
