@@ -37,18 +37,18 @@ export default function Experience() {
                 aria-label={`${item.organization} — ${item.role}`}
                 className="flex h-[72.5px] w-full items-center justify-between gap-3 px-5 text-left md:px-6"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   {item.logo ? (
                     <img
                       src={item.logo}
                       alt={`${item.organization} logo`}
                       draggable={false}
-                      className="h-10 w-10 shrink-0 rounded-full object-cover ring-1 ring-white/10"
+                      className="h-8 w-8 shrink-0 rounded-full object-cover ring-1 ring-white/10 md:h-10 md:w-10"
                     />
                   ) : (
                     <span
                       aria-hidden="true"
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/[0.06] font-mono text-xs font-semibold text-zinc-300"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/[0.06] font-mono text-xs font-semibold text-zinc-300 md:h-10 md:w-10"
                     >
                       {initials(item.organization)}
                     </span>

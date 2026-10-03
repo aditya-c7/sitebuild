@@ -1,0 +1,64 @@
+# CI gate for adityahq-portfolio
+#
+# Why this exists: `next dev` does NOT typecheck. Only `next build` does. With no
+# CI, the Vercel production build was the only place type errors surfaced, and this
+# repo shipped two broken deploys from a single prop-contract mismatch on
+# src/components/ui/SectionHeading.tsx. This workflow runs the same check on every
+# push and PR so the error appears in a pull request, not in production.
+#
+# BEFORE PUSHING: run `npm run typecheck` (fast) or `npm run build` locally.
+# `npm run build` runs `prebuild` -> `npm run typecheck` automatically, so a green
+# `npm run build` is the exact same gate CI and Vercel run.
+#
+# ENV VARS: none required. .env.local is gitignored, and every `process.env.*` read
+# in src/ (GROQ_API_KEY, GROQ_MODEL, GITHUB_TOKEN, UPSTASH_REDIS_REST_URL/TOKEN)
+# happens inside request handlers at runtime, never at module load or build time.
+# Keep it that way: if a future change makes the build need a key, add a repository
+# secret and reference it via `${{ secrets.NAME }}` below. Never inline real values.
+#
+# NODE: CI pins Node 22 (LTS, what Vercel uses for Next.js). Local dev is currently
+# on Node 24 — if the three ever need to match, add a .nvmrc and read it here
+# (node-version-file: .nvmrc). Not done here to keep this change zero-dependency.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Superseded runs on the same ref are pointless — cancel them.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck-and-build:
+    name: typecheck + build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Runs `tsc --noEmit` over tsconfig.json's include (src/**/*.ts(x)).
+      # This is the step that catches prop-contract drift on shared components.
+      # Works on a fresh clone: next-env.d.ts is gitignored and .next/ does not
+      # exist yet, and neither is required for tsc to resolve this project.
+      - name: Typecheck
+        run: npm run typecheck
+
+      # `npm run build` also fires the `prebuild` -> `npm run typecheck` hook,
+      # so this re-runs the typecheck by design and then compiles the app.
+      - name: Build
+        run: npm run build

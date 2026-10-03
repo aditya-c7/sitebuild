@@ -109,7 +109,7 @@ export default function GitHubActivity() {
 
   return (
     <section id="activity" className="mx-auto max-w-4xl px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16 no-select select-none">
-      <SectionHeading title="GitHub Activity" />
+      <SectionHeading index="03" title="GitHub Activity" />
 
       <div>
         {!data && !failed && (
