@@ -1,14 +1,12 @@
 interface SectionHeadingProps {
-  index: string;
   title: string;
 }
 
-export default function SectionHeading({ index, title }: SectionHeadingProps) {
+export default function SectionHeading({ title }: SectionHeadingProps) {
   return (
-    <div className="mb-8 flex items-baseline gap-3">
-      <span className="font-mono text-sm text-blue-500">/{index}</span>
-      <h2 className="font-display text-lg font-semibold tracking-tight text-zinc-100 md:text-2xl">{title}</h2>
-      <span className="ml-2 hidden h-px flex-1 self-center bg-gradient-to-r from-white/[0.12] to-transparent sm:block" />
+    <div className="mb-8 flex items-center gap-4">
+      <h2 className="shrink-0 font-display text-lg font-semibold tracking-tight text-zinc-100 md:text-2xl">{title}</h2>
+      <span aria-hidden="true" className="h-[2px] flex-1 self-center rounded-full bg-gradient-to-r from-transparent via-white/[0.08] to-white/40" />
     </div>
   );
 }
