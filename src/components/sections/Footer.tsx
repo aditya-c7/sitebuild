@@ -19,7 +19,7 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer className="border-t border-white/[0.08]">
-      <div className="mx-auto max-w-4xl px-5 py-8 md:max-w-[960px] md:px-6 md:py-12">
+      <div className="mx-auto max-w-4xl px-5 py-8 md:max-w-[832px] md:px-6 md:py-12">
         <div className="flex flex-col justify-between gap-10 md:flex-row">
           <div>
             <p className="font-mono text-sm font-semibold text-zinc-100">
@@ -62,7 +62,7 @@ export default function Footer() {
           <div className="flex gap-16">
             <div>
               <p className="font-mono text-xs uppercase tracking-widest text-zinc-600">Socials</p>
-              <ul className="mt-3 flex flex-col gap-2">
+              <ul className="mt-3 flex flex-row flex-wrap items-center gap-x-5 gap-y-2 md:flex-col md:items-start">
                 {SOCIALS.map((social) => (
                   <li key={social.label}>
                     <a

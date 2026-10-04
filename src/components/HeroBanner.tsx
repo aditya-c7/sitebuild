@@ -107,7 +107,7 @@ export default function HeroBanner({ imageSrc = "/banner.jpg" }: HeroBannerProps
 
   return (
     <div
-      className="relative mx-auto mt-14 mb-2 w-full max-w-5xl select-none px-4 md:mt-16"
+      className="relative mx-auto mt-14 mb-2 w-full max-w-4xl select-none px-4 md:mt-16 md:max-w-[896px]"
       onContextMenu={(e) => e.preventDefault()}
     >
       <div className={STRIPE_CLASS} />

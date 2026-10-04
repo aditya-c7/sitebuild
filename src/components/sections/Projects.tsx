@@ -189,8 +189,8 @@ function ProjectCard({ project }: { project: Project }) {
 
 export default function Projects() {
   return (
-    <section id="projects" className="mx-auto max-w-4xl px-5 pb-12 md:max-w-[960px] md:px-6 md:pb-20 no-select select-none">
-      <SectionHeading index="04" title="Projects" />
+    <section id="projects" className="mx-auto max-w-4xl px-5 pb-12 md:max-w-[832px] md:px-6 md:pb-20 no-select select-none">
+      <SectionHeading title="Projects" />
 
       <div className="flex flex-col gap-6">
         {PROJECTS_DATA.map((project) => (

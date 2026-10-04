@@ -20,8 +20,8 @@ export default function Experience() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-5 pb-10 md:max-w-[960px] md:px-6 md:pb-16">
-      <SectionHeading index="02" title="Experience" />
+    <section id="experience" className="no-select mx-auto max-w-4xl select-none px-5 pb-10 md:max-w-[832px] md:px-6 md:pb-16">
+      <SectionHeading title="Experience" />
 
       <div className="relative rounded-xl border border-white/[0.08] bg-[#0A0A0A]">
         <Crosshairs />
