@@ -1,8 +1,8 @@
 # Aditya Chitragar
 
-> Portfolio of Aditya Chitragar, a Computer Science student and developer in India.
+> Aditya Chitragar's Portfolio of Developing & building autonomous agentic workflows, scalable backend architectures, and polished web experiences.
 
-Aditya Chitragar is a developer building autonomous agentic workflows, scalable backend architectures, and polished web experiences. He is currently an SDET Intern at Marvedge (Remote, since Sep 2026).
+Aditya Chitragar is a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences. He is currently an SDET Intern at Marvedge (Remote, since Sep 2026).
 
 ## Pages
 

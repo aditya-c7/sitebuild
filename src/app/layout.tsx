@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://adityahq.me"),
   title: "Aditya Chitragar | Developer",
   description:
-    "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+    "Aditya Chitragar's Portfolio of Developing & building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
   keywords: [
     "Aditya Chitragar",
     "Developer",
@@ -48,6 +48,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Aditya Chitragar", url: "https://adityahq.me" }],
   creator: "Aditya Chitragar",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-touch-icon.png",
+  },
   robots: {
     index: true,
     follow: true,
@@ -61,9 +65,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Aditya Chitragar | Developer",
     description:
-      "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+      "Aditya Chitragar's Portfolio of Developing & building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
     url: "https://adityahq.me",
-    siteName: "adityahq",
+    siteName: "Aditya Chitragar",
     images: [
       {
         url: "https://adityahq.me/og-image.jpg",
@@ -79,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Aditya Chitragar | Developer",
     description:
-      "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+      "Aditya Chitragar's Portfolio of Developing & building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
     images: ["https://adityahq.me/og-image.jpg"],
   },
 };

@@ -10,7 +10,7 @@ import Footer from "@/components/sections/Footer";
 export const metadata: Metadata = {
   title: "Aditya Chitragar | Developer",
   description:
-    "Portfolio of Aditya Chitragar, a Computer Science student and developer in India. Explore his experience, projects, tech stack, and GitHub activity.",
+    "Aditya Chitragar's Portfolio of Developing & building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
   alternates: {
     canonical: "https://adityahq.me/",
   },
@@ -20,34 +20,44 @@ export const metadata: Metadata = {
 // name, role, bio, and socials come from src/data/portfolioData.ts.
 // The twitter/discord entries there are placeholders, so sameAs lists only
 // the real GitHub and LinkedIn profiles.
-const personJsonLd = {
+const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Aditya Chitragar",
-  url: "https://adityahq.me/",
-  image: "https://adityahq.me/og-image.jpg",
-  description:
-    "Computer Science student and developer in India. SDET Intern at Marvedge.",
-  jobTitle: "Developer",
-  worksFor: {
-    "@type": "Organization",
-    name: "Marvedge",
-  },
-  sameAs: [
-    "https://github.com/aditya-c7",
-    "https://linkedin.com/in/adityachitragar",
-  ],
-  knowsAbout: [
-    "Python",
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Node.js",
-    "FastAPI",
-    "MongoDB",
-    "AI",
-    "RAG",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: "Aditya Chitragar",
+      alternateName: "adityahq",
+      url: "https://adityahq.me/",
+    },
+    {
+      "@type": "Person",
+      name: "Aditya Chitragar",
+      url: "https://adityahq.me/",
+      image: "https://adityahq.me/og-image.jpg",
+      description:
+        "Computer Science student and developer in India. SDET Intern at Marvedge.",
+      jobTitle: "Developer",
+      worksFor: {
+        "@type": "Organization",
+        name: "Marvedge",
+      },
+      sameAs: [
+        "https://github.com/aditya-c7",
+        "https://linkedin.com/in/adityachitragar",
+      ],
+      knowsAbout: [
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Node.js",
+        "FastAPI",
+        "MongoDB",
+        "AI",
+        "RAG",
+      ],
+    },
   ],
 };
 
@@ -56,7 +66,7 @@ export default function Home() {
     <div id="top">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <HeroBanner imageSrc="/banner.jpg" />
         <Hero />
