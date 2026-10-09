@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://adityahq.me"),
   title: "Aditya Chitragar | Developer",
   description:
-    "Portfolio of Aditya Chitragar — Developer building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+    "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
   keywords: [
     "Aditya Chitragar",
     "Developer",
@@ -46,15 +46,27 @@ export const metadata: Metadata = {
     "Python",
     "FastAPI",
   ],
+  authors: [{ name: "Aditya Chitragar", url: "https://adityahq.me" }],
+  creator: "Aditya Chitragar",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     title: "Aditya Chitragar | Developer",
     description:
-      "Portfolio of Aditya Chitragar — Developer building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+      "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
     url: "https://adityahq.me",
     siteName: "adityahq",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "https://adityahq.me/og-image.jpg",
         width: 1077,
         height: 560,
         alt: "Aditya Chitragar — Developer",
@@ -65,7 +77,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-image.jpg"],
+    title: "Aditya Chitragar | Developer",
+    description:
+      "Portfolio of Aditya Chitragar, a Computer Science student and developer in India building autonomous agentic workflows, scalable backend architectures, and polished web experiences.",
+    images: ["https://adityahq.me/og-image.jpg"],
   },
 };
 

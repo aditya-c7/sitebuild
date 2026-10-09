@@ -9,6 +9,11 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "AI Assistant | Aditya Chitragar",
+  description:
+    "Chat with an AI assistant that answers questions about Aditya Chitragar — his skills, experience, and projects.",
+  alternates: {
+    canonical: "https://adityahq.me/ai",
+  },
 };
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
