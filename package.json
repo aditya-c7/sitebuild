@@ -7,7 +7,8 @@
     "typecheck": "tsc --noEmit",
     "prebuild": "npm run typecheck",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "phones:generate": "node scripts/generate-phone-models.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.14",

@@ -10,6 +10,8 @@ export interface DeviceSnapshot {
   os: string;
   browserName: string;
   browserVersion: string;
+  /** Browser-reported hardware model (Android UA-CH). Set ONLY when kind === "mobile"; never for pc/tablet. Consumed by src/lib/phoneModel.ts. */
+  reportedModel?: string;
 }
 
 export interface PcLock {
@@ -266,6 +268,7 @@ export async function detectDeviceInfo(): Promise<DeviceSnapshot> {
   let platformVersion: string | undefined;
   let mobileHint: boolean | undefined;
   let fullList: UADataBrand[] | undefined;
+  let model: string | undefined;
 
   try {
     const getValues = nav.userAgentData?.getHighEntropyValues;
@@ -279,6 +282,7 @@ export async function detectDeviceInfo(): Promise<DeviceSnapshot> {
         platformVersion = values.platformVersion;
         mobileHint = values.mobile;
         fullList = values.fullVersionList;
+        if (typeof values.model === "string") model = values.model;
       }
     }
   } catch {
@@ -295,7 +299,18 @@ export async function detectDeviceInfo(): Promise<DeviceSnapshot> {
   }
 
   const kind = deviceKind(ua, mobileHint);
-  return { kind, os: parseOS(ua, platform, platformVersion), browserName: browser.name, browserVersion: browser.version };
+  const snapshot: DeviceSnapshot = {
+    kind,
+    os: parseOS(ua, platform, platformVersion),
+    browserName: browser.name,
+    browserVersion: browser.version,
+  };
+  // Phone only: the browser-reported hardware model, never attached for pc/tablet.
+  // NEVER guess a phone model from screen dimensions anywhere in this codebase.
+  if (kind === "mobile" && typeof model === "string" && model.trim() !== "") {
+    snapshot.reportedModel = model.trim();
+  }
+  return snapshot;
 }
 
 // --- PC first-visit lock (localStorage, client-side history) ---

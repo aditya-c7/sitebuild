@@ -12,7 +12,11 @@ import {
   type DeviceKind,
 } from "@/lib/deviceDetect";
 
-// Visitor device line: PC → Monitor icon + OS name, mobile/tablet → phone icon + browser name.
+// Visitor device line: PC → Monitor icon + OS name, mobile/tablet → phone/tablet icon + "surfing on <browser>".
+// On mobile, one line below: the resolved phone marketing name from the
+// browser-reported model (exact lookup against Google's Play supported-device
+// catalog), or "Mobile device" when the browser doesn't expose/map a model —
+// no confidence percentages, no "Exact model detected" claims.
 // First PC detection is locked to localStorage (adityahq_device_lock) with
 // first-seen + visit history — later loads reuse it, so UA spoofing
 // (devtools device emulation) can never change displayed data.
@@ -31,6 +35,7 @@ function timeout(ms: number): Promise<null> {
 export default function VisitorDevice({ active = true }: { active?: boolean }) {
   const [kind, setKind] = useState<DeviceKind | null>(null);
   const [label, setLabel] = useState<string | null>(null);
+  const [phoneLabel, setPhoneLabel] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -40,6 +45,8 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
       try {
         // Drop any stale non-pc device data first (mobile is always re-captured fresh).
         releaseNonPcLock();
+        // Phone-name state resets before detection starts (mobile is re-resolved live).
+        setPhoneLabel(null);
         // Locked PC history wins over any fresh detection.
         const lock = getPcLock();
         if (lock) {
@@ -65,6 +72,19 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
         }
         setKind(info.kind);
         setLabel(deviceLabelFor(info));
+        // Phone name resolution runs only for mobile, and the lookup module is
+        // dynamically imported so the generated catalog bundle is only ever
+        // downloaded by mobile visitors (PC/tablet never fetch it).
+        if (info.kind === "mobile") {
+          try {
+            const { getPhoneDisplayLabel } = await import("@/lib/phoneModel");
+            const phoneDisplay = getPhoneDisplayLabel(info);
+            if (!cancelled) setPhoneLabel(phoneDisplay);
+          } catch {
+            // Honest fallback if the dataset module fails to load for any reason.
+            if (!cancelled) setPhoneLabel("Mobile device");
+          }
+        }
       } catch {
         if (!cancelled) setFailed(true);
       }
@@ -89,11 +109,20 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
   }
 
   const Icon = KIND_ICON[kind];
+  const isMobile = kind === "mobile";
 
   return (
-    <span className="animate-fade-rise inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
-      <Icon className="h-3.5 w-3.5 text-zinc-400" aria-hidden="true" />
-      {label}
+    <span className="flex flex-col gap-1.5">
+      <span className="animate-fade-rise inline-flex items-center gap-1.5 font-mono text-xs text-zinc-400">
+        <Icon className="h-3.5 w-3.5 text-zinc-400" aria-hidden="true" />
+        {label}
+      </span>
+      {isMobile &&
+        (phoneLabel === null ? (
+          <Skeleton className="ml-5 w-20" />
+        ) : (
+          <span className="animate-fade-rise ml-5 font-mono text-xs text-zinc-500">{phoneLabel}</span>
+        ))}
     </span>
   );
 }
