@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Skeleton from "@/components/ui/Skeleton";
+import { createDoubleTapGate, dispatchDeviceReveal } from "@/lib/easterEgg";
 
 const LOCATION_CACHE_KEY = "adityahq_location";
 
 export default function VisitorLocation({ active = true }: { active?: boolean }) {
   const [text, setText] = useState<string | null>(null);
+  // Easter-egg trigger: two quick taps on this row ask VisitorDevice to reveal
+  // the phone name. Pure behavior — the row looks exactly the same as before.
+  const tapGateRef = useRef<() => boolean>(createDoubleTapGate());
 
   useEffect(() => {
     let cancelled = false;
@@ -77,5 +81,14 @@ export default function VisitorLocation({ active = true }: { active?: boolean })
     );
   }
 
-  return <span className="animate-fade-rise font-mono text-xs text-zinc-400">{text}</span>;
+  return (
+    <span
+      className="animate-fade-rise select-none font-mono text-xs text-zinc-400"
+      onClick={() => {
+        if (tapGateRef.current()) dispatchDeviceReveal();
+      }}
+    >
+      {text}
+    </span>
+  );
 }
