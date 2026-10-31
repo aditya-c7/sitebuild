@@ -24,8 +24,8 @@ import {
 // after the visitor double-taps "surfing on <browser>" (this row) or the
 // "You're visiting from …" row: a skeleton shimmers for 2s in front of the
 // "surfing on …" text, then the marketing name shows inline, separated by "-"
-// (e.g. "Galaxy S23 Ultra 5G - surfing on Chrome"; "Mobile device" when the
-// browser doesn't expose/map a model). PC/tablet rows NEVER change.
+// (e.g. "surfing on Chrome - Galaxy S23 Ultra 5G"; "surfing on Chrome - Mobile
+// device" when the browser doesn't expose/map a model). PC/tablet rows NEVER change.
 // First PC detection is locked to localStorage (adityahq_device_lock) with
 // first-seen + visit history — later loads reuse it, so UA spoofing
 // (devtools device emulation) can never change displayed data.
@@ -215,8 +215,8 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
         <Skeleton className="w-24 shrink-0" />
       ) : null}
       <span>
-        {revealState === "revealed" && phoneName !== null ? `${phoneName} - ` : ""}
         {label}
+        {revealState === "revealed" && phoneName !== null ? ` - ${phoneName}` : ""}
       </span>
     </span>
   );
