@@ -201,8 +201,9 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
   }
 
   // Mobile row: double-tap target. Default view is IDENTICAL to pre-egg:
-  // icon + "surfing on <browser>". The name (with "-" separator) or the
-  // shimmer-only skeleton appear just in front of that untouched text.
+  // icon + "surfing on <browser>". During the 2s shimmer the placeholder sits
+  // exactly where the device name will appear (right after the text, bridged
+  // by "-"), then swaps to the name — no jumping.
   return (
     <span
       className="animate-fade-rise inline-flex select-none items-center gap-1.5 font-mono text-xs text-zinc-400"
@@ -211,12 +212,14 @@ export default function VisitorDevice({ active = true }: { active?: boolean }) {
       }}
     >
       <Icon className="h-3.5 w-3.5 text-zinc-400" aria-hidden="true" />
-      {revealState === "revealing" || (revealState === "revealed" && phoneName === null) ? (
-        <Skeleton className="w-24 shrink-0" />
-      ) : null}
       <span>
         {label}
-        {revealState === "revealed" && phoneName !== null ? ` - ${phoneName}` : ""}
+        {revealState !== "hidden" ? " - " : ""}
+        {revealState === "revealing" || (revealState === "revealed" && phoneName === null) ? (
+          <Skeleton className="inline-block w-24 align-[-1px]" />
+        ) : (
+          revealState === "revealed" && phoneName !== null ? phoneName : ""
+        )}
       </span>
     </span>
   );
