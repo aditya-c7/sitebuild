@@ -11,8 +11,6 @@
     "phones:generate": "node scripts/generate-phone-models.mjs"
   },
   "dependencies": {
-    "@clerk/nextjs": "^7.9.14",
-    "@clerk/themes": "^2.4.57",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",

@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -97,13 +96,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${instrument.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
-        <ClerkProvider>
-          <Navbar />
-          <main>{children}</main>
-          <CommandMenu />
-          <ConsoleGreet />
-          <Analytics debug={false} />
-        </ClerkProvider>
+        <Navbar />
+        <main>{children}</main>
+        <CommandMenu />
+        <ConsoleGreet />
+        <Analytics debug={false} />
       </body>
     </html>
   );

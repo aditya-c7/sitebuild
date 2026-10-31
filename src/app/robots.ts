@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/api-404", "/auth", "/sign-up", "/dashboard"],
+        disallow: ["/api/", "/api-404"],
       },
     ],
     sitemap: "https://adityahq.me/sitemap.xml",
