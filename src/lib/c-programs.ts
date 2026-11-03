@@ -135,6 +135,9 @@ int main() {
 }
 
 Book* create(int *n) {
+    Book *books;
+    int i;
+
     printf("Enter the number of books (N): ");
     scanf("%d", n);
 
@@ -144,14 +147,14 @@ Book* create(int *n) {
         return NULL;
     }
 
-    Book *books = (Book *)malloc((*n) * sizeof(Book));
+    books = (Book *)malloc((*n) * sizeof(Book));
     if (books == NULL) {
         printf("Memory allocation failed!\n");
         *n = 0;
         return NULL;
     }
 
-    for (int i = 0; i < *n; i++) {
+    for (i = 0; i < *n; i++) {
         printf("\n--- Enter Details for Book %d ---\n", i + 1);
         printf("Book ID: ");
         scanf("%d", &books[i].book_id);
@@ -173,6 +176,8 @@ Book* create(int *n) {
 }
 
 void display(Book *books, int n) {
+    int i;
+
     if (books == NULL || n == 0) {
         printf("\nNo book records found! Please add books first.\n");
         return;
@@ -180,7 +185,7 @@ void display(Book *books, int n) {
 
     printf("\n%-10s %-25s %-20s %-10s %-15s\n", "Book ID", "Title", "Author", "Price", "Status");
     printf("--------------------------------------------------------------------------------\n");
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         printf("%-10d %-25s %-20s %-10.2f %-15s\n",
                books[i].book_id,
                books[i].title,
@@ -191,16 +196,18 @@ void display(Book *books, int n) {
 }
 
 void search(Book *books, int n) {
+    int id, found = 0;
+    int i;
+
     if (books == NULL || n == 0) {
         printf("\nNo books available to search.\n");
         return;
     }
 
-    int id, found = 0;
     printf("Enter Book ID to search: ");
     scanf("%d", &id);
 
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         if (books[i].book_id == id) {
             printf("\nBook Found!\n");
             printf("ID: %d\n", books[i].book_id);
@@ -219,16 +226,18 @@ void search(Book *books, int n) {
 }
 
 void issueBook(Book *books, int n) {
+    int id, found = 0;
+    int i;
+
     if (books == NULL || n == 0) {
         printf("\nNo books available to issue.\n");
         return;
     }
 
-    int id, found = 0;
     printf("Enter Book ID to issue: ");
     scanf("%d", &id);
 
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         if (books[i].book_id == id) {
             found = 1;
             if (strcmp(books[i].availability_status, "Available") == 0) {
@@ -247,16 +256,18 @@ void issueBook(Book *books, int n) {
 }
 
 void returnBook(Book *books, int n) {
+    int id, found = 0;
+    int i;
+
     if (books == NULL || n == 0) {
         printf("\nNo books to return.\n");
         return;
     }
 
-    int id, found = 0;
     printf("Enter Book ID to return: ");
     scanf("%d", &id);
 
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         if (books[i].book_id == id) {
             found = 1;
             if (strcmp(books[i].availability_status, "Issued") == 0) {
@@ -294,6 +305,7 @@ typedef struct {
 
 void readSparseMatrix(Term a[], int *rows, int *cols) {
     int element, k = 1;
+    int i, j;
     printf("Enter number of rows and columns: ");
     scanf("%d %d", rows, cols);
 
@@ -301,8 +313,8 @@ void readSparseMatrix(Term a[], int *rows, int *cols) {
     a[0].col = *cols;
 
     printf("Enter the matrix elements (%d x %d):\n", *rows, *cols);
-    for (int i = 0; i < *rows; i++) {
-        for (int j = 0; j < *cols; j++) {
+    for (i = 0; i < *rows; i++) {
+        for (j = 0; j < *cols; j++) {
             scanf("%d", &element);
             if (element != 0) {
                 a[k].row = i;
@@ -316,26 +328,29 @@ void readSparseMatrix(Term a[], int *rows, int *cols) {
 }
 
 void displayTriplet(Term a[]) {
+    int i;
+
     if (a[0].val == 0) {
         printf("Matrix is completely zero.\n");
         return;
     }
     printf("\nRow\tCol\tValue\n");
     printf("---------------------\n");
-    for (int i = 0; i <= a[0].val; i++) {
+    for (i = 0; i <= a[0].val; i++) {
         printf("%d\t%d\t%d\n", a[i].row, a[i].col, a[i].val);
     }
 }
 
 void transposeSparse(Term a[], Term b[]) {
     int k = 1;
+    int col, i;
     b[0].row = a[0].col;
     b[0].col = a[0].row;
     b[0].val = a[0].val;
 
     if (a[0].val > 0) {
-        for (int col = 0; col < a[0].col; col++) {
-            for (int i = 1; i <= a[0].val; i++) {
+        for (col = 0; col < a[0].col; col++) {
+            for (i = 1; i <= a[0].val; i++) {
                 if (a[i].col == col) {
                     b[k].row = a[i].col;
                     b[k].col = a[i].row;
@@ -348,11 +363,11 @@ void transposeSparse(Term a[], Term b[]) {
 }
 
 int addSparse(Term a[], Term b[], Term sum[]) {
+    int i = 1, j = 1, k = 1;
+
     if (a[0].row != b[0].row || a[0].col != b[0].col) {
         return 0;
     }
-
-    int i = 1, j = 1, k = 1;
     sum[0].row = a[0].row;
     sum[0].col = a[0].col;
 
@@ -472,16 +487,20 @@ void push(int value) {
 }
 
 void pop() {
+    int poppedValue;
+
     if (top == -1) {
         printf("\n[UNDERFLOW] Stack is empty! No element to pop.\n");
         return;
     }
-    int poppedValue = stack[top];
+    poppedValue = stack[top];
     top--;
     printf("\nElement %d successfully popped from the stack.\n", poppedValue);
 }
 
 void display() {
+    int i;
+
     if (top == -1) {
         printf("\nStack Status: Empty (top = -1)\n");
         return;
@@ -491,7 +510,7 @@ void display() {
     printf("Top Index   : %d\n", top);
     printf("Total Items : %d / %d\n", top + 1, MAX);
     printf("Stack Elements (from top to bottom):\n");
-    for (int i = top; i >= 0; i--) {
+    for (i = top; i >= 0; i--) {
         if (i == top) {
             printf("  [%d] -> %d  <-- TOP\n", i, stack[i]);
         } else {
@@ -575,12 +594,13 @@ int isEmpty() {
 }
 
 void addJob() {
+    PrintJob job;
+
     if (isFull()) {
         printf("\n[OVERFLOW] Printer queue is full! Cannot accept new print jobs (Capacity: %d).\n", MAX);
         return;
     }
 
-    PrintJob job;
     printf("\nEnter Job ID: ");
     scanf("%d", &job.job_id);
     printf("Enter Document Name: ");
@@ -600,12 +620,14 @@ void addJob() {
 }
 
 void processJob() {
+    PrintJob job;
+
     if (isEmpty()) {
         printf("\n[UNDERFLOW] Printer queue is empty! No jobs to process.\n");
         return;
     }
 
-    PrintJob job = printerQueue[front];
+    job = printerQueue[front];
     printf("\nProcessing and printing Job [ID: %d, Document: '%s', Pages: %d]...\n",
            job.job_id, job.doc_name, job.pages);
 
@@ -618,17 +640,19 @@ void processJob() {
 }
 
 void displayStatus() {
+    int waitingCount, i;
+
     if (isEmpty()) {
         printf("\nPrinter Status: 0 jobs waiting in the queue.\n");
         return;
     }
 
-    int waitingCount = rear - front + 1;
+    waitingCount = rear - front + 1;
     printf("\n--- PRINTER QUEUE STATUS ---\n");
     printf("Total jobs waiting: %d\n", waitingCount);
     printf("%-10s %-25s %-10s\n", "Job ID", "Document Name", "Pages");
     printf("---------------------------------------------\n");
-    for (int i = front; i <= rear; i++) {
+    for (i = front; i <= rear; i++) {
         printf("%-10d %-25s %-10d\n",
                printerQueue[i].job_id,
                printerQueue[i].doc_name,
@@ -698,13 +722,16 @@ Node* createHeaderNode() {
 }
 
 void insertTerm(Node *head, int coeff, int expo) {
+    Node *newNode;
+    Node *curr;
+
     if (coeff == 0) return;
 
-    Node *newNode = (Node *)malloc(sizeof(Node));
+    newNode = (Node *)malloc(sizeof(Node));
     newNode->coeff = coeff;
     newNode->expo = expo;
 
-    Node *curr = head;
+    curr = head;
     while (curr->next != head) {
         curr = curr->next;
     }
@@ -714,11 +741,11 @@ void insertTerm(Node *head, int coeff, int expo) {
 }
 
 void readPolynomial(Node *head) {
-    int n, coeff, expo;
+    int n, coeff, expo, i;
     printf("Enter the number of terms in the polynomial: ");
     scanf("%d", &n);
 
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         printf("  Enter term %d (coefficient and exponent): ", i + 1);
         scanf("%d %d", &coeff, &expo);
         insertTerm(head, coeff, expo);
@@ -726,13 +753,16 @@ void readPolynomial(Node *head) {
 }
 
 void displayPolynomial(Node *head) {
+    Node *curr;
+    int isFirst = 1;
+    int absCoeff;
+
     if (head->next == head) {
         printf("0\n");
         return;
     }
 
-    Node *curr = head->next;
-    int isFirst = 1;
+    curr = head->next;
 
     while (curr != head) {
         if (curr->coeff > 0 && !isFirst) {
@@ -741,7 +771,7 @@ void displayPolynomial(Node *head) {
             printf(" - ");
         }
 
-        int absCoeff = abs(curr->coeff);
+        absCoeff = abs(curr->coeff);
 
         if (curr->expo == 0) {
             printf("%d", absCoeff);
@@ -795,8 +825,10 @@ Node* addPolynomials(Node *poly1, Node *poly2) {
 }
 
 void freeList(Node *head) {
+    Node *curr;
+
     if (head == NULL) return;
-    Node *curr = head->next;
+    curr = head->next;
     while (curr != head) {
         Node *temp = curr;
         curr = curr->next;
@@ -866,6 +898,11 @@ TreeNode* createNode(int val) {
 
 TreeNode* createTree() {
     int n, val;
+    TreeNode *root;
+    TreeNode *queue[MAX_QUEUE];
+    int front = 0, rear = 0;
+    int count = 1;
+
     printf("Enter the number of nodes to insert: ");
     scanf("%d", &n);
 
@@ -877,13 +914,10 @@ TreeNode* createTree() {
     printf("Enter value for node 1 (Root): ");
     scanf("%d", &val);
 
-    TreeNode *root = createNode(val);
+    root = createNode(val);
 
-    TreeNode *queue[MAX_QUEUE];
-    int front = 0, rear = 0;
     queue[rear++] = root;
 
-    int count = 1;
     while (front < rear && count < n) {
         TreeNode *curr = queue[front++];
 
