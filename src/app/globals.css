@@ -159,30 +159,12 @@ body {
    Theme switch — sun/moon toggle + dancing-Shigure view transition
    ========================================================================== */
 
-/* The active icon is chosen by the root data-theme, so SSR has no flash. */
-.theme-toggle .sun-icon,
+/* The moon is the only icon in the toggle; it turns slightly on hover. */
 .theme-toggle .moon-icon {
-  grid-area: 1 / 1;
-  transition:
-    opacity 0.3s ease,
-    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
-:root[data-theme="dark"] .theme-toggle .sun-icon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
-}
-:root[data-theme="dark"] .theme-toggle .moon-icon {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.45);
-}
-:root[data-theme="light"] .theme-toggle .sun-icon {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.45);
-}
-:root[data-theme="light"] .theme-toggle .moon-icon {
-  opacity: 1;
-  transform: rotate(0deg) scale(1);
+.theme-toggle:hover .moon-icon {
+  transform: rotate(-18deg);
 }
 
 ::view-transition-old(root),
@@ -208,47 +190,39 @@ body {
 ::view-transition-new(root) {
   z-index: 2;
   mix-blend-mode: normal;
-  will-change: mask-size;
   /* The GIF canvas is 409x572 and the figure's average centre sits at
      ~51% / 53.3% of it, so nudge the mask up-left by that much at 22vmax. */
   -webkit-mask: url("/shigure-ui-smol.gif") calc(50% - 0.22vmax) calc(50% - 1.02vmax) / 0 no-repeat;
   mask: url("/shigure-ui-smol.gif") calc(50% - 0.22vmax) calc(50% - 1.02vmax) / 0 no-repeat;
 }
 
-/* The banner and hero copy are the busiest parts of the page and sit right
-   where the mask lands. Fade them out of the incoming snapshot so the dancing
-   silhouette stays clean, then fade them back in when the transition ends. */
-.hero-banner,
-.hero-copy {
-  transition: opacity 0.4s ease;
+/* The banner is the busiest part of the page; fade it out of the incoming
+   snapshot so the dancing silhouette stays readable instead of camouflaging.
+   It fades back in when the transition finishes. */
+.hero-banner {
+  transition: opacity 0.35s ease;
 }
-html.theme-transitioning .hero-banner,
-html.theme-transitioning .hero-copy {
+html.theme-transitioning .hero-banner {
   opacity: 0;
   transition: none;
 }
 
-/* Grow smoothly into the hold, let the GIF dance, then ease out to a mask that
-   comfortably covers the viewport. Easing is set per segment for smoothness. */
 @keyframes theme-scale {
   0% {
     -webkit-mask-size: 0;
     mask-size: 0;
-    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
   }
-  12% {
+  10% {
     -webkit-mask-size: 22vmax;
     mask-size: 22vmax;
-    animation-timing-function: linear;
   }
-  88% {
+  90% {
     -webkit-mask-size: 22vmax;
     mask-size: 22vmax;
-    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
   }
   100% {
-    -webkit-mask-size: 150vmax;
-    mask-size: 150vmax;
+    -webkit-mask-size: 750vmax;
+    mask-size: 750vmax;
   }
 }
 
