@@ -1,23 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Command, Menu, X } from "lucide-react";
-
-const NAV_LINKS = [
-  { label: "Tech Stack", href: "#tech-stack" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-];
-
-const MOBILE_LINKS = [
-  { label: "Tech Stack", href: "#tech-stack" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-];
+import { Command } from "lucide-react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -45,63 +33,21 @@ export default function Navbar() {
           adityahq<span className="ml-1 text-blue-500">_</span>
         </a>
 
-        <div className="hidden items-center gap-6 md:flex">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-zinc-400 transition-colors hover:text-blue-400"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="flex items-center gap-2.5">
           <button
             onClick={openCommandMenu}
             aria-label="Open command menu"
-            className="flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.06] px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition-all hover:border-white/[0.16] hover:text-zinc-200"
+            className="flex h-8 items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.06] px-2.5 font-mono text-xs text-zinc-400 transition-all hover:border-white/[0.16] hover:text-zinc-200 sm:px-2.5"
           >
             <Command className="h-3.5 w-3.5" />
-            <span>Ctrl</span>
-            <span className="text-zinc-500">+</span>
-            <span>K</span>
+            <span className="hidden sm:inline">Ctrl</span>
+            <span className="hidden text-zinc-500 sm:inline">+</span>
+            <span className="hidden sm:inline">K</span>
           </button>
-        </div>
 
-        <button
-          className="flex items-center text-zinc-400 transition-colors hover:text-zinc-100 md:hidden"
-          onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label="Toggle navigation menu"
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+          <ThemeToggle />
+        </div>
       </nav>
-
-      {mobileOpen && (
-        <div className="border-t border-white/[0.08] bg-black/70 backdrop-blur-lg md:hidden">
-          <div className="mx-auto flex max-w-4xl flex-col gap-1 px-5 py-4 md:max-w-[832px] md:px-6">
-            {MOBILE_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="rounded-md px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-blue-400"
-              >
-                {link.label}
-              </a>
-            ))}
-            <button
-              onClick={() => {
-                setMobileOpen(false);
-                openCommandMenu();
-              }}
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-left font-mono text-sm text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-blue-400"
-            >
-              <Command className="h-4 w-4" />
-              Command Menu
-            </button>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

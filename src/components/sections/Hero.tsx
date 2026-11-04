@@ -31,12 +31,12 @@ export default function Hero() {
 
   return (
     <section className="relative mx-auto max-w-4xl px-5 pt-6 pb-12 text-center md:max-w-[832px] md:px-6 md:pt-8 md:pb-20 md:text-left">
-      <div>
+      <div className="hero-copy">
         <p className="mb-4 font-mono text-sm text-blue-500">~/hello-world</p>
 
         <h1 className="text-[2.6rem] font-normal leading-none tracking-tight text-zinc-50 sm:text-5xl md:text-7xl font-editorial no-select select-none">
           {HERO_DATA.name.split(" ")[0]}{" "}
-          <span className="text-white">
+          <span className="text-zinc-50">
             {HERO_DATA.name.split(" ").slice(1).join(" ")}
           </span>
         </h1>

@@ -5,6 +5,7 @@ import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
 import ConsoleGreet from "@/components/ui/ConsoleGreet";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -94,8 +95,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} ${instrument.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t="dark";}var r=document.documentElement;r.setAttribute("data-theme",t);r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();`,
+          }}
+        />
+        <link rel="preload" as="image" href="/shigure-ui-smol.gif" />
         <Navbar />
         <main>{children}</main>
         <CommandMenu />

@@ -4,14 +4,24 @@
 
 :root {
   color-scheme: dark;
+  --page-bg: #000000;
+  --page-fg: #fafafa;
+  --page-glow: rgba(37, 99, 235, 0.1);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page-bg: #f8f8f7;
+  --page-fg: #111111;
+  --page-glow: transparent;
 }
 
 html, body {
-  background-color: #000;
-  color: #fafafa;
+  background-color: var(--page-bg);
+  color: var(--page-fg);
   min-height: 100vh;
   background-image:
-    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(37, 99, 235, 0.1), transparent 70%);
+    radial-gradient(ellipse 60% 40% at 50% 0%, var(--page-glow), transparent 70%);
 }
 
 @supports (height: 100dvh) {
@@ -143,4 +153,246 @@ body {
   .comet-field {
     display: none;
   }
+}
+
+/* ==========================================================================
+   Theme switch — sun/moon toggle + dancing-Shigure view transition
+   ========================================================================== */
+
+/* The active icon is chosen by the root data-theme, so SSR has no flash. */
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.3s ease,
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:root[data-theme="dark"] .theme-toggle .sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+:root[data-theme="dark"] .theme-toggle .moon-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.45);
+}
+:root[data-theme="light"] .theme-toggle .sun-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.45);
+}
+:root[data-theme="light"] .theme-toggle .moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: theme-scale 1.75s cubic-bezier(0.7, 0, 0.84, 0) both;
+  mix-blend-mode: normal;
+}
+
+::view-transition-group(root) {
+  animation: none;
+  animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
+  z-index: 100;
+}
+
+/* Keep the incoming (masked) snapshot above the outgoing one, and leave the
+   outgoing snapshot static so only the reveal animates. */
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none;
+}
+
+/* Only the opaque pixels of the GIF reveal the incoming theme. */
+::view-transition-new(root) {
+  z-index: 2;
+  mix-blend-mode: normal;
+  will-change: mask-size;
+  /* The GIF canvas is 409x572 and the figure's average centre sits at
+     ~51% / 53.3% of it, so nudge the mask up-left by that much at 22vmax. */
+  -webkit-mask: url("/shigure-ui-smol.gif") calc(50% - 0.22vmax) calc(50% - 1.02vmax) / 0 no-repeat;
+  mask: url("/shigure-ui-smol.gif") calc(50% - 0.22vmax) calc(50% - 1.02vmax) / 0 no-repeat;
+}
+
+/* The banner and hero copy are the busiest parts of the page and sit right
+   where the mask lands. Fade them out of the incoming snapshot so the dancing
+   silhouette stays clean, then fade them back in when the transition ends. */
+.hero-banner,
+.hero-copy {
+  transition: opacity 0.4s ease;
+}
+html.theme-transitioning .hero-banner,
+html.theme-transitioning .hero-copy {
+  opacity: 0;
+  transition: none;
+}
+
+/* Grow smoothly into the hold, let the GIF dance, then ease out to a mask that
+   comfortably covers the viewport. Easing is set per segment for smoothness. */
+@keyframes theme-scale {
+  0% {
+    -webkit-mask-size: 0;
+    mask-size: 0;
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  }
+  12% {
+    -webkit-mask-size: 22vmax;
+    mask-size: 22vmax;
+    animation-timing-function: linear;
+  }
+  88% {
+    -webkit-mask-size: 22vmax;
+    mask-size: 22vmax;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  100% {
+    -webkit-mask-size: 150vmax;
+    mask-size: 150vmax;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root) {
+    animation: none;
+  }
+  ::view-transition-new(root) {
+    animation: none;
+    -webkit-mask: none;
+    mask: none;
+  }
+}
+
+/* ==========================================================================
+   Light theme — clean neutral surfaces, no tinted glow
+   ========================================================================== */
+
+html[data-theme="light"] ::selection {
+  background-color: rgba(17, 17, 17, 0.12);
+  color: #111111;
+}
+
+/* Text */
+html[data-theme="light"] .text-zinc-50,
+html[data-theme="light"] .text-zinc-100 {
+  color: #111111;
+}
+html[data-theme="light"] .text-zinc-200 {
+  color: #1f1f1f;
+}
+html[data-theme="light"] .text-zinc-300 {
+  color: #333333;
+}
+html[data-theme="light"] .text-zinc-400 {
+  color: #525252;
+}
+html[data-theme="light"] .text-zinc-500 {
+  color: #737373;
+}
+html[data-theme="light"] .text-zinc-600 {
+  color: #8a8a8a;
+}
+html[data-theme="light"] .text-zinc-700 {
+  color: #a3a3a3;
+}
+html[data-theme="light"] .text-zinc-800 {
+  color: #d4d4d4;
+}
+html[data-theme="light"] .text-blue-300,
+html[data-theme="light"] .hover\:text-blue-400:hover {
+  color: #1d4ed8;
+}
+html[data-theme="light"] .text-blue-400 {
+  color: #2563eb;
+}
+html[data-theme="light"] .hover\:text-white:hover {
+  color: #111111;
+}
+
+/* Surfaces */
+html[data-theme="light"] .bg-black {
+  background-color: var(--page-bg);
+}
+html[data-theme="light"] [class~="bg-black/40"] {
+  background-color: rgba(248, 248, 247, 0.78);
+}
+html[data-theme="light"] [class~="bg-black/70"] {
+  background-color: rgba(248, 248, 247, 0.88);
+}
+html[data-theme="light"] [class~="bg-[#0A0A0A]"] {
+  background-color: #ffffff;
+}
+html[data-theme="light"] [class~="bg-[#111111]"] {
+  background-color: #fcfcfc;
+}
+html[data-theme="light"] [class~="bg-[#0E0E10]"] {
+  background-color: #ffffff;
+}
+html[data-theme="light"] [class~="hover:bg-[#111111]"]:hover {
+  background-color: #fcfcfc;
+}
+html[data-theme="light"] [class*="bg-[linear-gradient(180deg,#1C1C1E"] {
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fafafa 45%,
+    #f2f2f2 100%
+  );
+}
+html[data-theme="light"] [class~="bg-white/[0.05]"],
+html[data-theme="light"] [class~="bg-white/[0.06]"] {
+  background-color: rgba(17, 17, 17, 0.05);
+}
+html[data-theme="light"] [class~="bg-white/[0.04]"] {
+  background-color: rgba(17, 17, 17, 0.035);
+}
+html[data-theme="light"] .bg-zinc-800 {
+  background-color: #e8e8e8;
+}
+html[data-theme="light"] .bg-zinc-700 {
+  background-color: #d9d9d9;
+}
+
+/* Borders, rings, dividers */
+html[data-theme="light"] [class~="border-white/[0.07]"] {
+  border-color: rgba(17, 17, 17, 0.08);
+}
+html[data-theme="light"] [class~="border-white/[0.08]"] {
+  border-color: rgba(17, 17, 17, 0.1);
+}
+html[data-theme="light"] [class~="border-white/[0.16]"],
+html[data-theme="light"] [class~="hover:border-white/[0.16]"]:hover {
+  border-color: rgba(17, 17, 17, 0.2);
+}
+html[data-theme="light"] [class~="ring-white/10"] {
+  --tw-ring-color: rgba(17, 17, 17, 0.1);
+}
+html[data-theme="light"] [class~="ring-white/[0.06]"] {
+  --tw-ring-color: rgba(17, 17, 17, 0.07);
+}
+
+/* Section heading rule */
+html[data-theme="light"]
+  [class*="via-white/[0.08]"][class*="to-white/40"] {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgba(17, 17, 17, 0.1),
+    rgba(17, 17, 17, 0.3)
+  );
+}
+
+/* Shadows */
+html[data-theme="light"] [class*="shadow-[0_4px_24px_rgba(0,0,0,0.6)]"] {
+  box-shadow: 0 4px 24px rgba(17, 17, 17, 0.06);
+}
+html[data-theme="light"] [class*="shadow-[8px_0_12px_0_#000]"] {
+  box-shadow: 8px 0 12px 0 var(--page-bg);
+}
+html[data-theme="light"]
+  [class*="shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.14)"] {
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 1px rgba(17, 17, 17, 0.06),
+    0 1px 2px rgba(17, 17, 17, 0.08);
 }

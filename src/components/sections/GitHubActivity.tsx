@@ -152,7 +152,7 @@ export default function GitHubActivity() {
                   {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
                     <span
                       key={i}
-                      className="flex h-[12px] items-center font-mono text-[10px] leading-none text-white md:h-[14px]"
+                      className="flex h-[12px] items-center font-mono text-[10px] leading-none text-zinc-100 md:h-[14px]"
                     >
                       {d}
                     </span>
