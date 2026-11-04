@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Instrument_Serif, Space_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
@@ -7,30 +7,34 @@ import ConsoleGreet from "@/components/ui/ConsoleGreet";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
-const inter = Inter({
-  subsets: ["latin"],
+// Self-hosted Google fonts: the build no longer fetches fonts.googleapis.com,
+// which made CI flaky (next/font/google occasionally failed to parse a reply).
+const inter = localFont({
+  src: "./fonts/Inter-latin.woff2",
   variable: "--font-sans",
   display: "swap",
+  weight: "100 900",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+const jetbrainsMono = localFont({
+  src: "./fonts/JetBrainsMono-latin.woff2",
   variable: "--font-mono",
   display: "swap",
+  weight: "100 800",
 });
 
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: ["400"],
+const instrument = localFont({
+  src: "./fonts/InstrumentSerif-latin.woff2",
   variable: "--font-editorial",
   display: "swap",
+  weight: "400",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const spaceGrotesk = localFont({
+  src: "./fonts/SpaceGrotesk-latin.woff2",
   variable: "--font-display",
   display: "swap",
+  weight: "300 700",
 });
 
 export const metadata: Metadata = {
