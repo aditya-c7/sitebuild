@@ -159,12 +159,30 @@ body {
    Theme switch — sun/moon toggle + dancing-Shigure view transition
    ========================================================================== */
 
-/* The moon is the only icon in the toggle; it turns slightly on hover. */
+/* The active icon is chosen by the root data-theme, so SSR has no flash. */
+.theme-toggle .sun-icon,
 .theme-toggle .moon-icon {
-  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.3s ease,
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.theme-toggle:hover .moon-icon {
-  transform: rotate(-18deg);
+
+:root[data-theme="dark"] .theme-toggle .sun-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+:root[data-theme="dark"] .theme-toggle .moon-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.45);
+}
+:root[data-theme="light"] .theme-toggle .sun-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.45);
+}
+:root[data-theme="light"] .theme-toggle .moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
 }
 
 ::view-transition-old(root),
@@ -325,6 +343,12 @@ html[data-theme="light"] .bg-zinc-800 {
 }
 html[data-theme="light"] .bg-zinc-700 {
   background-color: #d9d9d9;
+}
+
+/* GitHub heatmap: only the empty cells flip to white in light mode.
+   The green contribution scale stays exactly as-is. */
+html[data-theme="light"] .heatmap-empty {
+  background-color: #ffffff !important;
 }
 
 /* Borders, rings, dividers */

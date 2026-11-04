@@ -163,16 +163,20 @@ export default function GitHubActivity() {
                     <span className="flex h-[12px] text-xs leading-none text-zinc-400">
                       {labels[wi] ?? ""}
                     </span>
-                    {week.contributionDays.map((day, di) =>
-                      !day || typeof day !== "object" ? null : (
+                    {week.contributionDays.map((day, di) => {
+                      if (!day || typeof day !== "object") return null;
+                      const color = cellColor(day);
+                      return (
                         <span
                           key={di}
                           title={`${day.contributionCount ?? 0} on ${day.date ?? ""}`}
-                          className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
-                          style={{ backgroundColor: cellColor(day) }}
+                          className={`h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]${
+                            color === EMPTY_CELL ? " heatmap-empty" : ""
+                          }`}
+                          style={{ backgroundColor: color }}
                         />
-                      )
-                    )}
+                      );
+                    })}
                   </div>
                 ))}
               </div>
@@ -183,7 +187,9 @@ export default function GitHubActivity() {
               {["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"].map((c) => (
                 <span
                   key={c}
-                  className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
+                  className={`h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]${
+                    c === EMPTY_CELL ? " heatmap-empty" : ""
+                  }`}
                   style={{ backgroundColor: c }}
                 />
               ))}

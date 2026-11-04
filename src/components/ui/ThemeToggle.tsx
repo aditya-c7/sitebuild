@@ -5,9 +5,9 @@ type ViewTransitionDocument = Document & {
 };
 
 /**
- * Bare moon theme switch. The button has no chrome/border on purpose, and the
- * swap runs inside the View Transitions API to hand off to the dancing-Shigure
- * mask in globals.css.
+ * Borderless sun/moon theme switch. The active icon is chosen by the root
+ * `data-theme` in CSS, so SSR has no flash; the swap runs inside the View
+ * Transitions API to hand off to the dancing-Shigure mask in globals.css.
  */
 export default function ThemeToggle() {
   const toggleTheme = () => {
@@ -50,6 +50,31 @@ export default function ThemeToggle() {
       title="Toggle color theme"
       className="theme-toggle grid h-8 w-8 shrink-0 place-items-center text-zinc-400 transition-colors hover:text-white"
     >
+      {/* Sun — shown in dark mode */}
+      <svg
+        className="sun-icon"
+        width="15"
+        height="15"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+
+      {/* Moon — shown in light mode */}
       <svg
         className="moon-icon"
         width="15"
