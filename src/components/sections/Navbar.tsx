@@ -28,25 +28,29 @@ export default function Navbar() {
         WebkitBackdropFilter: "blur(8px) saturate(150%)",
       }}
     >
-      <nav className="mx-auto flex h-14 max-w-4xl items-center justify-between px-5 md:h-16 md:max-w-[832px] md:px-6">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="mx-auto flex h-full max-w-4xl items-center justify-end px-4 md:max-w-[896px]">
+          <div className="pointer-events-auto flex items-center gap-2.5">
+            <button
+              onClick={openCommandMenu}
+              aria-label="Open command menu"
+              className="flex h-8 items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.06] px-2.5 font-mono text-xs text-zinc-400 transition-all hover:border-white/[0.16] hover:text-zinc-200 sm:px-2.5"
+            >
+              <Command className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Ctrl</span>
+              <span className="hidden text-zinc-500 sm:inline">+</span>
+              <span className="hidden sm:inline">K</span>
+            </button>
+
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+
+      <nav className="relative mx-auto flex h-14 max-w-4xl items-center justify-between px-5 md:h-16 md:max-w-[832px] md:px-6">
         <a href="#top" className="font-mono text-[15px] font-semibold tracking-tight text-zinc-100 transition-colors hover:text-white">
           adityahq<span className="ml-1 text-blue-500">_</span>
         </a>
-
-        <div className="-mr-2 flex items-center gap-2.5">
-          <button
-            onClick={openCommandMenu}
-            aria-label="Open command menu"
-            className="flex h-8 items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.06] px-2.5 font-mono text-xs text-zinc-400 transition-all hover:border-white/[0.16] hover:text-zinc-200 sm:px-2.5"
-          >
-            <Command className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Ctrl</span>
-            <span className="hidden text-zinc-500 sm:inline">+</span>
-            <span className="hidden sm:inline">K</span>
-          </button>
-
-          <ThemeToggle />
-        </div>
       </nav>
     </header>
   );
