@@ -119,7 +119,7 @@ export default function GitHubActivity() {
               {Array.from({ length: 24 }).map((_, i) => (
                 <div key={i} className="flex flex-col gap-[2px]">
                   {Array.from({ length: 7 }).map((_, j) => (
-                    <div key={j} className="h-[12px] w-[12px] rounded-[2px] bg-white/[0.05] md:h-[14px] md:w-[14px]" />
+                    <div key={j} className="h-[12px] w-[12px] rounded-[2px] bg-white/[0.05]" />
                   ))}
                 </div>
               ))}
@@ -148,14 +148,14 @@ export default function GitHubActivity() {
                   {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
                     <span
                       key={i}
-                      className="flex h-[12px] items-center font-mono text-[10px] leading-none text-zinc-100 md:h-[14px]"
+                      className="flex h-[12px] items-center font-mono text-[10px] leading-none text-zinc-100"
                     >
                       {d}
                     </span>
                   ))}
                 </div>
                 {data.weeks.map((week, wi) => (
-                  <div key={wi} className="flex flex-col gap-[2px]">
+                  <div key={wi} className="flex w-[12px] shrink-0 flex-col gap-[2px]">
                     <span className="flex h-[12px] text-xs leading-none text-zinc-400">
                       {labels[wi] ?? ""}
                     </span>
@@ -166,7 +166,7 @@ export default function GitHubActivity() {
                         <span
                           key={di}
                           title={`${day.contributionCount ?? 0} on ${day.date ?? ""}`}
-                          className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
+                          className="h-[12px] w-[12px] rounded-[2px]"
                           style={{ backgroundColor: color }}
                         />
                       );
@@ -181,7 +181,7 @@ export default function GitHubActivity() {
               {["var(--heat-0)", "var(--heat-1)", "var(--heat-2)", "var(--heat-3)", "var(--heat-4)"].map((c) => (
                 <span
                   key={c}
-                  className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
+                  className="h-[12px] w-[12px] rounded-[2px]"
                   style={{ backgroundColor: c }}
                 />
               ))}
