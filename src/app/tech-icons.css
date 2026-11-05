@@ -1,21 +1,29 @@
-/* Official tech-stack brand colors, light mode only. */
-html[data-theme="light"] [data-tech="javascript"] { color: #F7DF1E; }
-html[data-theme="light"] [data-tech="typescript"] { color: #3178C6; }
-html[data-theme="light"] [data-tech="html"] { color: #E34F26; }
-html[data-theme="light"] [data-tech="c"] { color: #A8B9CC; }
-html[data-theme="light"] [data-tech="sql"] { color: #4479A1; }
-html[data-theme="light"] [data-tech="numpy"] { color: #013243; }
-html[data-theme="light"] [data-tech="linux"] { color: #4EAA25; }
-html[data-theme="light"] [data-tech="ci-cd"] { color: #B45309; }
-html[data-theme="light"] [data-tech="fastapi"] { color: #009688; }
-html[data-theme="light"] [data-tech="node-js"] { color: #5FA04E; }
-html[data-theme="light"] [data-tech="mongodb"] { color: #47A248; }
-html[data-theme="light"] [data-tech="firebase"] { color: #FFCA28; }
-html[data-theme="light"] [data-tech="react"] { color: #61DAFB; }
-html[data-theme="light"] [data-tech="next-js"] { color: #000000; }
-html[data-theme="light"] [data-tech="tailwind-css"] { color: #06B6D4; }
-html[data-theme="light"] [data-tech="rag"] { color: #BE123C; }
-html[data-theme="light"] [data-tech="git"] { color: #F05032; }
-html[data-theme="light"] [data-tech="github-actions"] { color: #2088FF; }
-html[data-theme="light"] [data-tech="postman"] { color: #FF6C37; }
-html[data-theme="light"] [data-tech="vercel"] { color: #000000; }
+/* Tech-stack icon tweaks.
+
+   Almost every chip now renders the official multicolor Devicon SVG, so its
+   brand colours are baked into the artwork and no CSS tint is needed. Only
+   the two glyphs without an official logo (CI/CD and RAG) still use a
+   monochrome Lucide icon, which needs an explicit colour in light mode. */
+
+html[data-theme="light"] [data-tech="ci-cd"] {
+  color: #b45309;
+}
+html[data-theme="light"] [data-tech="rag"] {
+  color: #be123c;
+}
+
+/* A whisper of shadow under each logo keeps yellow/orange marks (JS, HTML,
+   Firebase) crisp against the near-white chip in light mode. */
+html[data-theme="light"] .tech-icon {
+  filter: drop-shadow(0 0.5px 1px rgba(17, 17, 17, 0.22));
+}
+
+/* Logos that are solid black (Next.js, Vercel) or very dark navy (NumPy)
+   would disappear on the dark chip, so flip/lighten them in dark mode. */
+html:not([data-theme="light"]) .tech-icon[data-tech="next-js"],
+html:not([data-theme="light"]) .tech-icon[data-tech="vercel"] {
+  filter: invert(1);
+}
+html:not([data-theme="light"]) .tech-icon[data-tech="numpy"] {
+  filter: brightness(0) invert(1);
+}
