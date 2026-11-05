@@ -33,7 +33,7 @@ export default function Navbar() {
           adityahq<span className="ml-1 text-blue-500">_</span>
         </a>
 
-        <div className="flex items-center gap-2.5">
+        <div className="-mr-2 flex items-center gap-2.5">
           <button
             onClick={openCommandMenu}
             aria-label="Open command menu"
