@@ -1,0 +1,21 @@
+/* Official tech-stack brand colors, light mode only. */
+html[data-theme="light"] [data-tech="javascript"] { color: #F7DF1E; }
+html[data-theme="light"] [data-tech="typescript"] { color: #3178C6; }
+html[data-theme="light"] [data-tech="html"] { color: #E34F26; }
+html[data-theme="light"] [data-tech="c"] { color: #A8B9CC; }
+html[data-theme="light"] [data-tech="sql"] { color: #4479A1; }
+html[data-theme="light"] [data-tech="numpy"] { color: #013243; }
+html[data-theme="light"] [data-tech="linux"] { color: #4EAA25; }
+html[data-theme="light"] [data-tech="ci-cd"] { color: #B45309; }
+html[data-theme="light"] [data-tech="fastapi"] { color: #009688; }
+html[data-theme="light"] [data-tech="node-js"] { color: #5FA04E; }
+html[data-theme="light"] [data-tech="mongodb"] { color: #47A248; }
+html[data-theme="light"] [data-tech="firebase"] { color: #FFCA28; }
+html[data-theme="light"] [data-tech="react"] { color: #61DAFB; }
+html[data-theme="light"] [data-tech="next-js"] { color: #000000; }
+html[data-theme="light"] [data-tech="tailwind-css"] { color: #06B6D4; }
+html[data-theme="light"] [data-tech="rag"] { color: #BE123C; }
+html[data-theme="light"] [data-tech="git"] { color: #F05032; }
+html[data-theme="light"] [data-tech="github-actions"] { color: #2088FF; }
+html[data-theme="light"] [data-tech="postman"] { color: #FF6C37; }
+html[data-theme="light"] [data-tech="vercel"] { color: #000000; }

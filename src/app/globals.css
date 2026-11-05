@@ -7,6 +7,12 @@
   --page-bg: #000000;
   --page-fg: #fafafa;
   --page-glow: rgba(37, 99, 235, 0.1);
+  /* GitHub contribution heatmap (dark scheme) */
+  --heat-0: #161b22;
+  --heat-1: #0e4429;
+  --heat-2: #006d32;
+  --heat-3: #26a641;
+  --heat-4: #39d353;
 }
 
 :root[data-theme="light"] {
@@ -14,6 +20,12 @@
   --page-bg: #f8f8f7;
   --page-fg: #111111;
   --page-glow: transparent;
+  /* GitHub contribution heatmap (light scheme, official greens) */
+  --heat-0: #eeeeee;
+  --heat-1: #9be9a8;
+  --heat-2: #40c463;
+  --heat-3: #30a14e;
+  --heat-4: #216e39;
 }
 
 html, body {
@@ -345,11 +357,7 @@ html[data-theme="light"] .bg-zinc-700 {
   background-color: #d9d9d9;
 }
 
-/* GitHub heatmap: only the empty cells flip to white in light mode.
-   The green contribution scale stays exactly as-is. */
-html[data-theme="light"] .heatmap-empty {
-  background-color: #ffffff !important;
-}
+/* GitHub heatmap empty-cell colour is driven by --heat-0 (see :root). */
 
 /* Borders, rings, dividers */
 html[data-theme="light"] [class~="border-white/[0.07]"] {
@@ -370,14 +378,34 @@ html[data-theme="light"] [class~="ring-white/[0.06]"] {
 }
 
 /* Section heading rule */
-html[data-theme="light"]
-  [class*="via-white/[0.08]"][class*="to-white/40"] {
+.section-rule {
   background-image: linear-gradient(
     to right,
     transparent,
-    rgba(17, 17, 17, 0.1),
-    rgba(17, 17, 17, 0.3)
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0.4)
   );
+}
+html[data-theme="light"] .section-rule {
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgba(17, 17, 17, 0.22),
+    rgba(17, 17, 17, 0.55)
+  );
+}
+
+/* Project card title keeps a deep, readable blue on hover in light mode. */
+html[data-theme="light"] .group:hover .project-title {
+  color: #1d4ed8;
+}
+
+/* Status dots (India location + visitors) read better in a deeper green. */
+html[data-theme="light"] .bg-emerald-500 {
+  background-color: #059669;
+}
+html[data-theme="light"] [class~="bg-emerald-500/70"] {
+  background-color: rgba(5, 150, 105, 0.85);
 }
 
 /* Shadows */

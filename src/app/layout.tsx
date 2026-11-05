@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./tech-icons.css";
 import Navbar from "@/components/sections/Navbar";
 import CommandMenu from "@/components/ui/CommandMenu";
 import ConsoleGreet from "@/components/ui/ConsoleGreet";

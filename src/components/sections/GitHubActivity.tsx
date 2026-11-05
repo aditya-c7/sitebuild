@@ -25,18 +25,14 @@ interface GithubData {
   };
 }
 
-const EMPTY_CELL = "#161b22";
-
 function cellColor(day: GithubDay): string {
-  if (!day || typeof day !== "object") return EMPTY_CELL;
-  // Count-based dark scale (GitHub dark greens). The API returns
-  // light-scheme colors, which wash out on a black theme.
+  if (!day || typeof day !== "object") return "var(--heat-0)";
   const c = typeof day.contributionCount === "number" ? day.contributionCount : 0;
-  if (c <= 0) return EMPTY_CELL;
-  if (c <= 3) return "#0e4429";
-  if (c <= 6) return "#006d32";
-  if (c <= 9) return "#26a641";
-  return "#39d353";
+  if (c <= 0) return "var(--heat-0)";
+  if (c <= 3) return "var(--heat-1)";
+  if (c <= 6) return "var(--heat-2)";
+  if (c <= 9) return "var(--heat-3)";
+  return "var(--heat-4)";
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -170,9 +166,7 @@ export default function GitHubActivity() {
                         <span
                           key={di}
                           title={`${day.contributionCount ?? 0} on ${day.date ?? ""}`}
-                          className={`h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]${
-                            color === EMPTY_CELL ? " heatmap-empty" : ""
-                          }`}
+                          className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
                           style={{ backgroundColor: color }}
                         />
                       );
@@ -184,12 +178,10 @@ export default function GitHubActivity() {
 
             <div className="mt-2 flex items-center justify-end gap-1 font-mono text-[10px] text-zinc-600">
               Less
-              {["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"].map((c) => (
+              {["var(--heat-0)", "var(--heat-1)", "var(--heat-2)", "var(--heat-3)", "var(--heat-4)"].map((c) => (
                 <span
                   key={c}
-                  className={`h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]${
-                    c === EMPTY_CELL ? " heatmap-empty" : ""
-                  }`}
+                  className="h-[12px] w-[12px] rounded-[2px] md:h-[14px] md:w-[14px]"
                   style={{ backgroundColor: c }}
                 />
               ))}

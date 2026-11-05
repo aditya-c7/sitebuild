@@ -104,7 +104,7 @@ function ProjectCard({ project }: { project: Project }) {
       </AnimatePresence>
 
       <div className="flex items-start justify-between gap-4">
-        <h3 className="font-display text-lg font-semibold text-zinc-100 transition-colors duration-200 group-hover:text-blue-300 md:text-xl">
+        <h3 className="font-display text-lg font-semibold text-zinc-100 transition-colors duration-200 project-title md:text-xl">
           {project.title}
         </h3>
         <div className="relative flex shrink-0 items-center gap-2">
