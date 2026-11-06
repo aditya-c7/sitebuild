@@ -28,7 +28,7 @@ export default function Navbar() {
         WebkitBackdropFilter: "blur(8px) saturate(150%)",
       }}
     >
-      <div className="pointer-events-none absolute inset-0">
+      <div className="pointer-events-none absolute inset-0 z-10">
         <div className="mx-auto flex h-full max-w-4xl items-center justify-end px-4 md:max-w-[896px]">
           <div className="pointer-events-auto flex items-center gap-2.5">
             <button
