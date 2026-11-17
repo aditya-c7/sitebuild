@@ -468,98 +468,82 @@ int main() {
     question:
       "Implement a stack with an array (MAX > 15) supporting push, pop, overflow, underflow and display.",
     filename: "program3-stack-operations.c",
-    source: String.raw`#include <stdio.h>
-#include <stdlib.h>
-
-#define MAX 16
-
-int stack[MAX];
+    source: String.raw`#include<stdio.h>
+#include<stdlib.h>
+#define MAX 4
+int s[MAX];
 int top = -1;
-
-void push(int value) {
-    if (top == MAX - 1) {
-        printf("\n[OVERFLOW] Stack is full! Cannot push element %d. (MAX = %d)\n", value, MAX);
-        return;
-    }
-    top++;
-    stack[top] = value;
-    printf("\nElement %d successfully pushed onto the stack.\n", value);
+void push(int item);
+int pop();
+void display();
+void main()
+{
+    int choice, item;
+    while (1)
+    {
+printf("\n\n\n\n-----------Menu----------- : ");
+printf("\n=>1.Push an Element to Stack and Overflow demo ");
+printf("\n=>2.Pop an Element from Stack and Underflow demo");
+printf("\n=>3.Display ");
+printf("\n=>4.Exit");
+printf("\nEnter your choice: ");
+scanf("%d", & choice);
+switch (choice)
+{
+case 1:
+    printf("\nEnter an element to be pushed: ");
+    scanf("%d", & item);
+    push(item);
+    break;
+case 2:
+    item = pop();
+    if (item != -1)
+printf("\nElement popped is: %d", item);
+    break;
+case 3:
+    display();
+    break;
+case 4:
+    exit(1);
+default:
+    printf("\nPlease enter valid choice ");
+    break;
 }
-
-void pop() {
-    int poppedValue;
-
-    if (top == -1) {
-        printf("\n[UNDERFLOW] Stack is empty! No element to pop.\n");
-        return;
     }
-    poppedValue = stack[top];
-    top--;
-    printf("\nElement %d successfully popped from the stack.\n", poppedValue);
 }
-
-void display() {
+void push(int item)
+{
+    if (top == MAX - 1)
+    {
+printf("\n-----------Stack overflow-----------");
+return;
+ }
+    top = top + 1;
+    s[top] = item;
+}
+int pop()
+{
+    int item;
+    if (top == -1)
+    {
+printf("\n-----------Stack underflow-----------");
+return -1;
+    }
+    item = s[top];
+    top = top - 1;
+    return item;
+}
+void display()
+{
     int i;
-
-    if (top == -1) {
-        printf("\nStack Status: Empty (top = -1)\n");
-        return;
+    if (top == -1)
+    {
+printf("\n-----------Stack is empty-----------");
+return;
     }
-
-    printf("\n--- STACK STATUS ---\n");
-    printf("Top Index   : %d\n", top);
-    printf("Total Items : %d / %d\n", top + 1, MAX);
-    printf("Stack Elements (from top to bottom):\n");
-    for (i = top; i >= 0; i--) {
-        if (i == top) {
-            printf("  [%d] -> %d  <-- TOP\n", i, stack[i]);
-        } else {
-            printf("  [%d] -> %d\n", i, stack[i]);
-        }
-    }
-}
-
-int main() {
-    int choice, val;
-
-    while (1) {
-        printf("\n============= STACK MENU (MAX: %d) =============\n", MAX);
-        printf("1. Push an Element\n");
-        printf("2. Pop an Element\n");
-        printf("3. Display Stack Status\n");
-        printf("4. Exit\n");
-        printf("Enter your choice (1-4): ");
-
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input! Exiting program.\n");
-            break;
-        }
-
-        switch (choice) {
-            case 1:
-                printf("Enter integer element to push: ");
-                scanf("%d", &val);
-                push(val);
-                break;
-
-            case 2:
-                pop();
-                break;
-
-            case 3:
-                display();
-                break;
-
-            case 4:
-                printf("Exiting program. Goodbye!\n");
-                return 0;
-
-            default:
-                printf("Invalid choice! Please select an option between 1 and 4.\n");
-        }
-    }
-
-    return 0;
+    printf("\n Stack elements are:\n ");
+    for (i = top; i >= 0; i--)
+        printf("%d\n", s[i]);
 }
 `,
   },
@@ -570,129 +554,121 @@ int main() {
       "Simulate a printer queue: add job, process job, show waiting count, handle overflow and underflow.",
     filename: "program4-printer-queue.c",
     source: String.raw`#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define MAX 5
 
-typedef struct {
-    int job_id;
-    char doc_name[50];
-    int pages;
-} PrintJob;
+int queue[MAX];
+int front = -1, rear = -1;
 
-PrintJob printerQueue[MAX];
-int front = -1;
-int rear = -1;
-
-int isFull() {
-    return rear == MAX - 1;
+/* Check whether queue is empty */
+int isEmpty()
+{
+    return (front == -1 && rear == -1);
 }
 
-int isEmpty() {
-    return front == -1 || front > rear;
+/* Check whether queue is full */
+int isFull()
+{
+    return ((rear + 1) % MAX == front);
 }
 
-void addJob() {
-    PrintJob job;
-
-    if (isFull()) {
-        printf("\n[OVERFLOW] Printer queue is full! Cannot accept new print jobs (Capacity: %d).\n", MAX);
+/* Add a print job */
+void addJob(int job)
+{
+    if (isFull())
+    {
+        printf("Printer Queue Overflow!\n");
         return;
     }
 
-    printf("\nEnter Job ID: ");
-    scanf("%d", &job.job_id);
-    printf("Enter Document Name: ");
-    scanf(" %[^\n]", job.doc_name);
-    printf("Enter Number of Pages: ");
-    scanf("%d", &job.pages);
+    if (isEmpty())
+        front = rear = 0;
+    else
+        rear = (rear + 1) % MAX;
 
-    if (isEmpty()) {
-        front = 0;
-        rear = 0;
-    } else {
-        rear++;
-    }
+    queue[rear] = job;
 
-    printerQueue[rear] = job;
-    printf("Job [ID: %d, '%s', %d pages] added successfully.\n", job.job_id, job.doc_name, job.pages);
+    printf("Print job %d added successfully.\n", job);
 }
 
-void processJob() {
-    PrintJob job;
-
-    if (isEmpty()) {
-        printf("\n[UNDERFLOW] Printer queue is empty! No jobs to process.\n");
+/* Process/delete a print job */
+void processJob()
+{
+    if (isEmpty())
+    {
+        printf("Printer Queue Underflow!\n");
         return;
     }
 
-    job = printerQueue[front];
-    printf("\nProcessing and printing Job [ID: %d, Document: '%s', Pages: %d]...\n",
-           job.job_id, job.doc_name, job.pages);
+    printf("Processing print job: %d\n", queue[front]);
 
-    front++;
-
-    if (front > rear) {
-        front = -1;
-        rear = -1;
-    }
+    if (front == rear)
+        front = rear = -1;
+    else
+        front = (front + 1) % MAX;
 }
 
-void displayStatus() {
-    int waitingCount, i;
+/* Display number of waiting jobs */
+void displayCount()
+{
+    int count;
 
-    if (isEmpty()) {
-        printf("\nPrinter Status: 0 jobs waiting in the queue.\n");
-        return;
+    if (isEmpty())
+    {
+        count = 0;
+    }
+    else if (rear >= front)
+    {
+        count = rear - front + 1;
+    }
+    else
+    {
+        count = MAX - front + rear + 1;
     }
 
-    waitingCount = rear - front + 1;
-    printf("\n--- PRINTER QUEUE STATUS ---\n");
-    printf("Total jobs waiting: %d\n", waitingCount);
-    printf("%-10s %-25s %-10s\n", "Job ID", "Document Name", "Pages");
-    printf("---------------------------------------------\n");
-    for (i = front; i <= rear; i++) {
-        printf("%-10d %-25s %-10d\n",
-               printerQueue[i].job_id,
-               printerQueue[i].doc_name,
-               printerQueue[i].pages);
-    }
+    printf("Number of print jobs waiting: %d\n", count);
 }
 
-int main() {
-    int choice;
+int main()
+{
+    int choice, job;
 
-    while (1) {
-        printf("\n======= PRINTER QUEUE SIMULATION (MAX: %d) =======\n", MAX);
+    do
+    {
+        printf("\n--- PRINTER QUEUE ---\n");
         printf("1. Add Print Job\n");
-        printf("2. Process Print Job (Delete)\n");
-        printf("3. Display Waiting Jobs\n");
+        printf("2. Process Print Job\n");
+        printf("3. Display Number of Waiting Jobs\n");
         printf("4. Exit\n");
-        printf("Enter your choice (1-4): ");
 
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input! Exiting program.\n");
-            break;
-        }
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
 
-        switch (choice) {
+        switch(choice)
+        {
             case 1:
-                addJob();
+                printf("Enter print job number: ");
+                scanf("%d", &job);
+                addJob(job);
                 break;
+
             case 2:
                 processJob();
                 break;
+
             case 3:
-                displayStatus();
+                displayCount();
                 break;
+
             case 4:
-                printf("Exiting Printer Simulation. Goodbye!\n");
-                return 0;
+                printf("Exiting...\n");
+                break;
+
             default:
-                printf("Invalid choice! Please select an option between 1 and 4.\n");
+                printf("Invalid choice!\n");
         }
-    }
+
+    } while(choice != 4);
 
     return 0;
 }
@@ -707,166 +683,121 @@ int main() {
     source: String.raw`#include <stdio.h>
 #include <stdlib.h>
 
-typedef struct Node {
-    int coeff;
-    int expo;
+struct Node
+{
+    int coeff, power;
     struct Node *next;
-} Node;
+};
 
-Node* createHeaderNode() {
-    Node *head = (Node *)malloc(sizeof(Node));
-    head->coeff = 0;
-    head->expo = -1;
+typedef struct Node NODE;
+
+NODE *createHeader()
+{
+    NODE *head = malloc(sizeof(NODE));
     head->next = head;
     return head;
 }
 
-void insertTerm(Node *head, int coeff, int expo) {
-    Node *newNode;
-    Node *curr;
-
-    if (coeff == 0) return;
-
-    newNode = (Node *)malloc(sizeof(Node));
-    newNode->coeff = coeff;
-    newNode->expo = expo;
-
-    curr = head;
-    while (curr->next != head) {
-        curr = curr->next;
-    }
-
-    curr->next = newNode;
+void insert(NODE *head, int c, int p)
+{
+    NODE *newNode = malloc(sizeof(NODE));
+    NODE *temp = head;
+    newNode->coeff = c;
+    newNode->power = p;
+    while (temp->next != head)
+        temp = temp->next;
+    temp->next = newNode;
     newNode->next = head;
 }
 
-void readPolynomial(Node *head) {
-    int n, coeff, expo, i;
-    printf("Enter the number of terms in the polynomial: ");
-    scanf("%d", &n);
-
-    for (i = 0; i < n; i++) {
-        printf("  Enter term %d (coefficient and exponent): ", i + 1);
-        scanf("%d %d", &coeff, &expo);
-        insertTerm(head, coeff, expo);
+void readPoly(NODE *head)
+{
+    int degree, c, i;
+    printf("Enter degree: ");
+    scanf("%d", &degree);
+    for (i = degree; i >= 0; i--)
+    {
+        printf("Coefficient of x^%d: ", i);
+        scanf("%d", &c);
+        if (c != 0)
+            insert(head, c, i);
     }
 }
 
-void displayPolynomial(Node *head) {
-    Node *curr;
-    int isFirst = 1;
-    int absCoeff;
-
-    if (head->next == head) {
-        printf("0\n");
+void display(NODE *head)
+{
+    NODE *p = head->next;
+    if (p == head)
+    {
+        printf("0");
         return;
     }
-
-    curr = head->next;
-
-    while (curr != head) {
-        if (curr->coeff > 0 && !isFirst) {
+    while (p != head)
+    {
+        if (p != head->next && p->coeff > 0)
             printf(" + ");
-        } else if (curr->coeff < 0) {
-            printf(" - ");
-        }
-
-        absCoeff = abs(curr->coeff);
-
-        if (curr->expo == 0) {
-            printf("%d", absCoeff);
-        } else if (curr->expo == 1) {
-            if (absCoeff == 1) printf("x");
-            else printf("%dx", absCoeff);
-        } else {
-            if (absCoeff == 1) printf("x^%d", curr->expo);
-            else printf("%dx^%d", absCoeff, curr->expo);
-        }
-
-        isFirst = 0;
-        curr = curr->next;
+        if (p->power == 0)
+            printf("%d", p->coeff);
+        else if (p->power == 1)
+            printf("%dx", p->coeff);
+        else
+            printf("%dx^%d", p->coeff, p->power);
+        p = p->next;
     }
-    printf("\n");
 }
 
-Node* addPolynomials(Node *poly1, Node *poly2) {
-    Node *polySum = createHeaderNode();
-    Node *p1 = poly1->next;
-    Node *p2 = poly2->next;
-
-    while (p1 != poly1 && p2 != poly2) {
-        if (p1->expo == p2->expo) {
-            int sumCoeff = p1->coeff + p2->coeff;
-            if (sumCoeff != 0) {
-                insertTerm(polySum, sumCoeff, p1->expo);
-            }
-            p1 = p1->next;
-            p2 = p2->next;
-        } else if (p1->expo > p2->expo) {
-            insertTerm(polySum, p1->coeff, p1->expo);
-            p1 = p1->next;
-        } else {
-            insertTerm(polySum, p2->coeff, p2->expo);
-            p2 = p2->next;
+NODE *addPoly(NODE *a, NODE *b)
+{
+    NODE *p = a->next, *q = b->next;
+    NODE *sum = createHeader();
+    while (p != a && q != b)
+    {
+        if (p->power == q->power)
+        {
+            insert(sum, p->coeff + q->coeff, p->power);
+            p = p->next;
+            q = q->next;
+        }
+        else if (p->power > q->power)
+        {
+            insert(sum, p->coeff, p->power);
+            p = p->next;
+        }
+        else
+        {
+            insert(sum, q->coeff, q->power);
+            q = q->next;
         }
     }
-
-    while (p1 != poly1) {
-        insertTerm(polySum, p1->coeff, p1->expo);
-        p1 = p1->next;
+    while (p != a)
+    {
+        insert(sum, p->coeff, p->power);
+        p = p->next;
     }
-
-    while (p2 != poly2) {
-        insertTerm(polySum, p2->coeff, p2->expo);
-        p2 = p2->next;
+    while (q != b)
+    {
+        insert(sum, q->coeff, q->power);
+        q = q->next;
     }
-
-    return polySum;
+    return sum;
 }
 
-void freeList(Node *head) {
-    Node *curr;
-
-    if (head == NULL) return;
-    curr = head->next;
-    while (curr != head) {
-        Node *temp = curr;
-        curr = curr->next;
-        free(temp);
-    }
-    free(head);
-}
-
-int main() {
-    Node *POLY1 = createHeaderNode();
-    Node *POLY2 = createHeaderNode();
-    Node *POLYSUM = NULL;
-
-    printf("=== POLYNOMIAL ADDITION USING CIRCULAR LINKED LIST ===\n\n");
-
-    printf("--- Input Polynomial 1 (POLY1) ---\n");
-    readPolynomial(POLY1);
-
-    printf("\n--- Input Polynomial 2 (POLY2) ---\n");
-    readPolynomial(POLY2);
-
-    printf("\n----------------------------------------------------\n");
-    printf("POLY1   : ");
-    displayPolynomial(POLY1);
-
-    printf("POLY2   : ");
-    displayPolynomial(POLY2);
-
-    POLYSUM = addPolynomials(POLY1, POLY2);
-
-    printf("POLYSUM : ");
-    displayPolynomial(POLYSUM);
-    printf("----------------------------------------------------\n");
-
-    freeList(POLY1);
-    freeList(POLY2);
-    freeList(POLYSUM);
-
+int main()
+{
+    NODE *p1, *p2, *sum;
+    p1 = createHeader();
+    p2 = createHeader();
+    printf("Enter POLY1\n");
+    readPoly(p1);
+    printf("Enter POLY2\n");
+    readPoly(p2);
+    printf("\nPOLY1 = ");
+    display(p1);
+    printf("\nPOLY2 = ");
+    display(p2);
+    sum = addPoly(p1, p2);
+    printf("\nSUM = ");
+    display(sum);
     return 0;
 }
 `,
@@ -879,174 +810,131 @@ int main() {
     filename: "program6-binary-tree-traversals.c",
     source: String.raw`#include <stdio.h>
 #include <stdlib.h>
-
-#define MAX_QUEUE 100
-
-typedef struct TreeNode {
+struct Node
+{
     int data;
-    struct TreeNode *left;
-    struct TreeNode *right;
-} TreeNode;
+    struct Node *left, *right;
+};
 
-TreeNode* createNode(int val) {
-    TreeNode *newNode = (TreeNode *)malloc(sizeof(TreeNode));
-    newNode->data = val;
-    newNode->left = NULL;
-    newNode->right = NULL;
+struct Node* createNode(int data)
+{
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+
     return newNode;
 }
 
-TreeNode* createTree() {
-    int n, val;
-    TreeNode *root;
-    TreeNode *queue[MAX_QUEUE];
-    int front = 0, rear = 0;
-    int count = 1;
+// Create Binary Tree using Level Order
+struct Node* createTree()
+{
+    struct Node *root, *q[100], *temp;
+    int n, i, data, front = 0, rear = 0;
 
-    printf("Enter the number of nodes to insert: ");
+    printf("Enter number of nodes: ");
     scanf("%d", &n);
 
-    if (n <= 0) {
-        printf("Invalid node count!\n");
+    if (n <= 0)
         return NULL;
-    }
 
-    printf("Enter value for node 1 (Root): ");
-    scanf("%d", &val);
+    for (i = 0; i < n; i++)
+    {
+        printf("Enter data: ");
+        scanf("%d", &data);
 
-    root = createNode(val);
+        temp = createNode(data);
 
-    queue[rear++] = root;
-
-    while (front < rear && count < n) {
-        TreeNode *curr = queue[front++];
-
-        if (count < n) {
-            printf("Enter left child of %d: ", curr->data);
-            scanf("%d", &val);
-            curr->left = createNode(val);
-            queue[rear++] = curr->left;
-            count++;
+        if (i == 0)
+            root = temp;
+        else
+        {
+            if (q[front]->left == NULL)
+                q[front]->left = temp;
+            else
+            {
+                q[front]->right = temp;
+                front++;
+            }
         }
 
-        if (count < n) {
-            printf("Enter right child of %d: ", curr->data);
-            scanf("%d", &val);
-            curr->right = createNode(val);
-            queue[rear++] = curr->right;
-            count++;
-        }
+        q[rear++] = temp;
     }
 
-    printf("\nBinary Tree created successfully with %d nodes.\n", n);
     return root;
 }
 
-void preorder(TreeNode *root) {
-    if (root != NULL) {
+// Preorder: Root Left Right
+void preorder(struct Node *root)
+{
+    if (root != NULL)
+    {
         printf("%d ", root->data);
         preorder(root->left);
         preorder(root->right);
     }
 }
 
-void inorder(TreeNode *root) {
-    if (root != NULL) {
+// Inorder: Left Root Right
+void inorder(struct Node *root)
+{
+    if (root != NULL)
+    {
         inorder(root->left);
         printf("%d ", root->data);
         inorder(root->right);
     }
 }
 
-void postorder(TreeNode *root) {
-    if (root != NULL) {
+// Postorder: Left Right Root
+void postorder(struct Node *root)
+{
+    if (root != NULL)
+    {
         postorder(root->left);
         postorder(root->right);
         printf("%d ", root->data);
     }
 }
 
-void freeTree(TreeNode *root) {
-    if (root != NULL) {
-        freeTree(root->left);
-        freeTree(root->right);
-        free(root);
-    }
-}
+int main()
+{
+    struct Node *root = NULL;
+    int ch;
 
-int main() {
-    TreeNode *root = NULL;
-    int choice;
+    while (1)
+    {
+         printf("\n\n===== BINARY TREE MENU =====");
+        printf("\n\n1.Create  2.Preorder");
+        printf("\n3.Inorder  4.Postorder  5.Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &ch);
 
-    while (1) {
-        printf("\n========= BINARY TREE MENU =========\n");
-        printf("1. Create Binary Tree\n");
-        printf("2. Display Preorder Traversal\n");
-        printf("3. Display Inorder Traversal\n");
-        printf("4. Display Postorder Traversal\n");
-        printf("5. Exit\n");
-        printf("Enter your choice (1-5): ");
-
-        if (scanf("%d", &choice) != 1) {
-            printf("Invalid input! Exiting program.\n");
-            break;
-        }
-
-        switch (choice) {
+        switch (ch)
+        {
             case 1:
-                if (root != NULL) {
-                    freeTree(root);
-                    root = NULL;
-                }
                 root = createTree();
                 break;
 
             case 2:
-                if (root == NULL) {
-                    printf("\nTree is empty! Please create a tree first.\n");
-                } else {
-                    printf("\nPreorder Traversal: ");
-                    preorder(root);
-                    printf("\n");
-                }
+                preorder(root);
                 break;
 
             case 3:
-                if (root == NULL) {
-                    printf("\nTree is empty! Please create a tree first.\n");
-                } else {
-                    printf("\nInorder Traversal: ");
-                    inorder(root);
-                    printf("\n");
-                }
+                inorder(root);
                 break;
 
             case 4:
-                if (root == NULL) {
-                    printf("\nTree is empty! Please create a tree first.\n");
-                } else {
-                    printf("\nPostorder Traversal: ");
-                    postorder(root);
-                    printf("\n");
-                }
+                postorder(root);
                 break;
 
             case 5:
-                if (root != NULL) {
-                    freeTree(root);
-                }
-                printf("Exiting program. Goodbye!\n");
-                return 0;
+                exit(0);
 
             default:
-                printf("Invalid choice! Please choose between 1 and 5.\n");
+                printf("Invalid choice");
         }
     }
-
-    if (root != NULL) {
-        freeTree(root);
-    }
-    return 0;
 }
 `,
   },
